@@ -1,7 +1,8 @@
-import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Container from "react-bootstrap/Container";
-import Nav from "react-bootstrap/Nav";
+import React from 'react';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import NavLink from 'react-router-dom/NavLink';
 
 const NavBar = () => {
   return (
@@ -11,8 +12,8 @@ const NavBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
+            <NavLink to="/signin">Sign in</NavLink>
+            <NavLink to="/signup">Sign up</NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>
