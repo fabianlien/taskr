@@ -8,6 +8,7 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import Landing from "./components/Landing";
 import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
+import CreateTaskForm from "./pages/tasks/CreateTaskForm";
 
 function App() {
   return (
@@ -16,9 +17,10 @@ function App() {
       <Container className={styles.Body}>
         <Switch>
           <Route exact path="/" render={() => <Landing />} />
-          <Route exact path="/profile" render={() => <ProfilePage />} />
+          <Route exact path="/profile/:id" render={() => <ProfilePage />} />
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
+          <Route exact path="/tasks/create" render={() => <CreateTaskForm />} />
           <Route render={() => <p>Sorry, the page could not be found!</p>} />
         </Switch>
       </Container>

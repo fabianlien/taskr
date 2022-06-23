@@ -12,7 +12,7 @@ const NavBar = () => {
   
   const handleSignOut = async () => {
     try {
-      await axios.post("dj-rest-auth/logout/")
+      await axios.post('/dj-rest-auth/logout/')
       setCurrentUser(null)
     } catch (error) {
       console.log(error)
@@ -35,13 +35,10 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">taskr</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Brand>taskr</Navbar.Brand>
           <Nav className="me-auto">
             {currentUser ? SignedInNav : SignedOutNav}
           </Nav>
-        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
