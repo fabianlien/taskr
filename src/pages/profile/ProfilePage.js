@@ -34,7 +34,7 @@ const ProfilePage = () => {
             Some quick example text to build on the card title and make up the
             bulk of the card's content.
           </Card.Text>
-          <Link to="/tasks/create">
+          <Link to="/task/create">
             <Button variant="warning">+ Task</Button>
           </Link>
         </Card.Body>

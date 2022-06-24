@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -6,51 +6,68 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import DateTimePicker from "react-datetime-picker";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useHistory } from "react-router-dom";
-import { useCurrentUser } from "../../context/CurrentUserContext";
+import { useHistory, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
-const CreateTaskForm = () => {
-  const currentuser = useCurrentUser();
+const UpdateTaskForm = () => {
   const history = useHistory();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const onMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/tasks/${id}/`);
+        const {title, description, due_by, is_important, is_owner} = data
+        if (is_owner) {
+            setTaskTextData({title, description});
+            setDateTime(new Date(due_by));
+            setCheckedPriority(is_important);
+        } else {
+            history.goBack();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    onMount();
+  }, [id, history]);
 
   const [taskTextData, setTaskTextData] = useState({
     title: "",
-    description: ""
+    description: "",
   });
   const { title, description } = taskTextData;
   const [dateTime, setDateTime] = useState(new Date());
   const [checkedPriority, setCheckedPriority] = useState(false);
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
-    console.log(Date())
+    console.log(Date());
     setTaskTextData({
       ...taskTextData,
-      [event.target.name]: event.target.value
-    })
-  }
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  const toggleBool = (value) => !value
+  const toggleBool = (value) => !value;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", title)
-    formData.append("description", description)
-    formData.append("due_by", dateTime.toISOString())
-    formData.append("is_important", checkedPriority)
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("due_by", dateTime.toISOString());
+    formData.append("is_important", checkedPriority);
 
     try {
-      await axiosReq.post("/tasks/", formData)
-      history.push(`/profile/${currentuser.pk}`)
+      await axiosReq.put(`/tasks/${id}/`, formData);
+      history.push(`/task/${id}`);
     } catch (error) {
       console.log(error);
-      if (error.response?.status !== 401)
-        setErrors(error.response?.data)
+      if (error.response?.status !== 401) setErrors(error.response?.data);
     }
-  }
+  };
 
   return (
     <Container style={{ width: "80%" }}>
@@ -77,11 +94,11 @@ const CreateTaskForm = () => {
 
         <Form.Group as={Row} controlId="title">
           <Col sm={10}>
-            <DateTimePicker 
-              format="yyyy-MM-dd hh:mm" 
+            <DateTimePicker
+              format="yyyy-MM-dd hh:mm"
               minDate={new Date()}
-              value={dateTime} 
-              onChange={setDateTime} 
+              value={dateTime}
+              onChange={setDateTime}
             />
           </Col>
         </Form.Group>
@@ -105,7 +122,7 @@ const CreateTaskForm = () => {
             {message}
           </Alert>
         ))}
-        
+
         <fieldset>
           <Form.Group as={Row}>
             <Col sm={10}>
@@ -122,7 +139,7 @@ const CreateTaskForm = () => {
 
         <Form.Group as={Row}>
           <Col sm={{ span: 4 }}>
-            <Button type="submit">+ Add</Button>
+            <Button type="submit">Save Changes</Button>
           </Col>
           <Col sm={{ span: 6 }}>
             <Button onClick={() => history.goBack()}>Cancel</Button>
@@ -133,4 +150,4 @@ const CreateTaskForm = () => {
   );
 };
 
-export default CreateTaskForm;
+export default UpdateTaskForm;
