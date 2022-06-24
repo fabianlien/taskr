@@ -9,6 +9,7 @@ import Landing from "./components/Landing";
 import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
 import CreateTaskForm from "./pages/tasks/CreateTaskForm";
+import TaskDetail from "./pages/tasks/TaskDetail";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/tasks/create" render={() => <CreateTaskForm />} />
+          <Route exact path="/tasks/task/:id" render={() => <TaskDetail />} />
           <Route render={() => <p>Sorry, the page could not be found!</p>} />
         </Switch>
       </Container>
