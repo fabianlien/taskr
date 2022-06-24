@@ -6,6 +6,7 @@ import Link from "react-router-dom/Link";
 import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
+import Task from "../../components/Task";
 
 const TaskDetail = () => {
   const currentUser = useCurrentUser();
@@ -29,22 +30,7 @@ const TaskDetail = () => {
   return (
     <>
       {currentUser ? (
-        <Container>
-          <Card style={{ width: "100%" }}>
-            <Card.Img variant="left" src="currentUser?.profile_image" />
-            <Card.Body>
-              <Card.Title>{id}</Card.Title>
-              <Card.Text>
-                <h3>Task info goes here</h3>
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </Card.Text>
-              <Link to="/tasks/create">
-                <Button variant="warning">+ Task</Button>
-              </Link>
-            </Card.Body>
-          </Card>
-        </Container>
+        <Task {...task.results[0]} setTaskData={setTask} taskData={task}/>
       ) : (
         <Container>
           <Card style={{ width: "100%" }}>
