@@ -62,7 +62,7 @@ const UpdateTaskForm = () => {
 
     try {
       await axiosReq.put(`/tasks/${id}/`, formData);
-      history.push(`/task/${id}`);
+      history.push("/");
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -142,7 +142,7 @@ const UpdateTaskForm = () => {
             <Button type="submit">Save Changes</Button>
           </Col>
           <Col sm={{ span: 6 }}>
-            <Button onClick={() => history.goBack()}>Cancel</Button>
+            <Button onClick={() => history.push('/')}>Cancel</Button>
           </Col>
         </Form.Group>
       </Form>

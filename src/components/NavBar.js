@@ -5,6 +5,7 @@ import Nav from "react-bootstrap/Nav";
 import NavLink from "react-router-dom/NavLink";
 import { useCurrentUser, useSetCurrentUser } from "../context/CurrentUserContext";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
@@ -35,7 +36,9 @@ const NavBar = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand>taskr</Navbar.Brand>
+        <Navbar.Brand>
+          <Link to="/"><h1>taskr</h1></Link>
+        </Navbar.Brand>
           <Nav className="me-auto">
             {currentUser ? SignedInNav : SignedOutNav}
           </Nav>

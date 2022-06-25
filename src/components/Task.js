@@ -19,8 +19,9 @@ const Task = (props) => {
 
   const handleComplete = async () => {
     try {
-      const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results[0], due_by: parsedDate.toISOString(), is_completed: true })
-      setTaskData({results: [data]})
+      const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results[0], due_by: parsedDate.toISOString(), is_completed: true });
+      setTaskData({results: [data]});
+      history.push("/");
     } catch (error) {
       console.log(error)
     }
@@ -32,7 +33,7 @@ const Task = (props) => {
     } catch (error) {
         console.log(error)
     }
-    history.goBack()
+    history.push("/");
 }
 
   return (
@@ -49,7 +50,11 @@ const Task = (props) => {
           </Card.Text>
           {is_owner && id ? (
             <Container>
-              <Button onClick={handleComplete} variant="success">Complete</Button>
+              {!is_completed ? (
+                <Button onClick={handleComplete} variant="success">Complete</Button>
+              ) : (
+                <Link to="task/create">Create a new task</Link>
+              )}
               <Link to={`/task/${id}/update`}>
                 <Button variant="warning">Update</Button>
               </Link>
