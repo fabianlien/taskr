@@ -9,7 +9,7 @@ import { axiosReq, axiosRes } from "../api/axiosDefaults";
 const Task = (props) => {
   const { id } = useParams(); 
   const history = useHistory();
-  const { is_owner, title, is_completed, due_by, description, is_important, setTaskData, taskData } =
+  const { is_owner, title, is_completed, due_by, description, setTaskData, taskData } =
     props;
   //const date = new Date(due_by)
   //const dateISO = date.toISOString()
@@ -22,9 +22,7 @@ const Task = (props) => {
       const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results[0], due_by: parsedDate.toISOString(), is_completed: true })
       setTaskData({results: [data]})
     } catch (error) {
-      console.log(taskData)
-      console.log(error.response.data)
-      console.log(parsedDate.toISOString())
+      console.log(error)
     }
   }
 
@@ -44,13 +42,13 @@ const Task = (props) => {
           <Card.Title>
             <h3>{title}</h3>
           </Card.Title>
+          {is_completed ? <h4>Completed!</h4> : <h4>Task not completed!</h4>}
           <Card.Text>
             <h5>{`Due: ${due_by}`}</h5>
             <p>{description}</p>
           </Card.Text>
-          {is_owner ? (
+          {is_owner && id ? (
             <Container>
-              {is_completed ? <h2>Completed!</h2> : <h2>Task not completed!</h2>}
               <Button onClick={handleComplete} variant="success">Complete</Button>
               <Link to={`/task/${id}/update`}>
                 <Button variant="warning">Update</Button>
