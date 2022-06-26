@@ -17,11 +17,12 @@ const UpdateTaskForm = () => {
     const onMount = async () => {
       try {
         const { data } = await axiosReq.get(`/tasks/${id}/`);
-        const {title, description, due_by, is_important, is_owner} = data
+        const {title, description, due_by, is_important, is_owner, is_public} = data
         if (is_owner) {
             setTaskTextData({title, description});
             setDateTime(new Date(due_by));
             setCheckedPriority(is_important);
+            setCheckedPublic(is_public);
         } else {
             history.goBack();
         }
@@ -38,7 +39,8 @@ const UpdateTaskForm = () => {
   });
   const { title, description } = taskTextData;
   const [dateTime, setDateTime] = useState(new Date());
-  const [checkedPriority, setCheckedPriority] = useState(false);
+  const [checkedPriority, setCheckedPriority] = useState();
+  const [checkedPublic, setCheckedPublic] = useState();
   const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
@@ -59,6 +61,7 @@ const UpdateTaskForm = () => {
     formData.append("description", description);
     formData.append("due_by", dateTime.toISOString());
     formData.append("is_important", checkedPriority);
+    formData.append("is_public", checkedPublic);
 
     try {
       await axiosReq.put(`/tasks/${id}/`, formData);
@@ -132,6 +135,20 @@ const UpdateTaskForm = () => {
                 name="priority"
                 checked={checkedPriority}
                 onChange={() => setCheckedPriority(toggleBool)}
+              />
+            </Col>
+          </Form.Group>
+        </fieldset>
+
+        <fieldset>
+          <Form.Group as={Row}>
+            <Col sm={10}>
+              <Form.Check
+                type="switch"
+                label="Visible to public"
+                name="public"
+                checked={checkedPublic}
+                onChange={() => setCheckedPublic(toggleBool)}
               />
             </Col>
           </Form.Group>

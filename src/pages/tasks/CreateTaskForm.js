@@ -19,7 +19,8 @@ const CreateTaskForm = () => {
   const { title, description } = taskTextData;
   const [dateTime, setDateTime] = useState(new Date());
   const [checkedPriority, setCheckedPriority] = useState(false);
-  const [errors, setErrors] = useState({})
+  const [checkedPublic, setCheckedPublic] = useState(true);
+  const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
     setTaskTextData({
@@ -38,6 +39,7 @@ const CreateTaskForm = () => {
     formData.append("description", description)
     formData.append("due_by", dateTime.toISOString())
     formData.append("is_important", checkedPriority)
+    formData.append("is_public", checkedPublic)
 
     try {
       await axiosReq.post("/tasks/", formData)
@@ -112,6 +114,20 @@ const CreateTaskForm = () => {
                 name="priority"
                 checked={checkedPriority}
                 onChange={() => setCheckedPriority(toggleBool)}
+              />
+            </Col>
+          </Form.Group>
+        </fieldset>
+
+        <fieldset>
+          <Form.Group as={Row}>
+            <Col sm={10}>
+              <Form.Check
+                type="switch"
+                label="Visible to public"
+                name="public"
+                checked={checkedPublic}
+                onChange={() => setCheckedPublic(toggleBool)}
               />
             </Col>
           </Form.Group>
