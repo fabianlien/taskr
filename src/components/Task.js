@@ -11,9 +11,6 @@ const Task = (props) => {
   const history = useHistory();
   const { is_owner, title, is_completed, due_by, description, setTaskData, taskData } =
     props;
-  //const date = new Date(due_by)
-  //const dateISO = date.toISOString()
-
   const stringDate = String(due_by)
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12))
 

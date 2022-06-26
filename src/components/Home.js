@@ -57,12 +57,7 @@ const ProfilePage = () => {
                   onClick={goToUpdate}
                 ></i>
               </span>
-              <Card.Img
-                src={profile_image}
-                roundedCircle
-                fluid
-                alt="profile image"
-              />
+              <Card.Img src={profile_image} alt="profile image" />
 
               <Card.Title>{name}'s tasks</Card.Title>
               <Card.Text>
@@ -85,15 +80,24 @@ const ProfilePage = () => {
       </Accordion>
       {tasks.results.length ? (
         tasks.results.map((task) => (
-          <Accordion defaultActiveKey={task.is_completed ? "1" : "0"}>
-              <Accordion.Toggle as={Card.Header} eventKey="0">
-                <strong>{task.due_by}</strong>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Link key={task.id} to={`/task/${task.id}`}>
-                  <Task {...task} />
-                </Link>
-              </Accordion.Collapse>
+          <Accordion
+            key={task.id}
+            defaultActiveKey={task.is_completed ? "1" : "0"}
+          >
+            <Accordion.Toggle as={Card.Header} eventKey="0">
+              <strong>{task.due_by}</strong>
+              <span>
+                {new Date(task.due_by).getTime() < new Date().getTime() &&
+                !task.is_completed
+                  ? "Overdue"
+                  : ""}
+              </span>
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+              <Link to={`/task/${task.id}`}>
+                <Task {...task} />
+              </Link>
+            </Accordion.Collapse>
           </Accordion>
         ))
       ) : (
