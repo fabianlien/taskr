@@ -44,7 +44,6 @@ const UpdateTaskForm = () => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (event) => {
-    console.log(Date());
     setTaskTextData({
       ...taskTextData,
       [event.target.name]: event.target.value,

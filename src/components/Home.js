@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Accordion from "react-bootstrap/Accordion";
 import Task from "./Task";
 import { useCurrentUser } from "../context/CurrentUserContext";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { axiosReq } from "../api/axiosDefaults";
 
 const ProfilePage = () => {
@@ -15,7 +15,6 @@ const ProfilePage = () => {
   const [profileData, setProfileData] = useState({});
   const { owner, name, bio, profile_image } = profileData;
   const is_owner = currentUser?.username === owner;
-  const history = useHistory();
 
   useEffect(() => {
     const onMount = async () => {
@@ -37,10 +36,6 @@ const ProfilePage = () => {
     onMount();
   }, [setTasks, profile_id, is_owner]);
 
-  const goToUpdate = () => {
-    history.push(`/profile/${profile_id}/edit`);
-  };
-
   return (
     <Container>
       <Accordion defaultActiveKey="0">
@@ -50,13 +45,12 @@ const ProfilePage = () => {
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
-              <span>
+              <Link to={`/profile/${profile_id}/edit`} state={[profileData, setProfileData]}>
                 <i
                   className="fa-solid fa-pen-to-square"
-                  aria-label="edit profile name"
-                  onClick={goToUpdate}
+                  aria-label="edit profile"
                 ></i>
-              </span>
+              </Link>
               <Card.Img src={profile_image} alt="profile image" />
 
               <Card.Title>{name}'s tasks</Card.Title>
