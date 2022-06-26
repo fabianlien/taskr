@@ -2,40 +2,44 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Task from "../../components/Task";
-import { useCurrentUser } from "../../context/CurrentUserContext";
+import Task from "./Task";
+import { useCurrentUser } from "../context/CurrentUserContext";
 import { Link } from "react-router-dom";
-import { axiosReq } from "../../api/axiosDefaults";
+import { axiosReq } from "../api/axiosDefaults";
 
 const ProfilePage = () => {
-  //  const [profileData, setProfileData] = useState({})
   const currentUser = useCurrentUser();
+  const profile_id = currentUser?.profile_id;
   const [tasks, setTasks] = useState({ results: [] });
+  const [profileData, setProfileData] = useState({})
+  const {name, bio, profile_image} = profileData
 
   useEffect(() => {
     const onMount = async () => {
+      
       try {
-        const { data } = await axiosReq.get(`/tasks`);
-        setTasks(data);
-        console.log(tasks.results.length);
+        const [{ data: task }, { data: profile}] = await Promise.all([
+          axiosReq.get(`/tasks/?owner__profile=${profile_id}&is_public=True`),
+          axiosReq.get(`/profiles/${profile_id}`)
+        ])
+        setTasks(task)
+        setProfileData(profile)
       } catch (error) {
         console.log(error);
       }
+
+//      try {
+//        const {data} = await axiosReq.get(`/tasks/?owner__profile=${profile_id}&is_public=True`)
+//        setTasks(data)
+//        console.log(data)
+//      } catch (error) {
+//        console.log(error)
+//      }
+
     };
     onMount();
-  }, [tasks.results.length]);
+  }, [setTasks, profile_id]);
 
-  //    const fetchProfileData = () => {
-  //      try {
-  //        const { data } = axiosReq.get((`/profiles/${currentUser.profile_id}/`))
-  //        setProfileData(data)
-  //      } catch (error) {
-  //        console.log(error)
-  //      }
-  //    }
-  //    fetchProfileData();
-  //    console.log(profileData)
-  //  }, [])
 
   return (
     <Container>
@@ -44,9 +48,9 @@ const ProfilePage = () => {
         <Card.Body>
           <Card.Title>{currentUser.username}</Card.Title>
           <Card.Text>
-            <h3>Profile information displayed here</h3>
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
+            <p>Profile information displayed here</p>
+            <p>Some quick example text to build on the card title and make up the
+            bulk of the card's content.</p>
           </Card.Text>
           <Link to="/task/create">
             <Button variant="warning">+ Task</Button>
@@ -55,8 +59,8 @@ const ProfilePage = () => {
       </Card>
       {tasks.results.length ? (
         tasks.results.map((task) => (
-          <Link to={`/task/${task.id}`}>
-            <Task key={task.id} {...task} />
+          <Link key={task.id} to={`/task/${task.id}`}>
+            <Task {...task} />
           </Link>
         ))
       ) : (

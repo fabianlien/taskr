@@ -12,6 +12,7 @@ const TaskDetail = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const [task, setTask] = useState({ results: [] });
+  
   useEffect(() => {
     const onMount = async () => {
         try {
@@ -19,13 +20,12 @@ const TaskDetail = () => {
                 axiosReq.get(`/tasks/${id}/`)
             ])
             setTask({results: [task]})
-            console.log(task)
         } catch (error) {
             console.log(error)
         }
     }
     onMount();
-  }, [id]);
+  }, [id, setTask]);
 
   return (
     <>

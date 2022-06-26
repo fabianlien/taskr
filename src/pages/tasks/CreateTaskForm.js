@@ -7,11 +7,9 @@ import Button from "react-bootstrap/Button";
 import DateTimePicker from "react-datetime-picker";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useHistory } from "react-router-dom";
-import { useCurrentUser } from "../../context/CurrentUserContext";
 import Alert from "react-bootstrap/Alert";
 
 const CreateTaskForm = () => {
-  const currentuser = useCurrentUser();
   const history = useHistory();
 
   const [taskTextData, setTaskTextData] = useState({
@@ -24,7 +22,6 @@ const CreateTaskForm = () => {
   const [errors, setErrors] = useState({})
 
   const handleChange = (event) => {
-    console.log(Date())
     setTaskTextData({
       ...taskTextData,
       [event.target.name]: event.target.value
@@ -44,7 +41,7 @@ const CreateTaskForm = () => {
 
     try {
       await axiosReq.post("/tasks/", formData)
-      history.push(`/profile/${currentuser.pk}`)
+      history.push("/")
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401)

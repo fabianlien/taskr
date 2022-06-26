@@ -45,15 +45,16 @@ const Task = (props) => {
           </Card.Title>
           {is_completed ? <h4>Completed!</h4> : <h4>Task not completed!</h4>}
           <Card.Text>
-            <h5>{`Due: ${due_by}`}</h5>
+            <p>{`Due: ${due_by}`}</p>
             <p>{description}</p>
           </Card.Text>
           {is_owner && id ? (
             <Container>
+              <span onClick={() => history.goBack()}>*Go Back Icon*</span>
               {!is_completed ? (
                 <Button onClick={handleComplete} variant="success">Complete</Button>
               ) : (
-                <Link to="task/create">Create a new task</Link>
+                <Link to="/task/create">Create a new task</Link>
               )}
               <Link to={`/task/${id}/update`}>
                 <Button variant="warning">Update</Button>
