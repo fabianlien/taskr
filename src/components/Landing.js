@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import NavLink from "react-router-dom/NavLink";
 import { useCurrentUser } from "../context/CurrentUserContext";
-import Profile from "./Profile";
+import Home from "./Home";
 
 const Landing = () => {
   const currentUser = useCurrentUser();
@@ -13,7 +13,7 @@ const Landing = () => {
   return (
     <div>
       {currentUser ? (
-        <Profile />
+        <Home />
       ) : (
         <Row>
           <Col xs={12}>
