@@ -7,30 +7,33 @@ import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import Task from "../../components/Task";
+import CreateTaskItemForm from "./CreateTaskItemForm";
 
 const TaskDetail = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
-  const [task, setTask] = useState({ results: [] });
-  
+  const [task, setTask] = useState({});
+
   useEffect(() => {
     const onMount = async () => {
         try {
-            const [{data: task}] = await Promise.all([
-                axiosReq.get(`/tasks/${id}/`)
-            ])
-            setTask({results: [task]})
+            const { data } = await axiosReq.get(`/tasks/${id}/`)
+            setTask(data)
         } catch (error) {
             console.log(error)
         }
     }
     onMount();
-  }, [id, setTask]);
+  }, [id, setTask, currentUser]);
+
 
   return (
     <>
       {currentUser ? (
-        <Task {...task.results[0]} setTaskData={setTask} taskData={task}/>
+        <>
+          <Task {...task} setTaskData={setTask} taskData={task}/>
+          {task.owner === currentUser.username ? <CreateTaskItemForm task_id={id}/> : <></>}
+        </>
       ) : (
         <Container>
           <Card style={{ width: "100%" }}>

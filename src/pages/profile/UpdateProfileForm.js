@@ -27,9 +27,9 @@ const UpdateProfileForm = () => {
     const onMount = async () => {
       try {
         const { data } = await axiosReq.get(`/profiles/${id}`);
-        const { bio, name } = data;
+        const { bio, name, profile_image } = data;
         if (currentUser.pk === parseInt(id)) {
-          setProfileData({ bio, name });
+          setProfileData({ bio, name, profile_image });
         } else {
           history.goBack();
         }
@@ -79,12 +79,9 @@ const UpdateProfileForm = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group className="text-center">
           {profile_image ? (
-            <>
-              <figure>
-                <Image src={profile_image} rounded />
-              </figure>
-              <Form.Label htmlFor="image-upload">Change the image</Form.Label>
-            </>
+            <figure>
+              <Image src={profile_image} rounded fluid />
+            </figure>
           ) : (
             <Form.Label
               className="d-flex justify-content-center"
