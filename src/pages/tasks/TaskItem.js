@@ -15,12 +15,19 @@ const TaskItem = ({ taskItem }) => {
     formData.append("task_id", id);
 
     try {
-      console.log(checkCompleted);
       await axiosReq.put(`/taskitems/${id}/`, formData);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      await axiosReq.delete(`/taskitems/${id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div>
@@ -37,6 +44,9 @@ const TaskItem = ({ taskItem }) => {
               sendCheck(event.target.checked);
             }}
           />
+          <Form.Group onClick={handleDelete}>
+            <i className="fa-solid fa-xmark"></i>
+          </Form.Group>
         </Form>
       </span>
     </div>

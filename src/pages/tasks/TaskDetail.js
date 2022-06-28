@@ -32,7 +32,7 @@ const TaskDetail = () => {
       {currentUser ? (
         <>
           <Task {...task} setTaskData={setTask} taskData={task}/>
-          {task.owner === currentUser.username ? <CreateTaskItemForm task_id={id} task={task} setTask={setTask} /> : <></>}
+          {task.owner === currentUser.username ? <CreateTaskItemForm task_id={id} task={task} setTask={setTask}/> : <></>}
         </>
       ) : (
         <Container>
