@@ -63,6 +63,7 @@ const UpdateTaskForm = () => {
     formData.append("is_public", checkedPublic);
 
     try {
+      console.log(formData)
       await axiosReq.put(`/tasks/${id}/`, formData);
       history.push("/");
     } catch (error) {

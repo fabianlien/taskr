@@ -7,7 +7,7 @@ import Alert from "react-bootstrap/Alert";
 import { axiosReq } from "../../api/axiosDefaults";
 
 const CreateTaskItemForm = (props) => {
-  const { task_id } = props;
+  const { task_id, setTask, task } = props;
   const initialState = {
     content: "",
     task_id: task_id,
@@ -32,6 +32,9 @@ const CreateTaskItemForm = (props) => {
     try {
       await axiosReq.post("/taskitems/", formData);
       setTaskItem(initialState)
+      console.log()
+      setTask(task)
+      
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);

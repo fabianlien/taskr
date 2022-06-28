@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Link from "react-router-dom/Link";
+import TaskItem from "../pages/tasks/TaskItem.js";
 import { useHistory, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
  
@@ -13,7 +14,21 @@ const Task = (props) => {
     props;
   const stringDate = String(due_by)
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12))
+  const [taskItems, setTaskItems] = useState({ results: [] });
 
+  useEffect(() => {
+    const onMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/taskitems/?task_id=${id}`)
+        setTaskItems(data)
+        console.log(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    onMount();
+  }, [id, setTaskItems])
+  
   const handleComplete = async () => {
     try {
       const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results[0], due_by: parsedDate.toISOString(), is_completed: true });
@@ -43,7 +58,18 @@ const Task = (props) => {
           {is_completed ? <h4>Completed!</h4> : <h4>Task not completed!</h4>}
           <Card.Text>
             <p>{`Due: ${due_by}`}</p>
-            <p>{description}</p>
+            <strong>{description}</strong>
+            <hr/>
+            {taskItems.results.length ? (
+              <>
+                {taskItems?.results.map((taskItem, index) => {
+                  return <TaskItem key={index} taskItem={taskItem} />
+                })}
+              </>
+            ) : (
+              <p>This task has no items.</p>
+            )}
+            
           </Card.Text>
           {is_owner && id ? (
             <Container>
