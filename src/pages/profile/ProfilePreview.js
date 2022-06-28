@@ -16,7 +16,7 @@ const ProfilePreview = ({ profile }) => {
                 <Card.Title>{owner}</Card.Title>
             )}
           <Card.Text>
-            <p>{bio}</p>
+            <span>{bio}</span>
           </Card.Text>
         </Link>
       </Card.Body>

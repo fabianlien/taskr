@@ -11,6 +11,7 @@ import CreateTaskForm from "./pages/tasks/CreateTaskForm";
 import TaskDetail from "./pages/tasks/TaskDetail";
 import UpdateTaskForm from "./pages/tasks/UpdateTaskForm";
 import UpdateProfileForm from "./pages/profile/UpdateProfileForm";
+import Profile from "./pages/profile/Profile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/task/:id" render={() => <TaskDetail />} />
           <Route exact path="/task/:id/update" render={() => <UpdateTaskForm />} />
           <Route exact path="/profile/:id/edit" render={() => <UpdateProfileForm />} />
+          <Route exact path="/profile/:id" render={() => <Profile />} />
           <Route render={() => <p>Sorry, the page could not be found!</p>} />
         </Switch>
       </Container>

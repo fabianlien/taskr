@@ -80,7 +80,7 @@ const UpdateProfileForm = () => {
         <Form.Group className="text-center">
           {profile_image ? (
             <figure>
-              <Image src={profile_image} rounded fluid />
+              <Image src={profile_image} rounded="true" fluid="true" />
             </figure>
           ) : (
             <Form.Label

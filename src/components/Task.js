@@ -21,7 +21,6 @@ const Task = (props) => {
       try {
         const { data } = await axiosReq.get(`/taskitems/?task_id=${id}`)
         setTaskItems(data)
-        console.log(data)
       } catch (error) {
         console.log(error)
       }
@@ -31,7 +30,7 @@ const Task = (props) => {
   
   const handleComplete = async () => {
     try {
-      const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results[0], due_by: parsedDate.toISOString(), is_completed: true });
+      const { data } = await axiosReq.put(`/tasks/${id}/`, { ...taskData.results, due_by: parsedDate.toISOString(), is_completed: true, title: title });
       setTaskData({results: [data]});
       history.push("/");
     } catch (error) {
@@ -57,9 +56,10 @@ const Task = (props) => {
           </Card.Title>
           {is_completed ? <h4>Completed!</h4> : <h4>Task not completed!</h4>}
           <Card.Text>
-            <p>{`Due: ${due_by}`}</p>
+            <span>{`Due: ${due_by}`}</span>
+            <br />
             <strong>{description}</strong>
-            <hr/>
+            <hr />
             {taskItems.results.length ? (
               <>
                 {taskItems?.results.map((taskItem, index) => {
@@ -67,13 +67,13 @@ const Task = (props) => {
                 })}
               </>
             ) : (
-              <p>This task has no items.</p>
+              <span>This task has no items.</span>
             )}
             
           </Card.Text>
-          {is_owner && id ? (
+          {is_owner ? (
             <Container>
-              <span onClick={() => history.goBack()}>*Go Back Icon*</span>
+              <span onClick={() => history.goBack()}><i className="fa-solid fa-rotate-left"></i></span>
               {!is_completed ? (
                 <Button onClick={handleComplete} variant="success">Complete</Button>
               ) : (

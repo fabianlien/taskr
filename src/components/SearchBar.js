@@ -20,7 +20,7 @@ const SearchBar = ({setProfilesPreview, searchQuery, setSearchQuery}) => {
 
   return (
     <Form onSubmit={(event) => event.preventDefault()}>
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <i className="fa-solid fa-magnifying-glass"></i>
       <Form.Control
         type="text"
         placeholder="Search users..."
