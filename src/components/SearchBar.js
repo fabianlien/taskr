@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../api/axiosDefaults";
 
-const SearchBar = ({setProfilesPreview}) => {
-  const [searchQuery, setSearchQuery] = useState("")
-
+const SearchBar = ({setProfilesPreview, searchQuery, setSearchQuery}) => {
+  
   useEffect(() => {
     const fetchQuery = async () => {
         try {
