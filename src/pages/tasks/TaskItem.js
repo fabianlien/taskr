@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../../api/axiosDefaults";
+import { useCurrentUser } from "../../context/CurrentUserContext";
 
 const TaskItem = ({ taskItem }) => {
-  const { content, id, is_completed } = taskItem;
+  const { content, id, is_completed, owner } = taskItem;
   const [checkCompleted, setCheckCompleted] = useState(is_completed);
+  const currentUser = useCurrentUser();
 
   const toggleBool = (value) => !value;
 
@@ -23,11 +25,11 @@ const TaskItem = ({ taskItem }) => {
 
   const handleDelete = async () => {
     try {
-      await axiosReq.delete(`/taskitems/${id}`)
+      await axiosReq.delete(`/taskitems/${id}`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div>
@@ -35,18 +37,28 @@ const TaskItem = ({ taskItem }) => {
       <span>{id}</span>
       <span>
         <Form>
-          <Form.Check
-            type="switch"
-            name="priority"
-            checked={checkCompleted}
-            onChange={(event) => {
-              setCheckCompleted(toggleBool);
-              sendCheck(event.target.checked);
-            }}
-          />
-          <Form.Group onClick={handleDelete}>
-            <i className="fa-solid fa-xmark"></i>
-          </Form.Group>
+          {currentUser.username === owner ? (
+            <>
+              <Form.Check
+                type="switch"
+                name="priority"
+                checked={checkCompleted}
+                onChange={(event) => {
+                  setCheckCompleted(toggleBool);
+                  sendCheck(event.target.checked);
+                }}
+              />
+              <Form.Group onClick={handleDelete}>
+                <i className="fa-solid fa-xmark"></i>
+              </Form.Group>
+            </>
+          ) : (
+            <Form.Check
+              type="switch"
+              name="priority"
+              checked={checkCompleted}
+            />
+          )}
         </Form>
       </span>
     </div>

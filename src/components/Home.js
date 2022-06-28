@@ -7,12 +7,14 @@ import Task from "./Task";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import { Link } from "react-router-dom";
 import { axiosReq } from "../api/axiosDefaults";
+import SearchBar from "./SearchBar";
 
-const ProfilePage = () => {
+const Home = () => {
   const currentUser = useCurrentUser();
   const profile_id = currentUser?.profile_id;
   const [tasks, setTasks] = useState({ results: [] });
   const [profileData, setProfileData] = useState({});
+  const [profilesPreview, setProfilesPreview] = useState({ results: [] });
   const { owner, name, bio, profile_image } = profileData;
   const is_owner = currentUser?.username === owner;
 
@@ -38,6 +40,8 @@ const ProfilePage = () => {
 
   return (
     <Container>
+      <SearchBar profilesPreview={profilesPreview} setProfilesPreview={setProfilesPreview}/>
+      
       <Accordion defaultActiveKey="0">
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">
@@ -105,4 +109,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Home;
