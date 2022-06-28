@@ -74,7 +74,7 @@ const CreateTaskForm = () => {
           </Alert>
         ))}
 
-        <Form.Group as={Row} controlId="title">
+        <Form.Group as={Row} controlId="dateTime">
           <Col sm={10}>
             <DateTimePicker 
               format="yyyy-MM-dd hh:mm" 
