@@ -43,7 +43,7 @@ const SignInForm = () => {
         <Container className="p-5">
           <h1>sign in</h1>
           <Form onSubmit={handleSubmit} name="username">
-            <Form.Group controlId="username">
+            <Form.Group className="py-2" controlId="username">
               <Form.Label className="d-none">Username</Form.Label>
               <Form.Control
                 type="text"
@@ -59,7 +59,7 @@ const SignInForm = () => {
               </Alert>
             ))}
 
-            <Form.Group controlId="password">
+            <Form.Group className="py-2" controlId="password">
               <Form.Label className="d-none">Password</Form.Label>
               <Form.Control
                 type="password"
@@ -75,7 +75,7 @@ const SignInForm = () => {
               </Alert>
             ))}
 
-            <Button variant="success" type="submit">
+            <Button className="mt-3" variant="success" type="submit">
               Sign in
             </Button>
             {errors.non_field_errors?.map((message, index) => (
