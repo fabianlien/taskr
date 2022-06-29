@@ -39,10 +39,9 @@ const SignInForm = () => {
 
   return (
     <Row>
-      <Col className="my-auto py-2 p-md-2" md={6}>
-        <Container className="p-4">
+      <Col className="my-auto py-2 p-md-2 offset-md-3" md={6}>
+        <Container className="p-5">
           <h1>sign in</h1>
-
           <Form onSubmit={handleSubmit} name="username">
             <Form.Group controlId="username">
               <Form.Label className="d-none">Username</Form.Label>
@@ -76,7 +75,7 @@ const SignInForm = () => {
               </Alert>
             ))}
 
-            <Button variant="primary" type="submit">
+            <Button variant="success" type="submit">
               Sign in
             </Button>
             {errors.non_field_errors?.map((message, index) => (

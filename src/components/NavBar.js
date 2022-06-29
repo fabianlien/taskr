@@ -5,11 +5,13 @@ import Nav from "react-bootstrap/Nav";
 import NavLink from "react-router-dom/NavLink";
 import { useCurrentUser, useSetCurrentUser } from "../context/CurrentUserContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import styles from "../styles/NavBar.module.css";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
+  const history = useHistory();
   
   const handleSignOut = async () => {
     try {
@@ -18,29 +20,32 @@ const NavBar = () => {
     } catch (error) {
       console.log(error)
     }
+    history.push("/");
   };
 
   const SignedOutNav = (
     <>
-      <NavLink to="/signin">Sign in</NavLink>
-      <NavLink to="/signup">Sign up</NavLink>
+      <NavLink to="/signin" className={`${styles.Link} ${styles.NavLink}`}>Sign in</NavLink>
+      <NavLink to="/signup" className={`${styles.Link} ${styles.NavLink}`}>Sign up</NavLink>
     </>
   );
   const SignedInNav = (
     <>
-      <h5>Logged in as {currentUser?.username}</h5>
-      <NavLink to="/" onClick={handleSignOut}>Sign Out</NavLink>
+      <Navbar.Text className="p-lg-2">Logged in as {currentUser?.username}</Navbar.Text>
+      <NavLink to="/" className={`${styles.Link} ${styles.NavLink}`} onClick={handleSignOut}>Sign Out</NavLink>
     </>
   )
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" >
       <Container>
         <Navbar.Brand>
-          <Link to="/"><h1>taskr</h1></Link>
+          <Link to="/" className={styles.Link}>
+            <h1 className={styles.Brand}>taskr</h1>
+          </Link>
         </Navbar.Brand>
-          <Nav className="me-auto">
-            {currentUser ? SignedInNav : SignedOutNav}
+          <Nav>
+              {currentUser ? SignedInNav : SignedOutNav}
           </Nav>
       </Container>
     </Navbar>

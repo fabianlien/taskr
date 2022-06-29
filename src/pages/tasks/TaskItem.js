@@ -33,9 +33,9 @@ const TaskItem = ({ taskItem }) => {
 
   return (
     <div>
-      <span>{content}</span>
-      <span>{id}</span>
       <span>
+        <i class="fa-solid fa-clipboard-list"></i>
+        {content}
         <Form>
           {currentUser.username === owner ? (
             <>

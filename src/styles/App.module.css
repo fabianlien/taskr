@@ -2,3 +2,15 @@
     margin: 50px auto;
     padding: 0;
 }
+
+.App {
+    font-family: 'Maven Pro', sans-serif;
+    background-color: #faf7f7;
+    min-height: 100vh;
+  }
+
+a {
+    text-decoration: none;
+    color: rebeccapurple;
+    font-size: small;
+}

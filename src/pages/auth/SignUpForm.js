@@ -37,7 +37,7 @@ const SignUpForm = () => {
 
   return (
     <Row>
-      <Col className="my-auto py-2 p-md-2" md={6}>
+      <Col className="my-auto py-2 p-md-2 offset-md-3" md={6}>
         <Container className="p-4">
           <h1>sign up</h1>
 
@@ -90,7 +90,7 @@ const SignUpForm = () => {
               </Alert>
             ))}
 
-            <Button variant="primary" type="submit">
+            <Button className="mt-3" variant="success" type="submit">
               Sign up
             </Button>
             {errors.non_field_errors?.map((message, index) => (

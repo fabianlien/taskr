@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import Link from "react-router-dom/Link";
-import TaskItem from "../pages/tasks/TaskItem.js";
-import { useHistory, useParams } from "react-router-dom";
-import { axiosReq, axiosRes } from "../api/axiosDefaults";
+import TaskItem from "../../pages/tasks/TaskItem.js";
+import { Link, useHistory, useParams } from "react-router-dom";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults.js";
  
 const Task = (props) => {
   const { id } = useParams(); 

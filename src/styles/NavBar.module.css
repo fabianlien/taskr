@@ -1,0 +1,18 @@
+.Brand {
+    font-size: 500%;
+    color: rgb(236, 69, 69);
+}
+
+.Link {
+    text-decoration: none;
+    color: black;
+}
+
+.Link:hover {
+    color:rgb(219, 24, 24);
+}
+
+.NavLink {
+    font-size: 150%;
+    padding-right: 20px;
+}

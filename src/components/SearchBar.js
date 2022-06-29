@@ -15,7 +15,12 @@ const SearchBar = ({setProfilesPreview, searchQuery, setSearchQuery}) => {
             console.log(error)
         }
     }
-    fetchQuery();
+    const searchTimer = setTimeout(() => {
+      fetchQuery();
+    }, 800)
+    return () => {
+      clearTimeout(searchTimer)
+    }
   }, [searchQuery, setProfilesPreview])
 
   return (

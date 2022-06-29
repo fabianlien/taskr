@@ -48,8 +48,14 @@ const Home = () => {
         <>
           {profilesPreview.results.length ? (
             <>
-              {profilesPreview.results.map((profile) => {
-                return <ProfilePreview key={profile.pk} profile={profile} />;
+              {profilesPreview.results.map((profile, index) => {
+                return (
+                  <ProfilePreview
+                    key={index}
+                    profile={profile}
+                    setSearchQuery={setSearchQuery}
+                  />
+                );
               })}
             </>
           ) : (
@@ -65,16 +71,25 @@ const Home = () => {
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Body>
-                  <Link
-                    to={`/profile/${id}/edit`}
-                    state={[profileData, setProfileData]}
-                  >
-                    <i
-                      className="fa-solid fa-pen-to-square"
-                      aria-label="edit profile"
-                    ></i>
-                  </Link>
-                  <Card.Img src={profile_image} rounded="true" fluid="true" alt="profile image" />
+                  {is_owner ? (
+                    <Link
+                      to={`/profile/${id}/edit`}
+                      state={[profileData, setProfileData]}
+                    >
+                      <i
+                        className="fa-solid fa-pen-to-square"
+                        aria-label="edit profile"
+                      ></i>
+                    </Link>
+                  ) : (
+                    <></>
+                  )}
+                  <Card.Img
+                    src={profile_image}
+                    rounded="true"
+                    fluid="true"
+                    alt="profile image"
+                  />
 
                   <Card.Title>{name ? name : owner}'s tasks</Card.Title>
                   <Card.Text>{bio}</Card.Text>
@@ -94,9 +109,9 @@ const Home = () => {
             </Card>
           </Accordion>
           {tasks.results.length ? (
-            tasks.results.map((task) => (
+            tasks.results.map((task, index) => (
               <Accordion
-                key={task.id}
+                key={index}
                 defaultActiveKey={task.is_completed ? "1" : "0"}
               >
                 <Accordion.Toggle as={Card.Header} eventKey="0">

@@ -32,7 +32,6 @@ const CreateTaskItemForm = (props) => {
     try {
       await axiosReq.post("/taskitems/", formData);
       setTaskItem(initialState)
-      console.log()
       setTask(task)
       
     } catch (error) {
@@ -57,7 +56,7 @@ const CreateTaskItemForm = (props) => {
           />
         </Col>
       </Form.Group>
-      {errors.title?.map((message, index) => (
+      {errors.content?.map((message, index) => (
         <Alert variant="warning" key={index}>
           {message}
         </Alert>

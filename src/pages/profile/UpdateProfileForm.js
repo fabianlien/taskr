@@ -25,16 +25,16 @@ const UpdateProfileForm = () => {
 
   useEffect(() => {
     const onMount = async () => {
-      try {
-        const { data } = await axiosReq.get(`/profiles/${id}`);
-        const { bio, name, profile_image } = data;
-        if (currentUser.pk === parseInt(id)) {
+      if (currentUser.pk === parseInt(id)) {
+        try {
+          const { data } = await axiosReq.get(`/profiles/${id}`);
+          const { bio, name, profile_image } = data;
           setProfileData({ bio, name, profile_image });
-        } else {
-          history.goBack();
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
+      } else {
+        history.goBack();
       }
     };
     onMount();
@@ -52,10 +52,10 @@ const UpdateProfileForm = () => {
       URL.revokeObjectURL(profile_image);
       setProfileData({
         ...profileData,
-        profile_image: URL.createObjectURL(event.target.files[0])
-      })
+        profile_image: URL.createObjectURL(event.target.files[0]),
+      });
     }
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,7 +63,10 @@ const UpdateProfileForm = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("bio", bio);
-    formData.append("profile_image", imageInput.current.files[0])
+    if (imageInput?.current?.files[0]) {
+      formData.append("profile_image", imageInput?.current?.files[0]);
+    }
+
 
     try {
       await axiosReq.put(`/profiles/${id}`, formData);
@@ -100,7 +103,7 @@ const UpdateProfileForm = () => {
 
         <Form.Group as={Row} controlId="name">
           <Form.Label className="d-none mg-b-20" column sm={2}>
-            Title
+            Name
           </Form.Label>
           <Col sm={10}>
             <Form.Control
@@ -120,7 +123,7 @@ const UpdateProfileForm = () => {
 
         <Form.Group as={Row} controlId="bio">
           <Form.Label className="d-none mg-b-20" column sm={2}>
-            Description
+            Biography
           </Form.Label>
           <Col sm={10}>
             <Form.Control

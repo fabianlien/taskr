@@ -2,12 +2,12 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 
-const ProfilePreview = ({ profile }) => {
+const ProfilePreview = ({ profile, setSearchQuery }) => {
   const { id, owner, name, profile_image, bio } = profile;
 
   return (
     <div>
-      <Card.Body>
+      <Card.Body onClick={() => setSearchQuery("")}>
         <Link to={`/profile/${id}/`}>
           <Card.Img src={profile_image} alt="profile image" />
             {name.length ? (
