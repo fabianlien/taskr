@@ -4,7 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import DateTimePicker from "react-datetime-picker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useHistory, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
@@ -17,14 +18,21 @@ const UpdateTaskForm = () => {
     const onMount = async () => {
       try {
         const { data } = await axiosReq.get(`/tasks/${id}/`);
-        const {title, description, due_by, is_important, is_owner, is_public} = data
+        const {
+          title,
+          description,
+          due_by,
+          is_important,
+          is_owner,
+          is_public,
+        } = data;
         if (is_owner) {
-            setTaskTextData({title, description});
-            setDateTime(new Date(due_by));
-            setCheckedPriority(is_important);
-            setCheckedPublic(is_public);
+          setTaskTextData({ title, description });
+          setDateTime(new Date(due_by));
+          setCheckedPriority(is_important);
+          setCheckedPublic(is_public);
         } else {
-            history.goBack();
+          history.goBack();
         }
       } catch (error) {
         console.log(error);
@@ -63,7 +71,7 @@ const UpdateTaskForm = () => {
     formData.append("is_public", checkedPublic);
 
     try {
-      console.log(formData)
+      console.log(formData);
       await axiosReq.put(`/tasks/${id}/`, formData);
       history.push("/");
     } catch (error) {
@@ -97,11 +105,11 @@ const UpdateTaskForm = () => {
 
         <Form.Group as={Row} controlId="title">
           <Col sm={10}>
-            <DateTimePicker
-              format="yyyy-MM-dd hh:mm"
-              minDate={new Date()}
-              value={dateTime}
-              onChange={setDateTime}
+          <DatePicker
+              selected={dateTime}
+              onChange={(date) => setDateTime(date)}
+              showTimeSelect
+              dateFormat="Pp"
             />
           </Col>
         </Form.Group>
@@ -159,7 +167,7 @@ const UpdateTaskForm = () => {
             <Button type="submit">Save Changes</Button>
           </Col>
           <Col sm={{ span: 6 }}>
-            <Button onClick={() => history.push('/')}>Cancel</Button>
+            <Button onClick={() => history.push("/")}>Cancel</Button>
           </Col>
         </Form.Group>
       </Form>

@@ -4,7 +4,8 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
-import DateTimePicker from "react-datetime-picker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useHistory } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
@@ -14,7 +15,7 @@ const CreateTaskForm = () => {
 
   const [taskTextData, setTaskTextData] = useState({
     title: "",
-    description: ""
+    description: "",
   });
   const { title, description } = taskTextData;
   const [dateTime, setDateTime] = useState(new Date());
@@ -25,31 +26,30 @@ const CreateTaskForm = () => {
   const handleChange = (event) => {
     setTaskTextData({
       ...taskTextData,
-      [event.target.name]: event.target.value
-    })
-  }
+      [event.target.name]: event.target.value,
+    });
+  };
 
-  const toggleBool = (value) => !value
+  const toggleBool = (value) => !value;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", title)
-    formData.append("description", description)
-    formData.append("due_by", dateTime.toISOString())
-    formData.append("is_important", checkedPriority)
-    formData.append("is_public", checkedPublic)
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("due_by", dateTime.toISOString());
+    formData.append("is_important", checkedPriority);
+    formData.append("is_public", checkedPublic);
 
     try {
-      await axiosReq.post("/tasks/", formData)
-      history.push("/")
+      await axiosReq.post("/tasks/", formData);
+      history.push("/");
     } catch (error) {
       console.log(error);
-      if (error.response?.status !== 401)
-        setErrors(error.response?.data)
+      if (error.response?.status !== 401) setErrors(error.response?.data);
     }
-  }
+  };
 
   return (
     <Container style={{ width: "80%" }}>
@@ -76,11 +76,11 @@ const CreateTaskForm = () => {
 
         <Form.Group as={Row} controlId="dateTime">
           <Col sm={10}>
-            <DateTimePicker 
-              format="yyyy-MM-dd hh:mm" 
-              minDate={new Date()}
-              value={dateTime} 
-              onChange={setDateTime} 
+            <DatePicker
+              selected={dateTime}
+              onChange={(date) => setDateTime(date)}
+              showTimeSelect
+              dateFormat="Pp"
             />
           </Col>
         </Form.Group>
@@ -104,7 +104,7 @@ const CreateTaskForm = () => {
             {message}
           </Alert>
         ))}
-        
+
         <fieldset>
           <Form.Group as={Row}>
             <Col sm={10}>
