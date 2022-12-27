@@ -8,6 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import SearchBar from "../../components/SearchBar";
 import ProfilePreview from "./ProfilePreview";
+import styles from "../../styles/Profile.module.css";
 
 const Home = () => {
   const currentUser = useCurrentUser();
@@ -38,11 +39,12 @@ const Home = () => {
   }, [setTasks, is_owner, id]);
 
   return (
-    <Container>
+    <Container id={styles.ProfileContainer}>
       <SearchBar
         setProfilesPreview={setProfilesPreview}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        id={styles.Search}
       />
       {searchQuery.length ? (
         <>
@@ -89,6 +91,7 @@ const Home = () => {
                     rounded="true"
                     fluid="true"
                     alt="profile image"
+                    className={`${styles.ProfileImage}`}
                   />
 
                   <Card.Title>{name ? name : owner}'s tasks</Card.Title>

@@ -1,0 +1,17 @@
+#Search {
+    margin-bottom: 60px;
+    border: 20px solid black;
+}
+
+.ProfileImage {
+    max-width: 50%;
+    max-height: 500px;
+    object-fit: cover;
+    position: relative;
+    left: 50%;
+}
+
+.ProfileName {
+    font-size: 300%;
+}
+
