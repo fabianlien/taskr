@@ -11,6 +11,8 @@ import ProfilePreview from "./ProfilePreview";
 import styles from "../../styles/Profile.module.css";
 import TaskSearchBar from "../../components/TaskSearchBar";
 import TaskPreview from "../tasks/TaskPreview";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { fetchMoreData } from "../../utils/utils";
 
 const Home = () => {
   const currentUser = useCurrentUser();
@@ -117,35 +119,42 @@ const Home = () => {
                     taskSearchQuery={taskSearchQuery}
                     setTaskSearchQuery={setTaskSearchQuery}
                   />
-                  {console.log(tasksFiltered.results.length)}
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
-          {tasksFiltered.results.length ? (
+          {taskSearchQuery.length ? (
             <>
-            {tasksFiltered.results.map((task, index) => {
-              return (
-                <TaskPreview
-                  key={index}
-                  task={task}
-                />
-              );
-            })}
-          </>
+              {tasksFiltered.results.length ? (
+                <>
+                {console.log(tasksFiltered.results)}
+                  {tasksFiltered.results.filter(task => task.is_owner === true).map((task, index) => {
+                    return <TaskPreview key={index} task={task} />;
+                  })}
+                </>
+              ) : (
+                <>
+                  <Card style={{ width: "100%" }}>
+                    <Card.Body>
+                      <Card.Title>No tasks to display.</Card.Title>
+                    </Card.Body>
+                  </Card>
+                </>
+              )}
+            </>
           ) : (
             <>
               {tasks.results.length ? (
-                <>
-                  {tasks.results.map((task, index) => {
-                    return (
-                      <TaskPreview
-                        key={index}
-                        task={task}
-                      />
-                    );
-                  })}
-                </>
+                <InfiniteScroll
+                children={
+                  tasks.results.map((task, index) => (
+                  <TaskPreview key={index} task={task}/>
+                ))}
+                dataLength={tasks.results.length}
+                hasMore={!!tasks.next}
+                loader={<div>loading...</div>}
+                next={() => fetchMoreData(tasks, setTasks)}
+                />
               ) : (
                 <Card style={{ width: "100%" }}>
                   <Card.Body>
