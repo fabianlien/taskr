@@ -10,6 +10,7 @@ import UserSearchBar from "../../components/UserSearchBar";
 import ProfilePreview from "./ProfilePreview";
 import styles from "../../styles/Profile.module.css";
 import TaskSearchBar from "../../components/TaskSearchBar";
+import TaskPreview from "../tasks/TaskPreview";
 
 const Home = () => {
   const currentUser = useCurrentUser();
@@ -122,79 +123,29 @@ const Home = () => {
             </Card>
           </Accordion>
           {tasksFiltered.results.length ? (
-             tasksFiltered.results.map((task, index) => (
-              <Accordion
-                key={index}
-                defaultActiveKey={task.is_completed ? "1" : "0"}
-              >
-                <Accordion.Toggle as={Card.Header} eventKey="0">
-                  <strong>{task.due_by}</strong>
-                  <span>
-                    {new Date(task.due_by).getTime() <
-                      new Date().getTime() && !task.is_completed
-                      ? "Overdue"
-                      : ""}
-                  </span>
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey="0">
-                  <Link to={`/task/${task.id}`}>
-                    <Card style={{ width: "100%" }}>
-                      <Card.Body>
-                        <Card.Title>
-                          <h3>{task.title}</h3>
-                        </Card.Title>
-                        {task.is_completed ? (
-                          <h4>Completed!</h4>
-                        ) : (
-                          <h4>Task not completed!</h4>
-                        )}
-                        <Card.Text>
-                          <strong>{task.description}</strong>
-                        </Card.Text>
-                      </Card.Body>
-                    </Card>
-                  </Link>
-                </Accordion.Collapse>
-              </Accordion>
-            ))
+            <>
+            {tasksFiltered.results.map((task, index) => {
+              return (
+                <TaskPreview
+                  key={index}
+                  task={task}
+                />
+              );
+            })}
+          </>
           ) : (
             <>
               {tasks.results.length ? (
-                tasks.results.map((task, index) => (
-                  <Accordion
-                    key={index}
-                    defaultActiveKey={task.is_completed ? "1" : "0"}
-                  >
-                    <Accordion.Toggle as={Card.Header} eventKey="0">
-                      <strong>{task.due_by}</strong>
-                      <span>
-                        {new Date(task.due_by).getTime() <
-                          new Date().getTime() && !task.is_completed
-                          ? "Overdue"
-                          : ""}
-                      </span>
-                    </Accordion.Toggle>
-                    <Accordion.Collapse eventKey="0">
-                      <Link to={`/task/${task.id}`}>
-                        <Card style={{ width: "100%" }}>
-                          <Card.Body>
-                            <Card.Title>
-                              <h3>{task.title}</h3>
-                            </Card.Title>
-                            {task.is_completed ? (
-                              <h4>Completed!</h4>
-                            ) : (
-                              <h4>Task not completed!</h4>
-                            )}
-                            <Card.Text>
-                              <strong>{task.description}</strong>
-                            </Card.Text>
-                          </Card.Body>
-                        </Card>
-                      </Link>
-                    </Accordion.Collapse>
-                  </Accordion>
-                ))
+                <>
+                  {tasks.results.map((task, index) => {
+                    return (
+                      <TaskPreview
+                        key={index}
+                        task={task}
+                      />
+                    );
+                  })}
+                </>
               ) : (
                 <Card style={{ width: "100%" }}>
                   <Card.Body>
