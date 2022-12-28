@@ -6,17 +6,20 @@ import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import { Link, useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
-import SearchBar from "../../components/SearchBar";
+import UserSearchBar from "../../components/UserSearchBar";
 import ProfilePreview from "./ProfilePreview";
 import styles from "../../styles/Profile.module.css";
+import TaskSearchBar from "../../components/TaskSearchBar";
 
 const Home = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const [tasks, setTasks] = useState({ results: [] });
   const [profileData, setProfileData] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
+  const [userSearchQuery, setUserSearchQuery] = useState("");
+  const [taskSearchQuery, setTaskSearchQuery] = useState("");
   const [profilesPreview, setProfilesPreview] = useState({ results: [] });
+  const [tasksFiltered, setTasksFiltered] = useState({ results: [] });
   const { owner, name, bio, profile_image } = profileData;
   const is_owner = currentUser?.username === owner;
 
@@ -40,13 +43,12 @@ const Home = () => {
 
   return (
     <Container id={styles.ProfileContainer}>
-      <SearchBar
+      <UserSearchBar
         setProfilesPreview={setProfilesPreview}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        id={styles.Search}
+        userSearchQuery={userSearchQuery}
+        setUserSearchQuery={setUserSearchQuery}
       />
-      {searchQuery.length ? (
+      {userSearchQuery.length ? (
         <>
           {profilesPreview.results.length ? (
             <>
@@ -55,47 +57,48 @@ const Home = () => {
                   <ProfilePreview
                     key={index}
                     profile={profile}
-                    setSearchQuery={setSearchQuery}
+                    setUserSearchQuery={setUserSearchQuery}
                   />
                 );
               })}
             </>
           ) : (
-            <strong>No usernames containing "{searchQuery}" found.</strong>
+            <strong>No usernames containing "{userSearchQuery}" found.</strong>
           )}
         </>
       ) : (
         <>
           <Accordion defaultActiveKey="0">
-            <Card>
+            <Card className={styles.ProfileCard}>
               <Accordion.Toggle as={Card.Header} eventKey="0">
-                <strong>{owner}</strong>
+                <strong className={styles.ProfileCardTitle}>{owner}</strong>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  {is_owner ? (
-                    <Link
-                      to={`/profile/${id}/edit`}
-                      state={[profileData, setProfileData]}
-                    >
-                      <i
-                        className="fa-solid fa-pen-to-square"
-                        aria-label="edit profile"
-                      ></i>
-                    </Link>
-                  ) : (
-                    <></>
-                  )}
-                  <Card.Img
-                    src={profile_image}
-                    rounded="true"
-                    fluid="true"
-                    alt="profile image"
-                    className={`${styles.ProfileImage}`}
-                  />
-
-                  <Card.Title>{name ? name : owner}'s tasks</Card.Title>
-                  <Card.Text>{bio}</Card.Text>
+                <Card.Body className={styles.ProfileBody}>
+                  <div id={styles.ProfileImageBox}>
+                    <Card.Text className={styles.ProfileBio}>{bio}</Card.Text>
+                    {is_owner ? (
+                      <Link
+                        className={styles.EditProfileIcon}
+                        to={`/profile/${id}/edit`}
+                        state={[profileData, setProfileData]}
+                      >
+                        <i
+                          className="fa-solid fa-pen-to-square"
+                          aria-label="edit profile"
+                        ></i>
+                      </Link>
+                    ) : (
+                      <></>
+                    )}
+                    <Card.Img
+                      src={profile_image}
+                      rounded="true"
+                      fluid="true"
+                      alt="profile image"
+                      className={`${styles.ProfileImage}`}
+                    />
+                  </div>
                   {is_owner ? (
                     <>
                       <Link to="/task/create">
@@ -107,12 +110,19 @@ const Home = () => {
                       <Button variant="warning">+ Task Request</Button>
                     </Link>
                   )}
+                  <Card.Text>{name ? name : owner}'s tasks</Card.Text>
+                  <TaskSearchBar
+                    setTasksFiltered={setTasksFiltered}
+                    taskSearchQuery={taskSearchQuery}
+                    setTaskSearchQuery={setTaskSearchQuery}
+                  />
+                  {console.log(tasksFiltered.results.length)}
                 </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
-          {tasks.results.length ? (
-            tasks.results.map((task, index) => (
+          {tasksFiltered.results.length ? (
+             tasksFiltered.results.map((task, index) => (
               <Accordion
                 key={index}
                 defaultActiveKey={task.is_completed ? "1" : "0"}
@@ -120,8 +130,8 @@ const Home = () => {
                 <Accordion.Toggle as={Card.Header} eventKey="0">
                   <strong>{task.due_by}</strong>
                   <span>
-                    {new Date(task.due_by).getTime() < new Date().getTime() &&
-                    !task.is_completed
+                    {new Date(task.due_by).getTime() <
+                      new Date().getTime() && !task.is_completed
                       ? "Overdue"
                       : ""}
                   </span>
@@ -148,11 +158,51 @@ const Home = () => {
               </Accordion>
             ))
           ) : (
-            <Card style={{ width: "100%" }}>
-              <Card.Body>
-                <Card.Title>No tasks to display.</Card.Title>
-              </Card.Body>
-            </Card>
+            <>
+              {tasks.results.length ? (
+                tasks.results.map((task, index) => (
+                  <Accordion
+                    key={index}
+                    defaultActiveKey={task.is_completed ? "1" : "0"}
+                  >
+                    <Accordion.Toggle as={Card.Header} eventKey="0">
+                      <strong>{task.due_by}</strong>
+                      <span>
+                        {new Date(task.due_by).getTime() <
+                          new Date().getTime() && !task.is_completed
+                          ? "Overdue"
+                          : ""}
+                      </span>
+                    </Accordion.Toggle>
+                    <Accordion.Collapse eventKey="0">
+                      <Link to={`/task/${task.id}`}>
+                        <Card style={{ width: "100%" }}>
+                          <Card.Body>
+                            <Card.Title>
+                              <h3>{task.title}</h3>
+                            </Card.Title>
+                            {task.is_completed ? (
+                              <h4>Completed!</h4>
+                            ) : (
+                              <h4>Task not completed!</h4>
+                            )}
+                            <Card.Text>
+                              <strong>{task.description}</strong>
+                            </Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </Link>
+                    </Accordion.Collapse>
+                  </Accordion>
+                ))
+              ) : (
+                <Card style={{ width: "100%" }}>
+                  <Card.Body>
+                    <Card.Title>No tasks to display.</Card.Title>
+                  </Card.Body>
+                </Card>
+              )}
+            </>
           )}
         </>
       )}

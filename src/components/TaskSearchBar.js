@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../api/axiosDefaults";
 
-const SearchBar = ({setProfilesPreview, searchQuery, setSearchQuery}) => {
+const TaskSearchBar = ({setTasksFiltered, taskSearchQuery, setTaskSearchQuery}) => {
   
   useEffect(() => {
     const fetchQuery = async () => {
         try {
-            const { data } = await axiosReq.get(`/profiles/?search=${searchQuery}`);
-            if (searchQuery.length) {
-              setProfilesPreview(data)
+            const { data } = await axiosReq.get(`/tasks/?search=${taskSearchQuery}`);
+            if (taskSearchQuery.length) {
+              setTasksFiltered(data)
             }
         } catch (error) {
             console.log(error)
@@ -21,19 +21,19 @@ const SearchBar = ({setProfilesPreview, searchQuery, setSearchQuery}) => {
     return () => {
       clearTimeout(searchTimer)
     }
-  }, [searchQuery, setProfilesPreview])
+  }, [taskSearchQuery, setTasksFiltered])
 
   return (
     <Form onSubmit={(event) => event.preventDefault()}>
       <i className="fa-solid fa-magnifying-glass"></i>
       <Form.Control
         type="text"
-        placeholder="Search users..."
-        value={searchQuery}
-        onChange={(event) => setSearchQuery(event.target.value)}
+        placeholder="Search tasks..."
+        value={taskSearchQuery}
+        onChange={(event) => setTaskSearchQuery(event.target.value)}
       />
     </Form>
   );
 };
 
-export default SearchBar;
+export default TaskSearchBar;

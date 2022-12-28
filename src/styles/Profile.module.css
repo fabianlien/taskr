@@ -1,6 +1,18 @@
-#Search {
-    margin-bottom: 60px;
-    border: 20px solid black;
+.ProfileCard {
+    margin-top: 30px;
+}
+
+.ProfileCardTitle {
+    font-size: 300%;
+}
+
+.ProfileBody {
+    background-color: rgb(247, 243, 209);
+}
+
+.ProfileBio {
+    position: absolute;
+    width: 45%;
 }
 
 .ProfileImage {
@@ -9,9 +21,23 @@
     object-fit: cover;
     position: relative;
     left: 50%;
+    margin-right: 50%;
 }
 
 .ProfileName {
     font-size: 300%;
 }
 
+.EditProfileIcon {
+    position: absolute;
+    font-size: 200%;
+    z-index: 2;
+    right: 2%;
+    display: block;
+    color:aliceblue;
+
+}
+
+.EditProfileIcon:hover {
+    color: rgb(236, 69, 69);
+}
