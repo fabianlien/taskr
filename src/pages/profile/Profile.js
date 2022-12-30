@@ -21,6 +21,7 @@ const Home = () => {
   const { id } = useParams();
   const [tasks, setTasks] = useState({ results: [] });
   const [profileData, setProfileData] = useState({});
+  const [activeTasks, setActiveTasks] = useState({ results: [] });
   const [taskSearchQuery, setTaskSearchQuery] = useState("");
   const [tasksFiltered, setTasksFiltered] = useState({ results: [] });
   const { owner, name, bio, profile_image } = profileData;
@@ -29,14 +30,17 @@ const Home = () => {
   useEffect(() => {
     const onMount = async () => {
       try {
-        const [{ data: task }, { data: profile }] = await Promise.all([
-          is_owner
-            ? axiosReq.get(`/tasks/?owner__profile=${id}`)
-            : axiosReq.get(`/tasks/?owner__profile=${id}&is_public=True`),
-          axiosReq.get(`/profiles/${id}`),
-        ]);
-        setTasks(task);
+        const [{ data: tasks }, { data: profile }, { data: activeTasks }] =
+          await Promise.all([
+            is_owner
+              ? axiosReq.get(`/tasks/?owner__profile=${id}`)
+              : axiosReq.get(`/tasks/?owner__profile=${id}&is_public=True`),
+            axiosReq.get(`/profiles/${id}`),
+            axiosReq.get(`/tasks/?owner__profile=${id}&is_completed=False`),
+          ]);
         setProfileData(profile);
+        setTasks(tasks);
+        setActiveTasks(activeTasks);
       } catch (error) {
         console.log(error);
       }
@@ -55,7 +59,7 @@ const Home = () => {
           <Accordion.Collapse eventKey="0">
             <Card.Body className={styles.ProfileBody}>
               <div id={styles.ProfileImageBox}>
-                {is_owner ? (
+                {is_owner && (
                   <Link
                     className={styles.EditProfileIcon}
                     to={`/profile/${id}/edit`}
@@ -66,8 +70,6 @@ const Home = () => {
                       aria-label="edit profile"
                     ></i>
                   </Link>
-                ) : (
-                  <></>
                 )}
                 <Row>
                   <Col xs={6}>
@@ -89,9 +91,17 @@ const Home = () => {
                     />
                   </Col>
                   <Col>
-                    <Accordion defaultActiveKey="0" className="d-md-none">
-                      <Accordion.Toggle as={Card.Header} eventKey="0" className={styles.BioCollapseToggle}>
-                        <i className={`${"fa-solid fa-square-caret-down"} ${styles.BioCaret}`}></i>
+                    <Accordion defaultActiveKey="1" className="d-md-none">
+                      <Accordion.Toggle
+                        as={Card.Header}
+                        eventKey="0"
+                        className={styles.BioCollapseToggle}
+                      >
+                        <i
+                          className={`${"fa-solid fa-square-caret-down"} ${
+                            styles.BioCaret
+                          }`}
+                        ></i>
                       </Accordion.Toggle>
                       <Accordion.Collapse eventKey="0">
                         <Card.Text>{bio}</Card.Text>
@@ -100,18 +110,42 @@ const Home = () => {
                   </Col>
                 </Row>
               </div>
-              {is_owner ? (
-                <>
-                  <Link to="/task/create">
-                    <Button variant="warning">+ Task</Button>
-                  </Link>
-                </>
-              ) : (
-                <Link to="/task/create">
-                  <Button variant="warning">+ Task Request</Button>
-                </Link>
-              )}
-              <Card.Text>{name ? name : owner}'s tasks</Card.Text>
+              <Row>
+                <Col>
+                  {is_owner ? (
+                    <>
+                      <Link to="/task/create">
+                        <Button variant="warning" className={styles.TaskButton}>
+                          + Task
+                        </Button>
+                      </Link>
+                    </>
+                  ) : (
+                    <Link to="/task/create">
+                      <Button variant="warning" className={styles.TaskButton}>
+                        + Task Request
+                      </Button>
+                    </Link>
+                  )}
+                </Col>
+                <Col>
+                  {name ? (
+                    <div className={styles.ActiveTasksContainer}>
+                      <Card.Text>
+                        {name}'s active tasks:{" "}
+                        <strong>{activeTasks.count}</strong>
+                      </Card.Text>
+                    </div>
+                  ) : (
+                    <div className={styles.ActiveTasksContainer}>
+                      <Card.Text>
+                        Active Tasks: <strong>{activeTasks.count}</strong>
+                      </Card.Text>
+                    </div>
+                  )}
+                </Col>
+              </Row>
+
               <TaskSearchBar
                 setTasksFiltered={setTasksFiltered}
                 taskSearchQuery={taskSearchQuery}

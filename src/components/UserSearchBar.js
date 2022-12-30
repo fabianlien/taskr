@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Col, Row, Spinner } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../api/axiosDefaults";
 import ProfilePreview from "../pages/profile/ProfilePreview";
+import styles from "../styles/SearchBar.module.css";
 
 const UserSearchBar = () => {
   const [userSearchQuery, setUserSearchQuery] = useState("");
@@ -34,15 +35,20 @@ const UserSearchBar = () => {
 
   return (
     <div>
-      <Form onSubmit={(event) => event.preventDefault()}>
-        <i className="fa-solid fa-magnifying-glass"></i>
-        <Form.Control
-          type="text"
-          placeholder="Search users..."
-          value={userSearchQuery}
-          onChange={(event) => setUserSearchQuery(event.target.value)}
-        />
-      </Form>
+       <Row>
+        <Col xs={1}>
+          <div className={styles.MagnifyingGlass}><i className="fa-solid fa-magnifying-glass"></i></div>
+        </Col>
+        <Col xs={10}>
+          <Form.Control
+            type="text"
+            placeholder="Search tasks..."
+            value={userSearchQuery}
+            onChange={(event) => setUserSearchQuery(event.target.value)}
+            className={styles.SearchBar}
+          />
+        </Col>
+      </Row>
       {userSearchQuery.length ? (
         <>
           {hasLoaded ? (
