@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { Spinner } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
@@ -53,7 +55,6 @@ const Home = () => {
           <Accordion.Collapse eventKey="0">
             <Card.Body className={styles.ProfileBody}>
               <div id={styles.ProfileImageBox}>
-                <Card.Text className={styles.ProfileBio}>{bio}</Card.Text>
                 {is_owner ? (
                   <Link
                     className={styles.EditProfileIcon}
@@ -68,13 +69,36 @@ const Home = () => {
                 ) : (
                   <></>
                 )}
-                <Card.Img
-                  src={profile_image}
-                  rounded="true"
-                  fluid="true"
-                  alt="profile image"
-                  className={`${styles.ProfileImage}`}
-                />
+                <Row>
+                  <Col xs={6}>
+                    <Card.Text
+                      className={`${"d-none"} ${"d-md-block"} ${
+                        styles.ProfileBio
+                      }`}
+                    >
+                      {bio}
+                    </Card.Text>
+                  </Col>
+                  <Col md={6}>
+                    <Card.Img
+                      src={profile_image}
+                      rounded="true"
+                      fluid="true"
+                      alt="profile image"
+                      className={`${styles.ProfileImage}`}
+                    />
+                  </Col>
+                  <Col>
+                    <Accordion defaultActiveKey="0" className="d-md-none">
+                      <Accordion.Toggle as={Card.Header} eventKey="0" className={styles.BioCollapseToggle}>
+                        <i className={`${"fa-solid fa-square-caret-down"} ${styles.BioCaret}`}></i>
+                      </Accordion.Toggle>
+                      <Accordion.Collapse eventKey="0">
+                        <Card.Text>{bio}</Card.Text>
+                      </Accordion.Collapse>
+                    </Accordion>
+                  </Col>
+                </Row>
               </div>
               {is_owner ? (
                 <>
