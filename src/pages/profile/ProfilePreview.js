@@ -1,26 +1,39 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import { Link } from "react-router-dom";
+import styles from "../../styles/ProfilePreview.module.css";
 
 const ProfilePreview = ({ profile, setUserSearchQuery }) => {
-  const { id, owner, name, profile_image, bio } = profile;
+  const { id, owner, name, profile_image } = profile;
 
   return (
-    <div>
-      <Card.Body onClick={() => setUserSearchQuery("")}>
+    <Card className={styles.ProfilePreviewCard}>
+      <Card.Body onClick={() => setUserSearchQuery("")} className={styles.ProfilePreviewCard}>
         <Link to={`/profile/${id}/`}>
-          <Card.Img src={profile_image} alt="profile image" />
-            {name.length ? (
-                <Card.Title>{name}</Card.Title>
-            ) : (
-                <Card.Title>{owner}</Card.Title>
-            )}
-          <Card.Text>
-            <span>{bio}</span>
-          </Card.Text>
+            <Row>
+              <Col xs={2} className={styles.ImageContainer}>
+                <Card.Img
+                  className={styles.ProfilePreviewImage}
+                  src={profile_image}
+                  alt="profile image"
+                />
+              </Col>
+              <Col xs={10} className={styles.NameContainer}>
+                {name.length ? (
+                  <>
+                    <Card.Title className={styles.Owner}>{owner}</Card.Title>
+                    <Card.Title className={styles.Name}>{name}</Card.Title>
+                  </>
+                ) : (
+                  <Card.Title className={styles.Name}>{owner}</Card.Title>
+                )}
+              </Col>
+            </Row>
         </Link>
       </Card.Body>
-    </div>
+    </Card>
   );
 };
 
