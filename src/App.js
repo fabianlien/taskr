@@ -22,7 +22,7 @@ function App() {
           <Route exact path="/" render={() => <Landing />} />
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
-          <Route exact path="/task/create" render={() => <CreateTaskForm />} />
+          <Route exact path="/task/create/:id" render={() => <CreateTaskForm />} />
           <Route exact path="/task/:id" render={() => <TaskDetail />} />
           <Route exact path="/task/:id/update" render={() => <UpdateTaskForm />} />
           <Route exact path="/profile/:id/edit" render={() => <UpdateProfileForm />} />

@@ -22,6 +22,7 @@ const Home = () => {
   const [tasks, setTasks] = useState({ results: [] });
   const [profileData, setProfileData] = useState({});
   const [activeTasks, setActiveTasks] = useState({ results: [] });
+  const [requestedTasks, setRequestedTasks] = useState({ results: [] });
   const [taskSearchQuery, setTaskSearchQuery] = useState("");
   const [tasksFiltered, setTasksFiltered] = useState({ results: [] });
   const { owner, name, bio, profile_image } = profileData;
@@ -30,23 +31,25 @@ const Home = () => {
   useEffect(() => {
     const onMount = async () => {
       try {
-        const [{ data: tasks }, { data: profile }, { data: activeTasks }] =
+        const [{ data: tasks }, { data: profile }, { data: activeTasks }, { data: requestedTasks }] =
           await Promise.all([
             is_owner
-              ? axiosReq.get(`/tasks/?owner__profile=${id}`)
+              ? axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False`)
               : axiosReq.get(`/tasks/?owner__profile=${id}&is_public=True`),
             axiosReq.get(`/profiles/${id}`),
-            axiosReq.get(`/tasks/?owner__profile=${id}&is_completed=False`),
+            axiosReq.get(`/tasks/?owner__profile=${id}&is_completed=False&is_request=False`),
+            axiosReq.get(`/tasks/?owner__profile=${currentUser.pk}&requestee=${id}`)
           ]);
         setProfileData(profile);
         setTasks(tasks);
         setActiveTasks(activeTasks);
+        setRequestedTasks(requestedTasks);
       } catch (error) {
         console.log(error);
       }
     };
     onMount();
-  }, [setTasks, is_owner, id]);
+  }, [setTasks, is_owner, id, currentUser.pk]);
 
   return (
     <Container id={styles.ProfileContainer}>
@@ -112,21 +115,11 @@ const Home = () => {
               </div>
               <Row>
                 <Col>
-                  {is_owner ? (
-                    <>
-                      <Link to="/task/create">
-                        <Button variant="warning" className={styles.TaskButton}>
-                          + Task
-                        </Button>
-                      </Link>
-                    </>
-                  ) : (
-                    <Link to="/task/create">
+                <Link to={`/task/create/${owner}`}>
                       <Button variant="warning" className={styles.TaskButton}>
-                        + Task Request
+                        {is_owner ? "+ Task" : "+ Task Request"}
                       </Button>
                     </Link>
-                  )}
                 </Col>
                 <Col>
                   {name ? (

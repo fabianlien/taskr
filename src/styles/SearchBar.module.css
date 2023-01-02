@@ -8,3 +8,21 @@
 .SearchBar {
     margin-top: 20px;
 }
+
+.UserSearchQuery {
+    position: relative;
+    z-index: 3;
+}
+
+.Spinner {
+    width: 6vw;
+    height: 6vw;
+    margin-top: 20px;   
+}
+
+.NoTasksBox {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    font-size: larger;
+}

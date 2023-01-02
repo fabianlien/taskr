@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -7,12 +7,14 @@ import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
+import { useCurrentUser } from "../../context/CurrentUserContext";
 
 const CreateTaskForm = () => {
+  const currentUser = useCurrentUser();
   const history = useHistory();
-
+  const { id } = useParams();
   const [taskTextData, setTaskTextData] = useState({
     title: "",
     description: "",
@@ -21,7 +23,26 @@ const CreateTaskForm = () => {
   const [dateTime, setDateTime] = useState(new Date());
   const [checkedPriority, setCheckedPriority] = useState(false);
   const [checkedPublic, setCheckedPublic] = useState(true);
+  const [isRequest, setIsRequest] = useState(false);
   const [errors, setErrors] = useState({});
+  const [taskRequestProfileData, setTaskRequestProfileData] = useState({});
+  const is_owner = currentUser?.username === id;
+
+  useEffect(() => {
+    const onMount = async () => {
+      if (is_owner === false) {
+        setIsRequest(true);
+        try {
+          const { data } = await axiosReq.get(`/profiles/?search=${id}`)
+          setTaskRequestProfileData(data);
+        } catch (error) {
+          console.log(error)
+        }
+      };
+    };
+    onMount();
+  }, [is_owner, id]);
+  
 
   const handleChange = (event) => {
     setTaskTextData({
@@ -41,6 +62,10 @@ const CreateTaskForm = () => {
     formData.append("due_by", dateTime.toISOString());
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
+    formData.append("is_request", isRequest);
+    if (taskRequestProfileData.results[0].id > 0) {
+      formData.append("requestee", taskRequestProfileData.results[0].id);
+    }
 
     try {
       await axiosReq.post("/tasks/", formData);

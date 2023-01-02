@@ -35,50 +35,62 @@ const UserSearchBar = () => {
 
   return (
     <div>
-       <Row>
+      <Row>
         <Col xs={1}>
-          <div className={styles.MagnifyingGlass}><i className="fa-solid fa-magnifying-glass"></i></div>
+          <div className={styles.MagnifyingGlass}>
+            <i className="fa-solid fa-magnifying-glass"></i>
+          </div>
         </Col>
         <Col xs={10}>
           <Form.Control
             type="text"
-            placeholder="Search tasks..."
+            placeholder="Search users..."
             value={userSearchQuery}
             onChange={(event) => setUserSearchQuery(event.target.value)}
             className={styles.SearchBar}
           />
         </Col>
       </Row>
-      {userSearchQuery.length ? (
-        <>
-          {hasLoaded ? (
+      <Row className={styles.UserSearchQuery}>
+        <Col md={{ span: 10, offset: 1 }}>
+          {userSearchQuery.length ? (
             <>
-              {profilesPreview.results.length ? (
+              {hasLoaded ? (
                 <>
-                  {profilesPreview.results.map((profile, index) => {
-                    return (
-                      <ProfilePreview
-                        key={index}
-                        profile={profile}
-                        setUserSearchQuery={setUserSearchQuery}
-                        setHasLoaded={setHasLoaded}
-                      />
-                    );
-                  })}
+                  {profilesPreview.results.length ? (
+                    <>
+                      {profilesPreview.results.map((profile, index) => {
+                        return (
+                          <ProfilePreview
+                            key={index}
+                            profile={profile}
+                            setUserSearchQuery={setUserSearchQuery}
+                            setHasLoaded={setHasLoaded}
+                          />
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <Row className={styles.NoTasksBox}>
+                      <Col>
+                        No usernames containing "{userSearchQuery}" found.
+                      </Col>
+                    </Row>
+                  )}
                 </>
               ) : (
-                <strong>
-                  No usernames containing "{userSearchQuery}" found.
-                </strong>
+                <Row className={styles.NoTasksBox}>
+                  <Col>
+                    <Spinner animation="border" className={styles.Spinner} />
+                  </Col>
+                </Row>
               )}
             </>
           ) : (
-            <Spinner animation="border" />
+            <></>
           )}
-        </>
-      ) : (
-        <></>
-      )}
+        </Col>
+      </Row>
     </div>
   );
 };
