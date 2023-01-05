@@ -10,10 +10,10 @@ import TaskPreview from "./TaskPreview";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../utils/utils";
 
-const TaskList = ({owner}) => {
+const RequestList = ({owner}) => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
-  const [tasks, setTasks] = useState({ results: [] });
+  const [requestedTasks, setRequestedTasks] = useState({ results: [] });
   const [taskSearchQuery, setTaskSearchQuery] = useState("");
   const [tasksFiltered, setTasksFiltered] = useState({ results: [] });
   const is_owner = currentUser?.username === owner;
@@ -21,17 +21,17 @@ const TaskList = ({owner}) => {
   useEffect(() => {
     const onMount = async () => {
       try {
-        const { data } =
-            is_owner
-              ? await axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False`)
-              : await axiosReq.get(`/tasks/?owner__profile=${id}&is_public=True`)
-        setTasks(data);
+        const { data } = 
+        is_owner
+            ? await axiosReq.get(`/tasks/?requestee=${id}&is_request=True`)
+            : await axiosReq.get(`/tasks/?requestee=${id}&owner=${currentUser.username}`)
+        setRequestedTasks(data);
       } catch (error) {
         console.log(error);
       }
     };
     onMount();
-  }, [setTasks, is_owner, id, currentUser]);
+  }, [is_owner, id, currentUser]);
 
   return (
     <Container fluid>
@@ -62,20 +62,20 @@ const TaskList = ({owner}) => {
           </>
         ) : (
           <>
-            {tasks.results.length ? (
+            {requestedTasks.results.length ? (
               <InfiniteScroll
-                children={tasks.results.map((task, index) => (
+                children={requestedTasks.results.map((task, index) => (
                   <TaskPreview key={index} task={task} />
                 ))}
-                dataLength={tasks.results.length}
-                hasMore={!!tasks.next}
+                dataLength={requestedTasks.results.length}
+                hasMore={!!requestedTasks.next}
                 loader={<Spinner animation="border" />}
-                next={() => fetchMoreData(tasks, setTasks)}
+                next={() => fetchMoreData(requestedTasks, setRequestedTasks)}
               />
             ) : (
               <Card style={{ width: "100%" }}>
                 <Card.Body>
-                  <Card.Title>No tasks to display.</Card.Title>
+                  <Card.Title>{owner} has no requested tasks to display.</Card.Title>
                 </Card.Body>
               </Card>
             )}
@@ -85,4 +85,4 @@ const TaskList = ({owner}) => {
   )
 }
 
-export default TaskList
+export default RequestList

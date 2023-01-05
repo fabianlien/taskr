@@ -10,7 +10,7 @@
 }
 
 .ProfileBody {
-    background-color: rgb(248, 245, 218);
+    background-color: #ece0e0;
 }
 
 .ProfileBio {
@@ -43,7 +43,7 @@
 }
 
 .EditProfileIcon:hover {
-    color: rgb(248, 245, 218);
+    color: rgb(255, 196, 0);
 }
 
 .BioCaret {
@@ -86,7 +86,35 @@
 
 .ActiveTasksContainer strong {
     font-size: x-large;
-    color: rgb(211, 94, 94);;
+    color: rgb(228, 112, 112);;
+}
+
+#TasksTab {
+    background-color: rgb(248, 224, 181);
+    font-size: x-large;
+    color: black;
+    border: none;
+    margin-left: 8px;
+    margin-bottom: 8px;
+}
+
+#RequestsTab {
+    background-color: rgb(228, 148, 148);
+    font-size: x-large;
+    color: black;
+    border: none;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.TasksTabBody {
+    background-color: rgb(248, 224, 181);
+    color: black;
+}
+
+.RequestsTabBody {
+    background-color: rgb(228, 148, 148);
+    color: black;
 }
 
 @media only screen and (max-width: 767px) {

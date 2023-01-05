@@ -1,36 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Spinner, Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import UserSearchBar from "../../components/UserSearchBar";
 import styles from "../../styles/Profile.module.css";
-import TaskSearchBar from "../../components/TaskSearchBar";
-import TaskPreview from "../../components/TaskPreview";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { fetchMoreData } from "../../utils/utils";
 import ProfileInfo from "../../components/ProfileInfo";
 import TaskList from "../../components/TaskList";
+import RequestList from "../../components/RequestList";
 
 const Home = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
 
   const [profileData, setProfileData] = useState({});
-  const { owner, name, bio, profile_image } = profileData;
+  const { owner } = profileData;
   const is_owner = currentUser?.username === owner;
 
   useEffect(() => {
     const onMount = async () => {
       try {
-        const { data } =
-          await axiosReq.get(`/profiles/${id}`)
+        const { data } = await axiosReq.get(`/profiles/${id}`);
         setProfileData(data);
       } catch (error) {
         console.log(error);
@@ -50,29 +43,24 @@ const Home = () => {
           <Accordion.Collapse eventKey="0">
             <Card.Body className={styles.ProfileBody}>
               <ProfileInfo />
-              {is_owner ? (
-                <Tabs
-                  defaultActiveKey="profile"
-                  id="uncontrolled-tab-example"
-                  className="mb-3"
-                  justify
+              <Tabs defaultActiveKey="tasks" justify className="mt-3" >
+                <Tab
+                  eventKey="tasks"
+                  title={is_owner ? "Your Tasks" : `${owner}'s Tasks`}
+                  className={styles.TasksTabBody}
+                  id={styles.TasksTab}
                 >
-                  <Tab eventKey="home" title="Your Tasks">
-                    <TaskList/>
-                  </Tab>
-                  <Tab eventKey="profile" title="Requested Tasks"></Tab>
-                </Tabs>
-              ) : (
-                <Tabs
-                  defaultActiveKey="profile"
-                  id="uncontrolled-tab-example"
-                  className="mb-3"
-                  justify
+                  <TaskList owner={owner} />
+                </Tab>
+                <Tab
+                  eventKey="requests"
+                  title={is_owner ? "Requested Tasks" : "Your Requests"}
+                  className={styles.RequestsTabBody}
+                  id={styles.RequestsTab}
                 >
-                  <Tab eventKey="home" title={`${owner}'s Tasks`}></Tab>
-                  <Tab eventKey="profile" title="Your Requests"></Tab>
-                </Tabs>
-              )}
+                  <RequestList owner={owner} />
+                </Tab>
+              </Tabs>
             </Card.Body>
           </Accordion.Collapse>
         </Card>

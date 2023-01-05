@@ -64,11 +64,13 @@ const CreateTaskForm = () => {
     formData.append("is_public", checkedPublic);
     formData.append("is_request", isRequest);
     if (taskRequestProfileData.results[0].id > 0) {
-      formData.append("requestee", taskRequestProfileData.results[0].id);
+      formData.append("requested_ID", currentUser.pk)
+      formData.append("requested_username", currentUser.username);
     }
 
     try {
       await axiosReq.post("/tasks/", formData);
+      console.log(formData)
       history.push("/");
     } catch (error) {
       console.log(error);

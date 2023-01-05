@@ -2,10 +2,11 @@
     border: none;
     padding: 0;
     margin: 12px;
+    background-color: #ece0e0;
 }
 
 .ProfilePreviewCard:Hover {
-    background-color: rgb(255, 192, 158);
+    background-color: rgb(211, 94, 94);
 }
 
 .ProfilePreviewImage {
@@ -16,7 +17,7 @@
     padding: 12px;
     left: 100%;
     margin-right: 60px;
-    background-color: rgb(255, 192, 158);
+    background-color: rgb(211, 94, 94);
     position: relative;
     z-index: 2;
 }
@@ -27,7 +28,7 @@
 }
 
 .ImageContainer {
-    background-color: rgb(255, 192, 158);
+    background-color: rgb(211, 94, 94);
 }
 
 .Owner {
@@ -49,5 +50,5 @@
 }
 
 .NameContainer {
-    background-color: rgb(248, 245, 218);
+    background-color: #faf7f7;;
 }
