@@ -1,0 +1,84 @@
+.Container {
+    margin-top: 150px;
+    margin-left: 10%;
+    width: 80%;
+}
+
+.Heading {
+    text-align: center;
+    font-size: x-large;
+}
+
+.Heading:hover {
+    color: rgb(211, 94, 94);
+}
+
+.TitleField {
+    font-size: larger;
+}
+
+.DateTimePicker {
+    width: 100%;
+    font-size: larger;
+    letter-spacing: 1px;
+    word-spacing: 2px;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.Test {
+    color: rgb(211, 94, 94);
+}
+
+.DateTimePicker:Hover {
+    border-color: rgb(211, 94, 94);
+    color: rgb(211, 94, 94);
+}
+
+.CheckBox {
+    text-indent: 4px;
+}
+
+.ConfirmButton {
+    font-size: larger;
+    font-weight: 600;
+    margin: 4px;
+    width: 100%;
+}
+
+.CancelButton {
+    font-size: larger;
+    margin: 4px;
+    margin-left: -4px;
+    width: 100%;
+}
+
+@media only screen and (max-width: 575px) {
+    .Container {
+        margin-top: 5vh;
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    .ConfirmButton {
+        margin-left: 10%;
+        width: 80%;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .CancelButton {
+        margin-left: 10%;
+        width: 80%;
+        padding: 10px;
+        border-radius: 10px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .DueBox {
+        height: 50px;
+        line-height: 50px;
+        font-size: larger;
+    }
+}

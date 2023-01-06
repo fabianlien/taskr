@@ -10,6 +10,9 @@ import { axiosReq } from "../../api/axiosDefaults";
 import { useHistory, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import { useCurrentUser } from "../../context/CurrentUserContext";
+import styles from "../../styles/Detail.module.css";
+import { Card } from "react-bootstrap";
+import Switch from "react-custom-checkbox/switch";
 
 const CreateTaskForm = () => {
   const currentUser = useCurrentUser();
@@ -33,16 +36,15 @@ const CreateTaskForm = () => {
       if (is_owner === false) {
         setIsRequest(true);
         try {
-          const { data } = await axiosReq.get(`/profiles/?search=${id}`)
+          const { data } = await axiosReq.get(`/profiles/?search=${id}`);
           setTaskRequestProfileData(data);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
-      };
+      }
     };
     onMount();
   }, [is_owner, id]);
-  
 
   const handleChange = (event) => {
     setTaskTextData({
@@ -52,6 +54,13 @@ const CreateTaskForm = () => {
   };
 
   const toggleBool = (value) => !value;
+
+  const clearForm = () => {
+    setTaskTextData({ title: "", description: "" });
+    setDateTime(new Date());
+    setCheckedPriority(false);
+    setCheckedPublic(true);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -63,14 +72,14 @@ const CreateTaskForm = () => {
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
     formData.append("is_request", isRequest);
-    if (taskRequestProfileData.results[0].id > 0) {
-      formData.append("requested_ID", currentUser.pk)
+    if (taskRequestProfileData.count > 0) {
+      formData.append("owner", taskRequestProfileData.results[0]);
+      formData.append("requested_ID", currentUser.pk);
       formData.append("requested_username", currentUser.username);
     }
 
     try {
       await axiosReq.post("/tasks/", formData);
-      console.log(formData)
       history.push("/");
     } catch (error) {
       console.log(error);
@@ -79,93 +88,120 @@ const CreateTaskForm = () => {
   };
 
   return (
-    <Container style={{ width: "80%" }}>
+    <Container className={styles.Container}>
+      {console.log(taskRequestProfileData)}
       <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row} controlId="title">
-          <Form.Label className="d-none mg-b-20" column sm={2}>
-            Title
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              type="text"
-              placeholder="Title"
-              name="title"
-              value={title}
-              onChange={handleChange}
-            />
-          </Col>
-        </Form.Group>
-        {errors.title?.map((message, index) => (
-          <Alert variant="warning" key={index}>
-            {message}
-          </Alert>
-        ))}
-
-        <Form.Group as={Row} controlId="dateTime">
-          <Col sm={10}>
-            <DatePicker
-              selected={dateTime}
-              onChange={(date) => setDateTime(date)}
-              showTimeSelect
-              dateFormat="Pp"
-            />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row} controlId="description">
-          <Form.Label className="d-none mg-b-20" column sm={2}>
-            Description
-          </Form.Label>
-          <Col sm={10}>
-            <Form.Control
-              as="textarea"
-              placeholder="Description"
-              name="description"
-              value={description}
-              onChange={handleChange}
-            />
-          </Col>
-        </Form.Group>
-        {errors.description?.map((message, index) => (
-          <Alert variant="warning" key={index}>
-            {message}
-          </Alert>
-        ))}
-
-        <fieldset>
-          <Form.Group as={Row}>
-            <Col sm={10}>
-              <Form.Check
-                type="switch"
-                label="High Priority"
-                name="priority"
-                checked={checkedPriority}
-                onChange={() => setCheckedPriority(toggleBool)}
+        <Card className="p-2">
+          <Card.Header onClick={clearForm}>
+            <div className={styles.Heading}>Create a new Task</div>
+          </Card.Header>
+          <Form.Group as={Row} controlId="title">
+            <Form.Label className="d-none mg-b-20" column sm={2}>
+              Title
+            </Form.Label>
+            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+              <Form.Control
+                type="text"
+                placeholder="Title"
+                name="title"
+                value={title}
+                onChange={handleChange}
+                className={styles.TitleField}
               />
             </Col>
           </Form.Group>
-        </fieldset>
+          {errors.title?.map((message, index) => (
+            <Alert variant="warning" key={index}>
+              {message}
+            </Alert>
+          ))}
 
-        <fieldset>
-          <Form.Group as={Row}>
-            <Col sm={10}>
-              <Form.Check
-                type="switch"
-                label="Visible to public"
-                name="public"
-                checked={checkedPublic}
-                onChange={() => setCheckedPublic(toggleBool)}
+          <Form.Group as={Row} controlId="dateTime">
+            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+              <Row>
+                <Col md={2} className={styles.DueBox}>Due By</Col>
+                <Col md={10}>
+                  <DatePicker
+                    className={styles.DateTimePicker}
+                    selected={dateTime}
+                    onChange={(date) => setDateTime(date)}
+                    showTimeSelect
+                    dateFormat="Pp"
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Form.Group>
+
+          <Form.Group as={Row} controlId="description">
+            <Form.Label className="d-none mg-b-20" column sm={2}>
+              Description
+            </Form.Label>
+            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+              <Form.Control
+                as="textarea"
+                placeholder="Description"
+                name="description"
+                value={description}
+                onChange={handleChange}
+                className="mb-3"
               />
             </Col>
           </Form.Group>
-        </fieldset>
+          {errors.description?.map((message, index) => (
+            <Alert variant="warning" key={index}>
+              {message}
+            </Alert>
+          ))}
+
+          <fieldset>
+            <Form.Group as={Row}>
+              <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                <Switch
+                  label="High Priority"
+                  name="priority"
+                  checked={checkedPriority}
+                  onChange={() => setCheckedPriority(toggleBool)}    
+                  className={styles.CheckBox}
+                />
+              </Col>
+            </Form.Group>
+          </fieldset>
+
+          <fieldset>
+            <Form.Group as={Row}>
+              <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                <Switch
+                  type="switch"
+                  label="Visible to public"
+                  name="public"
+                  checked={checkedPublic}
+                  onChange={() => setCheckedPublic(toggleBool)}
+                  className={styles.CheckBox}
+                />
+              </Col>
+            </Form.Group>
+          </fieldset>
+        </Card>
 
         <Form.Group as={Row}>
-          <Col sm={{ span: 4 }}>
-            <Button type="submit">+ Add</Button>
+          <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+            <Button
+              type="submit"
+              variant="warning"
+              className={styles.ConfirmButton}
+            >
+              + Add
+            </Button>
           </Col>
-          <Col sm={{ span: 6 }}>
-            <Button onClick={() => history.goBack()}>Cancel</Button>
+          <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+            <Button
+              className={styles.CancelButton}
+              variant="secondary"
+              onClick={() => history.goBack()}
+            >
+              Cancel
+            </Button>
           </Col>
         </Form.Group>
       </Form>

@@ -9,6 +9,7 @@ import TaskSearchBar from "../components/TaskSearchBar";
 import TaskPreview from "./TaskPreview";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../utils/utils";
+import styles from "../styles/SearchBar.module.css";
 
 const TaskList = ({owner}) => {
   const currentUser = useCurrentUser();
@@ -24,7 +25,7 @@ const TaskList = ({owner}) => {
         const { data } =
             is_owner
               ? await axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False`)
-              : await axiosReq.get(`/tasks/?owner__profile=${id}&is_public=True`)
+              : await axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False&is_public=True`)
         setTasks(data);
       } catch (error) {
         console.log(error);
@@ -69,8 +70,9 @@ const TaskList = ({owner}) => {
                 ))}
                 dataLength={tasks.results.length}
                 hasMore={!!tasks.next}
-                loader={<Spinner animation="border" />}
+                loader={<Spinner animation="border" className={styles.Spinner}/>}
                 next={() => fetchMoreData(tasks, setTasks)}
+                style={{ overflowY: 'hidden' }}
               />
             ) : (
               <Card style={{ width: "100%" }}>

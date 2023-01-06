@@ -7,6 +7,7 @@
 
 .SearchBar {
     margin-top: 20px;
+    margin-bottom: 16px;
 }
 
 .UserSearchQuery {
@@ -17,7 +18,8 @@
 .Spinner {
     width: 6vw;
     height: 6vw;
-    margin-top: 20px;   
+    margin: 20px auto;
+    
 }
 
 .NoTasksBox {
