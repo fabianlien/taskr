@@ -26,15 +26,16 @@ const CreateTaskForm = () => {
   const [dateTime, setDateTime] = useState(new Date());
   const [checkedPriority, setCheckedPriority] = useState(false);
   const [checkedPublic, setCheckedPublic] = useState(true);
-  const [isRequest, setIsRequest] = useState(false);
+  const [requestAccepted, setRequestAccepted] = useState("0");
   const [errors, setErrors] = useState({});
   const [taskRequestProfileData, setTaskRequestProfileData] = useState({});
   const is_owner = currentUser?.username === id;
 
   useEffect(() => {
     const onMount = async () => {
+      console.log(is_owner)
       if (is_owner === false) {
-        setIsRequest(true);
+        setRequestAccepted("n");
         try {
           const { data } = await axiosReq.get(`/profiles/?search=${id}`);
           setTaskRequestProfileData(data);
@@ -71,16 +72,20 @@ const CreateTaskForm = () => {
     formData.append("due_by", dateTime.toISOString());
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
-    formData.append("is_request", isRequest);
-    if (taskRequestProfileData.count > 0) {
-      formData.append("owner", taskRequestProfileData.results[0]);
+    formData.append("request_accepted", requestAccepted);
+    if (requestAccepted === "n") {
+      formData.append("owner", taskRequestProfileData.results?.[0].owner);
       formData.append("requested_ID", currentUser.pk);
       formData.append("requested_username", currentUser.username);
     }
+    else {
+      formData.append("owner", currentUser.username);
+    }
 
     try {
+      {console.log(requestAccepted)}
       await axiosReq.post("/tasks/", formData);
-      history.push("/");
+      history.goBack();
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -89,7 +94,6 @@ const CreateTaskForm = () => {
 
   return (
     <Container className={styles.Container}>
-      {console.log(taskRequestProfileData)}
       <Form onSubmit={handleSubmit}>
         <Card className="p-2">
           <Card.Header onClick={clearForm}>
@@ -119,7 +123,9 @@ const CreateTaskForm = () => {
           <Form.Group as={Row} controlId="dateTime">
             <Col sm={{ span: 10, offset: 1 }} className="mt-2">
               <Row>
-                <Col md={2} className={styles.DueBox}>Due By</Col>
+                <Col md={2} className={styles.DueBox}>
+                  Due By
+                </Col>
                 <Col md={10}>
                   <DatePicker
                     className={styles.DateTimePicker}
@@ -161,7 +167,7 @@ const CreateTaskForm = () => {
                   label="High Priority"
                   name="priority"
                   checked={checkedPriority}
-                  onChange={() => setCheckedPriority(toggleBool)}    
+                  onChange={() => setCheckedPriority(toggleBool)}
                   className={styles.CheckBox}
                 />
               </Col>

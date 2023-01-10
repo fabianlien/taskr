@@ -8,14 +8,14 @@ import Landing from "./components/Landing";
 import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
 import CreateTaskForm from "./pages/tasks/CreateTaskForm";
-import TaskDetail from "./pages/tasks/TaskDetail";
 import UpdateTaskForm from "./pages/tasks/UpdateTaskForm";
 import UpdateProfileForm from "./pages/profile/UpdateProfileForm";
 import Profile from "./pages/profile/Profile";
+import Task from "./pages/tasks/Task";
 
 function App() {
   return (
-    <div className={styles.App}>
+    <Container className={styles.App}>
       <NavBar />
       <Container className={styles.Body}>
         <Switch>
@@ -23,14 +23,14 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/task/create/:id" render={() => <CreateTaskForm />} />
-          <Route exact path="/task/:id" render={() => <TaskDetail />} />
+          <Route exact path="/task/:id" render={() => <Task />} />
           <Route exact path="/task/:id/update" render={() => <UpdateTaskForm />} />
           <Route exact path="/profile/:id/edit" render={() => <UpdateProfileForm />} />
           <Route exact path="/profile/:id" render={() => <Profile />} />
-          <Route render={() => <p>Sorry, the page could not be found!</p>} />
+          <Route render={() => <>Sorry, the page could not be found!</>} />
         </Switch>
       </Container>
-    </div>
+    </Container>
   );
 }
 

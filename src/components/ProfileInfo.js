@@ -14,32 +14,37 @@ const ProfileInfo = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const [profileData, setProfileData] = useState({});
-  const [activeTasks, setActiveTasks] = useState({});
+  const [activeTasks, setActiveTasks] = useState({ results: [] });
   const { owner, name, bio, profile_image } = profileData;
   const is_owner = currentUser?.username === owner;
 
-    useEffect(() => {
-      const onMount = async () => {
-        try {
-          const [
-            { data: profile },
-            { data: activetasks },
-          ] = await Promise.all([
-            axiosReq.get(`/profiles/${id}`),
-            axiosReq.get(
-              `/tasks/?owner__profile=${id}&is_completed=False&is_request=False`
-            ),
-          ]);
-          setProfileData(profile);
-          setActiveTasks(activetasks);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      onMount();
-    }, [is_owner, id, currentUser]);
+  useEffect(() => {
+    const onMount = async () => {
+      try {
+        const [{ data: profile }, { data: activetasks }] = await Promise.all([
+          axiosReq.get(`/profiles/${id}`),
+          axiosReq.get(`/tasks/?owner__profile=${id}&is_completed=False`),
+        ]);
+        setProfileData(profile);
+        setActiveTasks(activetasks);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    onMount();
+  }, [is_owner, id, currentUser]);
 
-    return (
+  const filteredActiveTasks = activeTasks.results.filter(
+    (task) => task.request_accepted === "0"
+  ).length;
+  const filteredActiveRequests = activeTasks.results.filter(
+    (task) => task.request_accepted === "yes"
+  ).length;
+  const filteredActiveTotal = (
+    filteredActiveTasks + filteredActiveRequests
+  ).toString();
+
+  return (
     <Container>
       <div id={styles.ProfileImageBox}>
         {is_owner && (
@@ -103,13 +108,13 @@ const ProfileInfo = () => {
           {name ? (
             <div className={styles.ActiveTasksContainer}>
               <Card.Text>
-                {name}'s active tasks: <strong>{activeTasks.count}</strong>
+                {name}'s active tasks: <strong>{filteredActiveTotal}</strong>
               </Card.Text>
             </div>
           ) : (
             <div className={styles.ActiveTasksContainer}>
               <Card.Text>
-                Active Tasks: <strong>{activeTasks.count}</strong>
+                Active Tasks: <strong>{filteredActiveTotal}</strong>
               </Card.Text>
             </div>
           )}

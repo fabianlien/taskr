@@ -9,6 +9,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useHistory, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
+import styles from "../../styles/Detail.module.css";
+import { Card } from "react-bootstrap";
+import Switch from "react-custom-checkbox/switch";
 
 const UpdateTaskForm = () => {
   const history = useHistory();
@@ -81,19 +84,24 @@ const UpdateTaskForm = () => {
   };
 
   return (
-    <Container style={{ width: "80%" }}>
-      <Form onSubmit={handleSubmit}>
+    <Container className={styles.Container}>
+    <Form onSubmit={handleSubmit}>
+      <Card className="p-2">
+        <Card.Header>
+          <div className={styles.Heading}>{title}</div>
+        </Card.Header>
         <Form.Group as={Row} controlId="title">
           <Form.Label className="d-none mg-b-20" column sm={2}>
             Title
           </Form.Label>
-          <Col sm={10}>
+          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
             <Form.Control
               type="text"
               placeholder="Title"
               name="title"
               value={title}
               onChange={handleChange}
+              className={styles.TitleField}
             />
           </Col>
         </Form.Group>
@@ -103,14 +111,20 @@ const UpdateTaskForm = () => {
           </Alert>
         ))}
 
-        <Form.Group as={Row} controlId="title">
-          <Col sm={10}>
-          <DatePicker
-              selected={dateTime}
-              onChange={(date) => setDateTime(date)}
-              showTimeSelect
-              dateFormat="Pp"
-            />
+        <Form.Group as={Row} controlId="dateTime">
+          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+            <Row>
+              <Col md={2} className={styles.DueBox}>Due By</Col>
+              <Col md={10}>
+                <DatePicker
+                  className={styles.DateTimePicker}
+                  selected={dateTime}
+                  onChange={(date) => setDateTime(date)}
+                  showTimeSelect
+                  dateFormat="Pp"
+                />
+              </Col>
+            </Row>
           </Col>
         </Form.Group>
 
@@ -118,13 +132,14 @@ const UpdateTaskForm = () => {
           <Form.Label className="d-none mg-b-20" column sm={2}>
             Description
           </Form.Label>
-          <Col sm={10}>
+          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
             <Form.Control
               as="textarea"
               placeholder="Description"
               name="description"
               value={description}
               onChange={handleChange}
+              className="mb-3"
             />
           </Col>
         </Form.Group>
@@ -136,13 +151,13 @@ const UpdateTaskForm = () => {
 
         <fieldset>
           <Form.Group as={Row}>
-            <Col sm={10}>
-              <Form.Check
-                type="switch"
+            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+              <Switch
                 label="High Priority"
                 name="priority"
                 checked={checkedPriority}
-                onChange={() => setCheckedPriority(toggleBool)}
+                onChange={() => setCheckedPriority(toggleBool)}    
+                className={styles.CheckBox}
               />
             </Col>
           </Form.Group>
@@ -150,28 +165,42 @@ const UpdateTaskForm = () => {
 
         <fieldset>
           <Form.Group as={Row}>
-            <Col sm={10}>
-              <Form.Check
+            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+              <Switch
                 type="switch"
                 label="Visible to public"
                 name="public"
                 checked={checkedPublic}
                 onChange={() => setCheckedPublic(toggleBool)}
+                className={styles.CheckBox}
               />
             </Col>
           </Form.Group>
         </fieldset>
+      </Card>
 
-        <Form.Group as={Row}>
-          <Col sm={{ span: 4 }}>
-            <Button type="submit">Save Changes</Button>
-          </Col>
-          <Col sm={{ span: 6 }}>
-            <Button onClick={() => history.push("/")}>Cancel</Button>
-          </Col>
-        </Form.Group>
-      </Form>
-    </Container>
+      <Form.Group as={Row}>
+        <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+          <Button
+            type="submit"
+            variant="warning"
+            className={styles.ConfirmButton}
+          >
+            + Add
+          </Button>
+        </Col>
+        <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+          <Button
+            className={styles.CancelButton}
+            variant="secondary"
+            onClick={() => history.goBack()}
+          >
+            Cancel
+          </Button>
+        </Col>
+      </Form.Group>
+    </Form>
+  </Container>
   );
 };
 

@@ -24,8 +24,8 @@ const TaskList = ({owner}) => {
       try {
         const { data } =
             is_owner
-              ? await axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False`)
-              : await axiosReq.get(`/tasks/?owner__profile=${id}&is_request=False&is_public=True`)
+              ? await axiosReq.get(`/tasks/?owner__profile=${id}`)
+              : await axiosReq.get(`/tasks/?owner__profile=${id}&request_accepted=0&is_public=True`)
         setTasks(data);
       } catch (error) {
         console.log(error);

@@ -5,27 +5,38 @@ import Button from "react-bootstrap/Button";
 import TaskItem from "../../pages/tasks/TaskItem.js";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults.js";
+import styles from "../../styles/Detail.module.css";
+import CreateTaskItemForm from "./CreateTaskItemForm.js";
+import { useCurrentUser } from "../../context/CurrentUserContext.js";
  
-const Task = (props) => {
+const Task = () => {
   const { id } = useParams(); 
   const history = useHistory();
-  const { is_owner, title, is_completed, due_by, description, setTaskData, taskData } =
-    props;
-  const stringDate = String(due_by)
-  const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12))
+  const [task, setTask] = useState({});
   const [taskItems, setTaskItems] = useState({ results: [] });
+  const currentUser = useCurrentUser();
+  const [refresh, setRefresh] = useState("")
 
   useEffect(() => {
     const onMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/taskitems/?task_id=${id}`)
-        setTaskItems(data)
+        const [{ data: task }, { data: taskItems}] = await Promise.all([
+          axiosReq.get(`/tasks/${id}/`),
+          axiosReq.get(`/taskitems/?task_id=${id}`)
+        ]);
+        setTask(task)
+        setTaskItems(taskItems)
       } catch (error) {
         console.log(error)
       }
+      setRefresh(refresh);
     }
     onMount();
-  }, [id, setTaskItems])
+  }, [id, setTaskItems, setTask, refresh])
+
+  const { is_owner, title, is_completed, due_by, description, setTaskData, taskData } = task
+  const stringDate = String(due_by)
+  const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12))
   
   const handleComplete = async () => {
     try {
@@ -43,11 +54,11 @@ const Task = (props) => {
     } catch (error) {
         console.log(error)
     }
-    history.push("/");
+    history.goBack();
 }
 
   return (
-    <Container>
+    <Container className={styles.Container}>
       <Card style={{ width: "100%" }}>
         <Card.Body>
           <Card.Title>
@@ -62,7 +73,7 @@ const Task = (props) => {
             {taskItems.results.length ? (
               <>
                 {taskItems?.results.map((taskItem, index) => {
-                  return <TaskItem key={index} taskItem={taskItem} />
+                  return <TaskItem key={index} taskItem={taskItem} is_owner={is_owner}/>
                 })}
               </>
             ) : (
@@ -82,6 +93,7 @@ const Task = (props) => {
                 <Button variant="warning">Update</Button>
               </Link>
               <Button onClick={handleDelete} variant="warning">Delete</Button>
+              <CreateTaskItemForm task_id={id} task={task} setTask={setTask} setRefresh={setRefresh}/>
             </Container>
           ) : (
             <></>
