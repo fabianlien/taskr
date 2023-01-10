@@ -46,7 +46,7 @@ const TaskList = ({owner}) => {
             {tasksFiltered.results.length ? (
               <>
                 {tasksFiltered.results
-                  .filter((task) => task.owner === owner)
+                  .filter((task) => task.owner === owner && task.request_accepted !== "no")
                   .map((task, index) => {
                     return <TaskPreview key={index} task={task} />;
                   })}
@@ -55,7 +55,7 @@ const TaskList = ({owner}) => {
               <>
                 <Card style={{ width: "100%" }}>
                   <Card.Body>
-                    <Card.Title>No tasks to display.</Card.Title>
+                    <Card.Title>No tasks found for {taskSearchQuery}.</Card.Title>
                   </Card.Body>
                 </Card>
               </>
@@ -65,7 +65,9 @@ const TaskList = ({owner}) => {
           <>
             {tasks.results.length ? (
               <InfiniteScroll
-                children={tasks.results.map((task, index) => (
+                children={tasks.results
+                  .filter((task) => task.owner === owner && task.request_accepted !== "no")
+                  .map((task, index) => (
                   <TaskPreview key={index} task={task} />
                 ))}
                 dataLength={tasks.results.length}

@@ -26,7 +26,7 @@ const RequestList = ({ owner }) => {
         if (is_owner) {
           const [{ data: newRequests }, { data: userRequests }] =
             await Promise.all([
-              axiosReq.get(`/tasks/?owner__profile=${id}&request_accepted=yes`),
+              axiosReq.get(`/tasks/?owner__profile=${id}`),
               axiosReq.get(`/tasks/?requested_ID=${id}`),
             ]);
           setRequestedTasks(newRequests);
@@ -44,6 +44,10 @@ const RequestList = ({ owner }) => {
     onMount();
   }, [is_owner, id, currentUser]);
 
+  const requests = requestedTasks.results?.filter(
+    (task) => task.request_accepted === "no"
+  );
+
   return (
     <Container fluid>
       <TaskSearchBar
@@ -56,7 +60,11 @@ const RequestList = ({ owner }) => {
           {tasksFiltered.results.length ? (
             <>
               {tasksFiltered.results
-                .filter((task) => task.owner === owner)
+                .filter(
+                  (task) =>
+                    task.requested_username === owner ||
+                    task.request_accepted === "no"
+                )
                 .map((task, index) => {
                   return <TaskPreview key={index} task={task} />;
                 })}
@@ -81,10 +89,12 @@ const RequestList = ({ owner }) => {
                 <></>
               )}
               <InfiniteScroll
-                children={requestedTasks.results?.map((task, index) => (
-                  <TaskPreview key={index} task={task} />
-                ))}
-                dataLength={requestedTasks.results.length}
+                children={(is_owner ? requests : requestedTasks.results).map(
+                  (task, index) => (
+                    <TaskPreview key={index} task={task} />
+                  )
+                )}
+                dataLength={requests.length}
                 hasMore={!!requestedTasks.next}
                 loader={
                   <Spinner animation="border" className={styles.Spinner} />
@@ -95,37 +105,47 @@ const RequestList = ({ owner }) => {
           ) : (
             <Card style={{ width: "100%" }}>
               <Card.Body>
-                <Card.Title>You have no new incoming requests.</Card.Title>
+                <Card.Title>
+                  {is_owner
+                    ? "You have no new incoming requests."
+                    : `You have not made any requests to ${owner}.`}
+                </Card.Title>
               </Card.Body>
             </Card>
           )}
-          {userRequests.results.length ? (
-            <Card>
-              <Card.Title>Your outgoing requests</Card.Title>
-              <InfiniteScroll
-                children={userRequests.results?.map((task, index) => (
-                  <TaskPreview key={index} task={task} />
-                ))}
-                dataLength={userRequests.results.length}
-                hasMore={!!userRequests.next}
-                loader={
-                  <Spinner animation="border" className={styles.Spinner} />
-                }
-                next={() => fetchMoreData(userRequests, setUserRequests)}
-              />
-            </Card>
-          ) : (
+          {is_owner ? (
             <>
-              {is_owner ? (
+              {userRequests.results.length ? (
                 <Card>
-                  <Card.Body>
-                    <Card.Title>You have no outgoing requests.</Card.Title>
-                  </Card.Body>
+                  <Card.Title>Your outgoing requests</Card.Title>
+                  <InfiniteScroll
+                    children={userRequests.results?.map((task, index) => (
+                      <TaskPreview key={index} task={task} />
+                    ))}
+                    dataLength={userRequests.results.length}
+                    hasMore={!!userRequests.next}
+                    loader={
+                      <Spinner animation="border" className={styles.Spinner} />
+                    }
+                    next={() => fetchMoreData(userRequests, setUserRequests)}
+                  />
                 </Card>
               ) : (
-                <></>
+                <>
+                  {is_owner ? (
+                    <Card>
+                      <Card.Body>
+                        <Card.Title>You have no outgoing requests.</Card.Title>
+                      </Card.Body>
+                    </Card>
+                  ) : (
+                    <></>
+                  )}
+                </>
               )}
             </>
+          ) : (
+            <></>
           )}
         </>
       )}

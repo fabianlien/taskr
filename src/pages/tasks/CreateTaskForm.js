@@ -33,9 +33,8 @@ const CreateTaskForm = () => {
 
   useEffect(() => {
     const onMount = async () => {
-      console.log(is_owner)
       if (is_owner === false) {
-        setRequestAccepted("n");
+        setRequestAccepted("no");
         try {
           const { data } = await axiosReq.get(`/profiles/?search=${id}`);
           setTaskRequestProfileData(data);
@@ -73,7 +72,7 @@ const CreateTaskForm = () => {
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
     formData.append("request_accepted", requestAccepted);
-    if (requestAccepted === "n") {
+    if (requestAccepted === "no") {
       formData.append("owner", taskRequestProfileData.results?.[0].owner);
       formData.append("requested_ID", currentUser.pk);
       formData.append("requested_username", currentUser.username);
@@ -83,7 +82,6 @@ const CreateTaskForm = () => {
     }
 
     try {
-      {console.log(requestAccepted)}
       await axiosReq.post("/tasks/", formData);
       history.goBack();
     } catch (error) {
@@ -99,8 +97,8 @@ const CreateTaskForm = () => {
           <Card.Header onClick={clearForm}>
             <div className={styles.Heading}>Create a new Task</div>
           </Card.Header>
-          <Form.Group as={Row} controlId="title">
-            <Form.Label className="d-none mg-b-20" column sm={2}>
+          <Form.Group as={Row} className={styles.ro} classcontrolId="title">
+            <Form.Label className="d-none">
               Title
             </Form.Label>
             <Col sm={{ span: 10, offset: 1 }} className="mt-2">

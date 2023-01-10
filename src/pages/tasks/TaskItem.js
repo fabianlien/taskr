@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Container } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
+import styles from "../../styles/TaskItem.module.css";
 
 const TaskItem = ({ taskItem }) => {
   const { content, id, is_completed, owner } = taskItem;
@@ -33,25 +34,33 @@ const TaskItem = ({ taskItem }) => {
   };
 
   return (
-    <Container>
-      <i className="fa-solid fa-clipboard-list"></i>
-      <span>{content}</span>
+    <Container fluid className={styles.ItemBox}>
       <Form>
         {currentUser.username === owner ? (
-          <>
-            <Form.Check
-              type="switch"
-              name="priority"
-              checked={checkCompleted}
-              onChange={(event) => {
-                setCheckCompleted(toggleBool);
-                sendCheck(event.target.checked);
-              }}
-            />
-            <Form.Group onClick={handleDelete}>
-              <i className="fa-solid fa-xmark"></i>
-            </Form.Group>
-          </>
+          <Row>
+            <Col xs={9}>
+              <Card.Text>
+                <i className="fa-solid fa-clipboard-list"></i>
+                {content}
+              </Card.Text>
+            </Col>
+            <Col xs={2}>
+              <Form.Check
+                type="switch"
+                name="priority"
+                checked={checkCompleted}
+                onChange={(event) => {
+                  setCheckCompleted(toggleBool);
+                  sendCheck(event.target.checked);
+                }}
+              />
+            </Col>
+            <Col xs={1}>
+              <Form.Group onClick={handleDelete}>
+                <i className="fa-solid fa-xmark"></i>
+              </Form.Group>
+            </Col>
+          </Row>
         ) : (
           <Form.Check type="switch" name="priority" checked={checkCompleted} />
         )}

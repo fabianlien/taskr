@@ -5,13 +5,14 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { axiosReq } from "../../api/axiosDefaults";
+import styles from "../../styles/Detail.module.css";
 
 const CreateTaskItemForm = (props) => {
   const { task_id, setTask, task } = props;
   const initialState = {
     content: "",
     task_id: task_id,
-  }
+  };
   const [taskItem, setTaskItem] = useState(initialState);
   const [errors, setErrors] = useState({});
 
@@ -31,9 +32,8 @@ const CreateTaskItemForm = (props) => {
 
     try {
       await axiosReq.post("/taskitems/", formData);
-      setTaskItem(initialState)
-      setTask(task)
-      
+      setTaskItem(initialState);
+      setTask(task);
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -43,10 +43,8 @@ const CreateTaskItemForm = (props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group as={Row} controlId="content">
-        <Form.Label className="d-none mg-b-20" column sm={2}>
-          Task item
-        </Form.Label>
-        <Col sm={10}>
+        <Form.Label className="d-none">Task item</Form.Label>
+        <Col xs={11} lg={10}>
           <Form.Control
             type="text"
             placeholder="Task item"
@@ -55,13 +53,17 @@ const CreateTaskItemForm = (props) => {
             onChange={handleChange}
           />
         </Col>
+        <Col xs={1} lg={2}>
+          <Button className={styles.AddButton} type="submit">
+            +
+          </Button>
+        </Col>
       </Form.Group>
       {errors.content?.map((message, index) => (
-        <Alert variant="warning" key={index}>
+        <Alert className="mt-1" variant="warning" key={index}>
           {message}
         </Alert>
       ))}
-      <Button type="submit">+ Item</Button>
     </Form>
   );
 };
