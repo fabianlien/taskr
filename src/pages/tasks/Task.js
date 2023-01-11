@@ -47,7 +47,6 @@ const Task = () => {
         is_completed: true,
       });
       setTask(data);
-      history.goBack();
     } catch (error) {
       console.log(error);
     }
@@ -186,7 +185,7 @@ const Task = () => {
           </Row>
         </Container>
       ) : (
-        <Card.Text onClick={() => history.goBack()}>
+        <Card.Text className={styles.GoBack} onClick={() => history.goBack()}>
           <i className="fa-solid fa-rotate-left" />
         </Card.Text>
       )}
