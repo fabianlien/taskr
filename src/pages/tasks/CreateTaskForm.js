@@ -76,8 +76,7 @@ const CreateTaskForm = () => {
       formData.append("owner", taskRequestProfileData.results?.[0].owner);
       formData.append("requested_ID", currentUser.pk);
       formData.append("requested_username", currentUser.username);
-    }
-    else {
+    } else {
       formData.append("owner", currentUser.username);
     }
 
@@ -94,13 +93,11 @@ const CreateTaskForm = () => {
     <Container className={styles.Container}>
       <Form onSubmit={handleSubmit}>
         <Card className="p-2">
-          <Card.Header onClick={clearForm}>
-            <div className={styles.Heading}>Create a new Task</div>
+          <Card.Header onClick={clearForm} className={styles.Heading}>
+            {is_owner ? "Create a new Task" : "Make a new Request"}
           </Card.Header>
           <Form.Group as={Row} className={styles.ro} classcontrolId="title">
-            <Form.Label className="d-none">
-              Title
-            </Form.Label>
+            <Form.Label className="d-none">Title</Form.Label>
             <Col sm={{ span: 10, offset: 1 }} className="mt-2">
               <Form.Control
                 type="text"

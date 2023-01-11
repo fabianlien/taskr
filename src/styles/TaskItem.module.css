@@ -1,3 +1,8 @@
 .ItemBox {
     text-align: center;
+    margin-bottom: 20px;
+}
+
+.Icon {
+    color: rgb(109, 106, 106);
 }

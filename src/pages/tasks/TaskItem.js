@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import Checkbox from "react-custom-checkbox";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/TaskItem.module.css";
@@ -38,17 +39,22 @@ const TaskItem = ({ taskItem }) => {
       <Form>
         {currentUser.username === owner ? (
           <Row>
-            <Col xs={9}>
-              <Card.Text>
-                <i className="fa-solid fa-clipboard-list"></i>
+            <Col className={styles.Icon} xs={1}>
+              <i className="fa-solid fa-clipboard-list" />
+            </Col>
+            <Col xs={6}>
+            <Card.Text>
                 {content}
               </Card.Text>
             </Col>
             <Col xs={2}>
-              <Form.Check
-                type="switch"
-                name="priority"
+              <Checkbox
                 checked={checkCompleted}
+                borderColor="rgb(211, 94, 94)"
+                borderRadius={5}
+                icon={<i className="fa-solid fa-check" />}
+                size={18}
+                aria-label=" Task item checkbox"
                 onChange={(event) => {
                   setCheckCompleted(toggleBool);
                   sendCheck(event.target.checked);
@@ -56,8 +62,8 @@ const TaskItem = ({ taskItem }) => {
               />
             </Col>
             <Col xs={1}>
-              <Form.Group onClick={handleDelete}>
-                <i className="fa-solid fa-xmark"></i>
+              <Form.Group className={styles.Icon} onClick={handleDelete}>
+                <i className="fa-solid fa-xmark" />
               </Form.Group>
             </Col>
           </Row>

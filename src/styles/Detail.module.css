@@ -46,6 +46,25 @@
     text-indent: 4px;
 }
 
+.DueBox2 {
+    text-align: center;
+    height: 50px;
+    line-height: 50px;
+    font-size: larger;
+}
+
+.GoBack {
+    top: 265px;
+    position: absolute;
+    font-size: xx-large;
+    color: #faf7f7;
+    margin-left: 4px;
+}
+
+.GoBack:Hover {
+    color: rgb(201, 190, 190);
+}
+
 .ConfirmButton {
     font-size: larger;
     font-weight: 600;
@@ -60,6 +79,28 @@
     width: 100%;
 }
 
+.DeleteButton {
+    font-size: larger;
+    margin: 4px;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    color: white;
+    background-color: rgb(109, 106, 106);
+    border-color: rgb(109, 106, 106);
+}
+
+.DeleteButton:Hover {
+    color: white;
+    background-color: rgb(211, 94, 94);
+    border-color: rgb(211, 94, 94);
+}
+
+.RejectButton {
+    margin-top: 4px;
+    margin-left: -4px;
+}
+
 .AddButton {
     height: 38px;
     width: 38px;
@@ -70,6 +111,12 @@
     border: 2px solid #ece0e0;
     color: #ece0e0;
     font-size: xx-large;
+}
+
+.AddButton:Hover {
+    background-color: #ece0e0;
+    color: rgb(109, 106, 106);
+    border: 2px solid #ece0e0;
 }
 
 .TaskIncomplete {
@@ -114,11 +161,19 @@
 
 }
 
+.Link {
+    font-size: medium;
+}
+
 @media only screen and (max-width: 575px) {
     .Container {
         margin-top: 5vh;
         width: 90%;
         margin-left: 5%;
+    }
+
+    .GoBack {
+        top: 170px;
     }
 
     .ConfirmButton {
@@ -135,6 +190,14 @@
         border-radius: 10px;
     }
 
+    .DeleteButton {
+        margin-top: 40px;
+        margin-left: 10%;
+        width: 80%;
+        padding-top: 10px;
+        border-radius: 10px;
+    }
+
     .AddButton {
         margin-left: -30px;
     }
@@ -146,5 +209,9 @@
         height: 50px;
         line-height: 50px;
         font-size: larger;
+    }
+
+    .DeleteButton {
+        margin-top: 4px;
     }
 }
