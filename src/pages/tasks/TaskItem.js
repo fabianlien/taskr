@@ -6,18 +6,16 @@ import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/TaskItem.module.css";
 
-const TaskItem = ({ taskItem }) => {
-  const { content, id, is_completed, owner } = taskItem;
-  const [checkCompleted, setCheckCompleted] = useState(is_completed);
+const TaskItem = ({ taskItem, setItemsLoading }) => {
+  const { content, id, is_completed, owner, task_id } = taskItem;
+  const [checkCompleted] = useState(is_completed);
   const currentUser = useCurrentUser();
 
-  const toggleBool = (value) => !value;
-
-  const sendCheck = async () => {
+  const sendCheck = async (completed) => {
     const formData = new FormData();
     formData.append("content", content);
-    formData.append("is_completed", checkCompleted);
-    formData.append("task_id", id);
+    formData.append("is_completed", completed);
+    formData.append("task_id", task_id);
 
     try {
       await axiosReq.put(`/taskitems/${id}/`, formData);
@@ -29,6 +27,7 @@ const TaskItem = ({ taskItem }) => {
   const handleDelete = async () => {
     try {
       await axiosReq.delete(`/taskitems/${id}`);
+      setItemsLoading(true);
     } catch (error) {
       console.log(error);
     }
@@ -38,37 +37,57 @@ const TaskItem = ({ taskItem }) => {
     <Container fluid className={styles.ItemBox}>
       <Form>
         {currentUser.username === owner ? (
+          <>
+            {checkCompleted === true}
+            <Row>
+              <Col className={styles.Icon} xs={1}>
+                <i className="fa-solid fa-clipboard-list" />
+              </Col>
+              <Col xs={6}>
+                <Card.Text>{content}</Card.Text>
+              </Col>
+              <Col xs={2}>
+                <Checkbox
+                  name={id}
+                  checked={checkCompleted}
+                  borderColor="rgb(211, 94, 94)"
+                  borderRadius={5}
+                  icon={<i className="fa-solid fa-check" />}
+                  size={18}
+                  aria-label=" Task item checkbox"
+                  onChange={(value) => {
+                    sendCheck(value);
+                  }}
+                />
+              </Col>
+              <Col xs={1}>
+                <Form.Group className={styles.Icon} onClick={handleDelete}>
+                  <i className="fa-solid fa-xmark" />
+                </Form.Group>
+              </Col>
+            </Row>
+          </>
+        ) : (
           <Row>
             <Col className={styles.Icon} xs={1}>
               <i className="fa-solid fa-clipboard-list" />
             </Col>
-            <Col xs={6}>
-            <Card.Text>
-                {content}
-              </Card.Text>
+            <Col xs={8}>
+              <Card.Text>{content}</Card.Text>
             </Col>
             <Col xs={2}>
               <Checkbox
+                name={id}
                 checked={checkCompleted}
                 borderColor="rgb(211, 94, 94)"
                 borderRadius={5}
                 icon={<i className="fa-solid fa-check" />}
                 size={18}
                 aria-label=" Task item checkbox"
-                onChange={(event) => {
-                  setCheckCompleted(toggleBool);
-                  sendCheck(event.target.checked);
-                }}
+                disabled={true}
               />
             </Col>
-            <Col xs={1}>
-              <Form.Group className={styles.Icon} onClick={handleDelete}>
-                <i className="fa-solid fa-xmark" />
-              </Form.Group>
-            </Col>
           </Row>
-        ) : (
-          <Form.Check type="switch" name="priority" checked={checkCompleted} />
         )}
       </Form>
     </Container>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Container, Form, Spinner } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,7 +9,7 @@ import styles from "../../styles/Detail.module.css";
 import TaskItem from "./TaskItem";
 
 const CreateTaskItemForm = (props) => {
-  const { task_id, setTask, task, is_owner } = props;
+  const { task_id } = props;
   const initialState = {
     content: "",
     task_id: task_id,
@@ -17,20 +17,23 @@ const CreateTaskItemForm = (props) => {
   const [taskItem, setTaskItem] = useState(initialState);
   const [taskItems, setTaskItems] = useState({ results: [] });
   const [errors, setErrors] = useState({});
-  const [refresh, setRefresh] = useState({});
+  const [itemsLoading, setItemsLoading] = useState(true);
 
   useEffect(() => {
     const onMount = async () => {
       try {
-        const { data } = await axiosReq.get(`/taskitems/?task_id=${task_id}`)
+        const { data } = await axiosReq.get(`/taskitems/?task_id=${task_id}`);
         setTaskItems(data);
+        setItemsLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
-    onMount();
-    setRefresh(refresh);
-  }, [task_id, setTaskItems, setRefresh, refresh]);
+    if (itemsLoading){
+      onMount();
+    }
+    
+  }, [task_id, itemsLoading]);
 
   const handleChange = (event) => {
     setTaskItem({
@@ -39,8 +42,7 @@ const CreateTaskItemForm = (props) => {
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async () => {
 
     const formData = new FormData();
     formData.append("content", taskItem.content);
@@ -48,9 +50,7 @@ const CreateTaskItemForm = (props) => {
 
     try {
       await axiosReq.post("/taskitems/", formData);
-      setTaskItem(initialState);
-      setTask(task);
-      setRefresh(refresh);
+      setItemsLoading(true);
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -59,7 +59,7 @@ const CreateTaskItemForm = (props) => {
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit}>
+      <Form >
         <Form.Group as={Row} className="mb-4" controlId="content">
           <Form.Label className="d-none">Task item</Form.Label>
           <Col xs={11} lg={10}>
@@ -72,7 +72,7 @@ const CreateTaskItemForm = (props) => {
             />
           </Col>
           <Col xs={1} lg={2}>
-            <Button className={styles.AddButton} type="submit">
+            <Button className={styles.AddButton} type="button" onClick={handleSubmit}>
               +
             </Button>
           </Col>
@@ -83,14 +83,17 @@ const CreateTaskItemForm = (props) => {
           </Alert>
         ))}
       </Form>
-      {taskItems.results.length ? (
+      {itemsLoading && (
+        <Spinner animation="border" />
+      )}
+      {!itemsLoading && taskItems.results.length ? (
             <>
               {taskItems?.results.map((taskItem, index) => {
                 return (
                   <TaskItem
                     key={index}
                     taskItem={taskItem}
-                    is_owner={is_owner}
+                    setItemsLoading={setItemsLoading}
                   />
                 );
               })}

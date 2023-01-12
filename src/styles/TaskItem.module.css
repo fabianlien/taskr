@@ -3,6 +3,10 @@
     margin-bottom: 20px;
 }
 
+.StrikeThrough {
+    text-decoration: line-through;
+}
+
 .Icon {
     color: rgb(109, 106, 106);
 }

@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults.js";
 import styles from "../../styles/Detail.module.css";
-import CreateTaskItemForm from "./CreateTaskItemList.js";
+import CreateTaskItemList from "./CreateTaskItemList.js";
 import { Col, Row } from "react-bootstrap";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
 
@@ -76,7 +76,6 @@ const Task = () => {
 
   return (
     <Container className={styles.Container}>
-      {console.log(task)}
       <Card style={{ width: "100%", marginBottom: "20px" }}>
         {request_accepted === "no" ? (
           <Card.Text className={styles.TaskNewRequest}></Card.Text>
@@ -100,7 +99,7 @@ const Task = () => {
           <div as={Row} className={styles.Line}></div>
           <Row>
             <Col sm={{ offset: 1 }} className="mt-4">
-              <CreateTaskItemForm
+              <CreateTaskItemList
                 task_id={id}
                 task={task}
                 setTask={setTask}
