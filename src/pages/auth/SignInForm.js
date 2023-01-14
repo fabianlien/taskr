@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSetCurrentUser } from "../../context/CurrentUserContext";
 
 const SignInForm = () => {
@@ -17,7 +17,7 @@ const SignInForm = () => {
   });
   const [errors, setErrors] = useState({});
   const { username, password  } = signInData;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setSignInData({
@@ -31,7 +31,7 @@ const SignInForm = () => {
     try {
       const {data} = await axios.post("dj-rest-auth/login/", signInData);
       setCurrentUser(data.user)
-      history.push("/");
+      navigate("/");
     } catch (error) {
       setErrors(error.response?.data);
     }

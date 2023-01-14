@@ -18,7 +18,7 @@ const CreateTaskItemForm = (props) => {
   const [taskItems, setTaskItems] = useState({ results: [] });
   const [errors, setErrors] = useState({});
   const [itemsLoading, setItemsLoading] = useState(true);
-  const [showMessage, setShowMessage] = useState(true);
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     const onMount = async () => {
@@ -53,12 +53,14 @@ const CreateTaskItemForm = (props) => {
       setTaskItem(initialState);
     } catch (error) {
       console.log(error);
+      setShowMessage(true)
       if (error.response?.status !== 401) setErrors(error.response?.data);
     }
   };
 
   const messageTimer = setTimeout(() => {
     setShowMessage(false);
+    clearTimeout(messageTimer);
   }, 5000);
 
   return (

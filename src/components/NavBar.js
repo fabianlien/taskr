@@ -2,16 +2,16 @@ import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import NavLink from "react-router-dom/NavLink";
 import { useCurrentUser, useSetCurrentUser } from "../context/CurrentUserContext";
 import axios from "axios";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/NavBar.module.css";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
-  const history = useHistory();
+  const navigate = useNavigate();
+  
   
   const handleSignOut = async () => {
     try {
@@ -20,19 +20,19 @@ const NavBar = () => {
     } catch (error) {
       console.log(error)
     }
-    history.push("/");
+    navigate("/");
   };
 
   const SignedOutNav = (
     <>
-      <NavLink to="/signin" className={`${styles.Link} ${styles.NavLink}`}>Sign in</NavLink>
-      <NavLink to="/signup" className={`${styles.Link} ${styles.NavLink}`}>Sign up</NavLink>
+      <Link to="/signin" className={`${styles.Link} ${styles.NavLink}`}>Sign in</Link>
+      <Link to="/signup" className={`${styles.Link} ${styles.NavLink}`}>Sign up</Link>
     </>
   );
   const SignedInNav = (
     <>
       <Navbar.Text className="p-lg-2">Logged in as {currentUser?.username}</Navbar.Text>
-      <NavLink to="/" className={`${styles.Link} ${styles.NavLink}`} onClick={handleSignOut}>Sign Out</NavLink>
+      <Link to="/" className={`${styles.Link} ${styles.NavLink}`} onClick={handleSignOut}>Sign Out</Link>
     </>
   )
 

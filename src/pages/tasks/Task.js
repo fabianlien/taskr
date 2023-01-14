@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults.js";
 import styles from "../../styles/Detail.module.css";
 import CreateTaskItemList from "./CreateTaskItemList.js";
@@ -12,7 +12,7 @@ import { useCurrentUser } from "../../context/CurrentUserContext.js";
 const Task = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [task, setTask] = useState({});
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const Task = () => {
     } catch (error) {
       console.log(error);
     }
-    history.goBack();
+    navigate(-1);
   };
 
   return (
@@ -111,7 +111,7 @@ const Task = () => {
       </Card>
       {is_owner ? (
         <Container>
-          <Card.Text className={styles.GoBack} onClick={() => history.goBack()}>
+          <Card.Text className={styles.GoBack} onClick={() => navigate(-1)}>
             <i className="fa-solid fa-rotate-left" />
           </Card.Text>
           <Row>
@@ -184,7 +184,7 @@ const Task = () => {
           </Row>
         </Container>
       ) : (
-        <Card.Text className={styles.GoBack} onClick={() => history.goBack()}>
+        <Card.Text className={styles.GoBack} onClick={() => navigate(-1)}>
           <i className="fa-solid fa-rotate-left" />
         </Card.Text>
       )}

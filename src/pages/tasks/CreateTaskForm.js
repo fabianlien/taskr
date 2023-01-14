@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/Detail.module.css";
@@ -16,7 +16,7 @@ import Switch from "react-custom-checkbox/switch";
 
 const CreateTaskForm = () => {
   const currentUser = useCurrentUser();
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [taskTextData, setTaskTextData] = useState({
     title: "",
@@ -82,7 +82,7 @@ const CreateTaskForm = () => {
 
     try {
       await axiosReq.post("/tasks/", formData);
-      history.goBack();
+      navigate(-1);
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -199,7 +199,7 @@ const CreateTaskForm = () => {
             <Button
               className={styles.CancelButton}
               variant="secondary"
-              onClick={() => history.goBack()}
+              onClick={() => navigate(-1)}
             >
               Cancel
             </Button>

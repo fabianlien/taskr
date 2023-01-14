@@ -3,23 +3,23 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import NavLink from "react-router-dom/NavLink";
 import banner from "./assets/abstract_colorful_pattern.jpg";
 import { useCurrentUser } from "../context/CurrentUserContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const NavLink = require("react-router-dom").NavLink
   const currentUser = useCurrentUser();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onMount = () => {
       if (currentUser) {
-        history.push(`/profile/${currentUser.profile_id}`);
+        navigate(`/profile/${currentUser.profile_id}`);
       }
     };
     onMount();
-  }, [currentUser, history]);
+  }, [currentUser, navigate]);
 
   return (
     <div>

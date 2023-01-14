@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/UpdateProfileForm.module.css";
@@ -20,7 +20,7 @@ const UpdateProfileForm = () => {
   });
   const { name, bio, profile_image } = profileData;
   const imageInput = useRef(null);
-  const history = useHistory();
+  const navigate = useNavigate();
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const [errors, setErrors] = useState({});
@@ -36,11 +36,11 @@ const UpdateProfileForm = () => {
           console.log(error);
         }
       } else {
-        history.goBack();
+        navigate(-1);
       }
     };
     onMount();
-  }, [id, history, currentUser, setProfileData]);
+  }, [id, navigate, currentUser, setProfileData]);
 
   const handleChange = (event) => {
     setProfileData({
@@ -71,7 +71,7 @@ const UpdateProfileForm = () => {
 
     try {
       await axiosReq.put(`/profiles/${id}`, formData);
-      history.push("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -163,7 +163,7 @@ const UpdateProfileForm = () => {
               <Button
                 className={styles.CancelButton}
                 variant="secondary"
-                onClick={() => history.goBack()}
+                onClick={() => navigate(-1)}
               >
                 Cancel
               </Button>

@@ -21,7 +21,7 @@
     "react-datetime-picker": "^4.1.1",
     "react-dom": "^17.0.2",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-router-dom": "^5.3.3",
+    "react-router-dom": "^6.6.2",
     "react-scripts": "^4.0.3",
     "web-vitals": "^1.1.2"
   },

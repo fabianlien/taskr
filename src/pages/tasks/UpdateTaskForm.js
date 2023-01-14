@@ -7,14 +7,14 @@ import Button from "react-bootstrap/Button";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import styles from "../../styles/Detail.module.css";
 import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
 const UpdateTaskForm = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -35,14 +35,14 @@ const UpdateTaskForm = () => {
           setCheckedPriority(is_important);
           setCheckedPublic(is_public);
         } else {
-          history.goBack();
+          navigate(-1);
         }
       } catch (error) {
         console.log(error);
       }
     };
     onMount();
-  }, [id, history]);
+  }, [id, navigate]);
 
   const [taskTextData, setTaskTextData] = useState({
     title: "",
@@ -76,7 +76,7 @@ const UpdateTaskForm = () => {
     try {
       console.log(formData);
       await axiosReq.put(`/tasks/${id}/`, formData);
-      history.push("/");
+      navigate("/");
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -193,7 +193,7 @@ const UpdateTaskForm = () => {
           <Button
             className={styles.CancelButton}
             variant="secondary"
-            onClick={() => history.goBack()}
+            onClick={() => navigate(-1)}
           >
             Cancel
           </Button>
