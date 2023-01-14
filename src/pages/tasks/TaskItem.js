@@ -19,6 +19,7 @@ const TaskItem = ({ taskItem, setItemsLoading }) => {
 
     try {
       await axiosReq.put(`/taskitems/${id}/`, formData);
+      setItemsLoading(true);
     } catch (error) {
       console.log(error);
     }
@@ -37,36 +38,39 @@ const TaskItem = ({ taskItem, setItemsLoading }) => {
     <Container fluid className={styles.ItemBox}>
       <Form>
         {currentUser.username === owner ? (
-          <>
-            {checkCompleted === true}
-            <Row>
-              <Col className={styles.Icon} xs={1}>
-                <i className="fa-solid fa-clipboard-list" />
-              </Col>
-              <Col xs={6}>
+          <Row>
+            <Col className={styles.Icon} xs={1}>
+              <i className="fa-solid fa-clipboard-list" />
+            </Col>
+            <Col xs={6}>
+              {checkCompleted ? (
+                <>
+                  <Card.Text className={styles.StrikeThrough}>{content}</Card.Text>
+                </>
+              ) : (
                 <Card.Text>{content}</Card.Text>
-              </Col>
-              <Col xs={2}>
-                <Checkbox
-                  name={id}
-                  checked={checkCompleted}
-                  borderColor="rgb(211, 94, 94)"
-                  borderRadius={5}
-                  icon={<i className="fa-solid fa-check" />}
-                  size={18}
-                  aria-label=" Task item checkbox"
-                  onChange={(value) => {
-                    sendCheck(value);
-                  }}
-                />
-              </Col>
-              <Col xs={1}>
-                <Form.Group className={styles.Icon} onClick={handleDelete}>
-                  <i className="fa-solid fa-xmark" />
-                </Form.Group>
-              </Col>
-            </Row>
-          </>
+              )}
+            </Col>
+            <Col xs={2}>
+              <Checkbox
+                name={id}
+                checked={checkCompleted}
+                borderColor="rgb(211, 94, 94)"
+                borderRadius={5}
+                icon={<i className="fa-solid fa-check" />}
+                size={18}
+                aria-label=" Task item checkbox"
+                onChange={(value) => {
+                  sendCheck(value);
+                }}
+              />
+            </Col>
+            <Col xs={1}>
+              <Form.Group className={styles.Icon} onClick={handleDelete}>
+                <i className="fa-solid fa-xmark" />
+              </Form.Group>
+            </Col>
+          </Row>
         ) : (
           <Row>
             <Col className={styles.Icon} xs={1}>

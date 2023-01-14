@@ -18,6 +18,7 @@ const CreateTaskItemForm = (props) => {
   const [taskItems, setTaskItems] = useState({ results: [] });
   const [errors, setErrors] = useState({});
   const [itemsLoading, setItemsLoading] = useState(true);
+  const [showMessage, setShowMessage] = useState(true);
 
   useEffect(() => {
     const onMount = async () => {
@@ -29,10 +30,9 @@ const CreateTaskItemForm = (props) => {
         console.log(error);
       }
     };
-    if (itemsLoading){
+    if (itemsLoading) {
       onMount();
     }
-    
   }, [task_id, itemsLoading]);
 
   const handleChange = (event) => {
@@ -43,7 +43,6 @@ const CreateTaskItemForm = (props) => {
   };
 
   const handleSubmit = async () => {
-
     const formData = new FormData();
     formData.append("content", taskItem.content);
     formData.append("task_id", task_id);
@@ -51,15 +50,20 @@ const CreateTaskItemForm = (props) => {
     try {
       await axiosReq.post("/taskitems/", formData);
       setItemsLoading(true);
+      setTaskItem(initialState);
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
     }
   };
 
+  const messageTimer = setTimeout(() => {
+    setShowMessage(false);
+  }, 5000);
+
   return (
     <Container>
-      <Form >
+      <Form>
         <Form.Group as={Row} className="mb-4" controlId="content">
           <Form.Label className="d-none">Task item</Form.Label>
           <Col xs={11} lg={10}>
@@ -72,35 +76,45 @@ const CreateTaskItemForm = (props) => {
             />
           </Col>
           <Col xs={1} lg={2}>
-            <Button className={styles.AddButton} type="button" onClick={handleSubmit}>
+            <Button
+              className={styles.AddButton}
+              type="button"
+              onClick={handleSubmit}
+            >
               +
             </Button>
           </Col>
         </Form.Group>
-        {errors.content?.map((message, index) => (
-          <Alert className="mt-1" variant="warning" key={index}>
+        {errors.content?.length && errors.content?.map((message, index) => (
+          <Alert
+            className={styles.WarningMessage}
+            variant="warning"
+            key={index}
+            show={showMessage}
+          >
             {message}
+            <Col className="d-none">
+              {messageTimer}
+            </Col>
           </Alert>
         ))}
       </Form>
-      {itemsLoading && (
-        <Spinner animation="border" />
-      )}
+      {itemsLoading && <Spinner animation="border" />}
       {!itemsLoading && taskItems.results.length ? (
-            <>
-              {taskItems?.results.map((taskItem, index) => {
-                return (
-                  <TaskItem
-                    key={index}
-                    taskItem={taskItem}
-                    setItemsLoading={setItemsLoading}
-                  />
-                );
-              })}
-            </>
-          ) : (
-            <></>
-          )}
+        <>
+          {taskItems?.results.map((taskItem, index) => {
+            return (
+              <TaskItem
+                key={index}
+                taskItem={taskItem}
+                setItemsLoading={setItemsLoading}
+              />
+            );
+          })}
+        </>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 };
