@@ -34,6 +34,18 @@ const TaskItem = ({ taskItem, setItemsLoading }) => {
     }
   };
 
+  const strikeThroughConditional = (
+    <>
+      {checkCompleted ? (
+        <>
+          <Card.Text className={styles.StrikeThrough}>{content}</Card.Text>
+        </>
+      ) : (
+        <Card.Text>{content}</Card.Text>
+      )}
+    </>
+  );
+
   return (
     <Container fluid className={styles.ItemBox}>
       <Form>
@@ -43,13 +55,7 @@ const TaskItem = ({ taskItem, setItemsLoading }) => {
               <i className="fa-solid fa-clipboard-list" />
             </Col>
             <Col xs={6}>
-              {checkCompleted ? (
-                <>
-                  <Card.Text className={styles.StrikeThrough}>{content}</Card.Text>
-                </>
-              ) : (
-                <Card.Text>{content}</Card.Text>
-              )}
+              {strikeThroughConditional}
             </Col>
             <Col xs={2}>
               <Checkbox
@@ -77,7 +83,7 @@ const TaskItem = ({ taskItem, setItemsLoading }) => {
               <i className="fa-solid fa-clipboard-list" />
             </Col>
             <Col xs={8}>
-              <Card.Text>{content}</Card.Text>
+              {strikeThroughConditional}
             </Col>
             <Col xs={2}>
               <Checkbox

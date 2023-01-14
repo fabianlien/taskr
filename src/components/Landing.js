@@ -6,9 +6,10 @@ import Col from "react-bootstrap/Col";
 import banner from "./assets/abstract_colorful_pattern.jpg";
 import { useCurrentUser } from "../context/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 const Landing = () => {
-  const NavLink = require("react-router-dom").NavLink
+  const NavLink = require("react-router-dom").NavLink;
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const Landing = () => {
   }, [currentUser, navigate]);
 
   return (
-    <div>
+    <Container>
       <Row>
         <Col xs={12}>
           <Card align="center">
@@ -32,11 +33,9 @@ const Landing = () => {
                 Keep track of your progress with taskr.
               </Card.Title>
               <Card.Text className="my-4">
-                <h4>
-                  taskr is a quick and easy to use task manager. It helps you
-                  keep track of your important tasks and lets you request tasks
-                  from your friends!
-                </h4>
+                taskr is a quick and easy to use task manager. It helps you keep
+                track of your important tasks and lets you request tasks from
+                your friends!
               </Card.Text>
               <Card.Text>Get started by creating an account:</Card.Text>
               <NavLink to="/signup">
@@ -63,7 +62,7 @@ const Landing = () => {
           </span>
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 };
 

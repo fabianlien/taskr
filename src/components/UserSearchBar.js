@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { axiosReq } from "../api/axiosDefaults";
 import ProfilePreview from "../pages/profile/ProfilePreview";
@@ -34,7 +34,7 @@ const UserSearchBar = () => {
   }, [userSearchQuery, setProfilesPreview, setHasLoaded]);
 
   return (
-    <div>
+    <Container>
       <Row>
         <Col xs={1}>
           <div className={styles.MagnifyingGlass}>
@@ -91,7 +91,7 @@ const UserSearchBar = () => {
           )}
         </Col>
       </Row>
-    </div>
+    </Container>
   );
 };
 

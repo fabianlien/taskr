@@ -13,6 +13,7 @@ import styles from "../../styles/UpdateProfileForm.module.css";
 import { Card } from "react-bootstrap";
 
 const UpdateProfileForm = () => {
+  const currentUser = useCurrentUser();
   const [profileData, setProfileData] = useState({
     name: "",
     bio: "",
@@ -21,13 +22,12 @@ const UpdateProfileForm = () => {
   const { name, bio, profile_image } = profileData;
   const imageInput = useRef(null);
   const navigate = useNavigate();
-  const currentUser = useCurrentUser();
   const { id } = useParams();
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const onMount = async () => {
-      if (currentUser.pk === parseInt(id)) {
+      if (currentUser?.pk === parseInt(id)) {
         try {
           const { data } = await axiosReq.get(`/profiles/${id}`);
           const { bio, name, profile_image } = data;
@@ -35,8 +35,6 @@ const UpdateProfileForm = () => {
         } catch (error) {
           console.log(error);
         }
-      } else {
-        navigate(-1);
       }
     };
     onMount();

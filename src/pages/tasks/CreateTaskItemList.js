@@ -9,7 +9,7 @@ import styles from "../../styles/Detail.module.css";
 import TaskItem from "./TaskItem";
 
 const CreateTaskItemForm = (props) => {
-  const { task_id } = props;
+  const { task_id, is_owner } = props;
   const initialState = {
     content: "",
     task_id: task_id,
@@ -53,7 +53,7 @@ const CreateTaskItemForm = (props) => {
       setTaskItem(initialState);
     } catch (error) {
       console.log(error);
-      setShowMessage(true)
+      setShowMessage(true);
       if (error.response?.status !== 401) setErrors(error.response?.data);
     }
   };
@@ -66,40 +66,41 @@ const CreateTaskItemForm = (props) => {
   return (
     <Container>
       <Form>
-        <Form.Group as={Row} className="mb-4" controlId="content">
-          <Form.Label className="d-none">Task item</Form.Label>
-          <Col xs={11} lg={10}>
-            <Form.Control
-              type="text"
-              placeholder="Task item"
-              name="content"
-              value={taskItem.content}
-              onChange={handleChange}
-            />
-          </Col>
-          <Col xs={1} lg={2}>
-            <Button
-              className={styles.AddButton}
-              type="button"
-              onClick={handleSubmit}
-            >
-              +
-            </Button>
-          </Col>
-        </Form.Group>
-        {errors.content?.length && errors.content?.map((message, index) => (
-          <Alert
-            className={styles.WarningMessage}
-            variant="warning"
-            key={index}
-            show={showMessage}
-          >
-            {message}
-            <Col className="d-none">
-              {messageTimer}
+        {is_owner && (
+          <Form.Group as={Row} className="mb-4" controlId="content">
+            <Form.Label className="d-none">Task item</Form.Label>
+            <Col xs={11} lg={10}>
+              <Form.Control
+                type="text"
+                placeholder="Task item"
+                name="content"
+                value={taskItem.content}
+                onChange={handleChange}
+              />
             </Col>
-          </Alert>
-        ))}
+            <Col xs={1} lg={2}>
+              <Button
+                className={styles.AddButton}
+                type="button"
+                onClick={handleSubmit}
+              >
+                +
+              </Button>
+            </Col>
+          </Form.Group>
+        )}
+        {errors.content?.length &&
+          errors.content?.map((message, index) => (
+            <Alert
+              className={styles.WarningMessage}
+              variant="warning"
+              key={index}
+              show={showMessage}
+            >
+              {message}
+              <Col className="d-none">{messageTimer}</Col>
+            </Alert>
+          ))}
       </Form>
       {itemsLoading && <Spinner animation="border" />}
       {!itemsLoading && taskItems.results.length ? (

@@ -29,9 +29,9 @@ const Overdue = new Date(due_by).getTime() < new Date().getTime()
                 {request_accepted}
               </Card.Body>
               {is_completed ? (
-                <h4>Completed!</h4>
+                <>Completed!</>
               ) : (
-                <h4>Task not completed!</h4>
+                <>Task not completed!</>
               )}
               <Card.Text>
                 <strong>{description}</strong>

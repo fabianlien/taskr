@@ -133,6 +133,15 @@
     border-top-right-radius: 4px;
 }
 
+.RequestedUserLink {
+    font-size: larger;
+    color: rgb(109, 106, 106);
+}
+
+.RequestedUserLink:Hover {
+    color: rgb(211, 94, 94);
+}
+
 .TaskComplete {
     position: relative;
     width: 100%;

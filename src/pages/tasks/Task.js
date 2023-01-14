@@ -34,6 +34,8 @@ const Task = () => {
     due_by,
     description,
     request_accepted,
+    requested_username,
+    requested_ID
   } = task;
   const stringDate = String(due_by);
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12));
@@ -57,13 +59,13 @@ const Task = () => {
       const { data } = await axiosReq.put(`/tasks/${id}/`, {
         ...task,
         due_by: parsedDate.toISOString(),
-        request_accepted: "yes"
+        request_accepted: "yes",
       });
       setTask(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
@@ -76,16 +78,17 @@ const Task = () => {
 
   return (
     <Container className={styles.Container}>
+      {console.log(requested_ID)}
       <Card style={{ width: "100%", marginBottom: "20px" }}>
         {request_accepted === "no" ? (
-          <Card.Text className={styles.TaskNewRequest}></Card.Text>
+          <Card.Text className={styles.TaskNewRequest} />
         ) : (
           <>
             {is_completed ? (
               <Card.Text className={styles.TaskComplete}></Card.Text>
             ) : (
               <Card.Text className={styles.TaskIncomplete}>
-                {Overdue ? "Overdue" : ""}
+                {Overdue && "Overdue"}
               </Card.Text>
             )}
           </>
@@ -95,16 +98,12 @@ const Task = () => {
         </Card.Title>
         <Card.Text>
           <Card.Text className={styles.DueBox2}>{`Due: ${due_by}`}</Card.Text>
+          {requested_username && <Card.Text className={styles.DueBox2}>Request from: <Link className={styles.RequestedUserLink} to={`/Profile/${requested_ID}/`}>{requested_username}</Link></Card.Text>}
           <Card.Text className={styles.TextBody}>{description}</Card.Text>
           <div as={Row} className={styles.Line}></div>
           <Row>
             <Col sm={{ offset: 1 }} className="mt-4">
-              <CreateTaskItemList
-                task_id={id}
-                task={task}
-                setTask={setTask}
-                is_owner={is_owner}
-              />
+              <CreateTaskItemList task_id={id} is_owner={is_owner} />
             </Col>
           </Row>
         </Card.Text>
