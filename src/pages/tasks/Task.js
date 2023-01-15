@@ -9,6 +9,7 @@ import CreateTaskItemList from "./CreateTaskItemList.js";
 import { Col, Row } from "react-bootstrap";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
 import ImportantBadge from "../../components/tasks/ImportantBadge.js";
+import DueCountdown from "../../components/tasks/DueCountdown.js";
 
 const Task = () => {
   const currentUser = useCurrentUser();
@@ -31,12 +32,6 @@ const Task = () => {
   const stringDate = String(due_by);
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12));
   const overdue = new Date(due_by).getTime() < new Date().getTime();
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
 
   useEffect(() => {
     const onMount = async () => {
@@ -46,31 +41,9 @@ const Task = () => {
       } catch (error) {
         console.log(error);
       }
-      const countDown = setInterval(() => {
-        const reamingTime = new Date(due_by).getTime() - new Date().getTime();
-        const days = Math.floor(reamingTime / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (reamingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor(
-          (reamingTime % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const seconds = Math.floor((reamingTime % (1000 * 60)) / 1000);
-
-        setTimeLeft(prevState => ({...prevState,
-          days: days,
-          hours: hours,
-          minutes: minutes,
-          seconds: seconds,
-        }));
-
-        if (overdue) {
-          clearInterval(countDown);
-        }
-      }, 1000);
     };
     onMount();
-  }, [id, setTask, setTimeLeft, due_by, overdue]);
+  }, [id, setTask]);
 
   const handleComplete = async () => {
     try {
@@ -110,7 +83,7 @@ const Task = () => {
   return (
     <Container className={styles.Container}>
       <Card style={{ width: "100%", marginBottom: "20px" }}>
-      {is_important && <ImportantBadge big={true} />}
+        {is_important && <ImportantBadge big={true} />}
         {request_accepted === "no" ? (
           <Card.Text className={styles.TaskNewRequest} />
         ) : (
@@ -133,14 +106,12 @@ const Task = () => {
             className={styles.CreatedAtBox}
           >{`Created: ${created_at}`}</Card.Text>
           {!overdue && !is_completed && (
-            <Card.Text
-              className={styles.TimeRemainingBox}
-            >{`Due In: ${timeLeft.days} days, ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</Card.Text>
+            <DueCountdown due_by={due_by} />
           )}
           {is_completed && (
-            <Card.Text
-            className={styles.CompletedBox}
-          >Task Completed!</Card.Text>
+            <Card.Text className={styles.CompletedBox}>
+              Task Completed!
+            </Card.Text>
           )}
           {requested_ID > 0 && requested_username !== currentUser?.username && (
             <Card.Text className={styles.DueBox2}>
