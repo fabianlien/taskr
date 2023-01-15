@@ -69,7 +69,7 @@ const CreateTaskItemForm = (props) => {
         {is_owner && (
           <Form.Group as={Row} className="mb-4" controlId="content">
             <Form.Label className="d-none">Task item</Form.Label>
-            <Col xs={11} lg={10}>
+            <Col xs={10}>
               <Form.Control
                 type="text"
                 placeholder="Task item"
@@ -78,7 +78,7 @@ const CreateTaskItemForm = (props) => {
                 onChange={handleChange}
               />
             </Col>
-            <Col xs={1} lg={2}>
+            <Col xs={2}>
               <Button
                 className={styles.AddButton}
                 type="button"

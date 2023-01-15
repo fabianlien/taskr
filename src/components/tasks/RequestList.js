@@ -70,18 +70,18 @@ const RequestList = ({ owner }) => {
                 })}
             </>
           ) : (
-            <>
-              <Card style={{ width: "100%" }}>
-                <Card.Body>
-                  <Card.Title>No tasks to display.</Card.Title>
-                </Card.Body>
-              </Card>
-            </>
+            <Card className={styles.RequestCard}>
+              <Card.Body className={styles.RequestCardBody}>
+                <Card.Title className={styles.TextBox}>
+                  No tasks to display.
+                </Card.Title>
+              </Card.Body>
+            </Card>
           )}
         </>
       ) : (
         <>
-          {requestedTasks.results.length ? (
+          {requests.length ? (
             <Card className={styles.RequestCard}>
               <Accordion defaultActiveKey="0">
                 {is_owner && (
@@ -120,7 +120,7 @@ const RequestList = ({ owner }) => {
             </Card>
           ) : (
             <Card className={styles.RequestCard}>
-              <Card.Body>
+              <Card.Body className={styles.RequestCardBody}>
                 <Card.Title className={styles.TextBox}>
                   {is_owner
                     ? "You have no new incoming requests."
@@ -171,9 +171,11 @@ const RequestList = ({ owner }) => {
               ) : (
                 <>
                   {is_owner ? (
-                    <Card>
-                      <Card.Body>
-                        <Card.Title>You have no outgoing requests.</Card.Title>
+                    <Card className={styles.RequestCard}>
+                      <Card.Body className={styles.RequestCardBody}>
+                        <Card.Title className={styles.TextBox}>
+                          You have no outgoing requests.
+                        </Card.Title>
                       </Card.Body>
                     </Card>
                   ) : (

@@ -5,6 +5,7 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/TaskPreview.module.css";
+import ImportantBadge from "./ImportantBadge";
 
 const TaskPreview = ({ task }) => {
   const {
@@ -13,6 +14,7 @@ const TaskPreview = ({ task }) => {
     id,
     title,
     is_completed,
+    is_important,
     description,
     requested_ID,
     requested_username,
@@ -26,6 +28,7 @@ const TaskPreview = ({ task }) => {
       <Col className={styles.DueDate}>{due_by}</Col>
       <Col className={styles.OverDue}>
         {Overdue && !task.is_completed && "Overdue!"}
+        {task.is_completed && "Completed"}
       </Col>
       <Col className={`d-none d-lg-block ${styles.RequestText}`}>
         {incomingReq && `From: ${requested_username}`}
@@ -84,7 +87,7 @@ const TaskPreview = ({ task }) => {
             <Card className={styles.PreviewCard}>
               <Card.Body>
                 <Card.Title className={styles.TaskTitle}>{title}</Card.Title>
-                <Card.Body>{}</Card.Body>
+                <Card.Body className={styles.TaskBody}>{is_important && <ImportantBadge big={false} />}</Card.Body>
                 <Card.Text className={styles.TaskDescription}>{description}</Card.Text>
               </Card.Body>
             </Card>

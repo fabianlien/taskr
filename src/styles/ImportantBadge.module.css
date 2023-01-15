@@ -1,0 +1,30 @@
+.BigImportant {
+    position: absolute;
+    top: 20px;
+    right: -30px;
+    z-index: 2;
+    text-align: center;
+    font-size: xxx-large;
+    line-height: 20px;
+    color: rgb(255, 196, 0);
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: 10px rgb(201, 190, 190) double;
+    background-color: rgb(109, 106, 106);
+}
+
+.SmallImportant {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    z-index: 2;
+    font-size: x-large;
+    line-height: 30px;
+    color: rgb(255, 196, 0);
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 10px rgb(201, 190, 190) double;
+    background-color: rgb(109, 106, 106);
+}

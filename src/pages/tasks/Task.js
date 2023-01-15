@@ -8,6 +8,7 @@ import styles from "../../styles/Detail.module.css";
 import CreateTaskItemList from "./CreateTaskItemList.js";
 import { Col, Row } from "react-bootstrap";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
+import ImportantBadge from "../../components/tasks/ImportantBadge.js";
 
 const Task = () => {
   const currentUser = useCurrentUser();
@@ -19,6 +20,7 @@ const Task = () => {
     is_owner,
     title,
     is_completed,
+    is_important,
     due_by,
     created_at,
     description,
@@ -108,6 +110,7 @@ const Task = () => {
   return (
     <Container className={styles.Container}>
       <Card style={{ width: "100%", marginBottom: "20px" }}>
+      {is_important && <ImportantBadge big={true} />}
         {request_accepted === "no" ? (
           <Card.Text className={styles.TaskNewRequest} />
         ) : (
@@ -129,10 +132,15 @@ const Task = () => {
           <Card.Text
             className={styles.CreatedAtBox}
           >{`Created: ${created_at}`}</Card.Text>
-          {!overdue && (
+          {!overdue && !is_completed && (
             <Card.Text
               className={styles.TimeRemainingBox}
             >{`Due In: ${timeLeft.days} days, ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</Card.Text>
+          )}
+          {is_completed && (
+            <Card.Text
+            className={styles.CompletedBox}
+          >Task Completed!</Card.Text>
           )}
           {requested_ID > 0 && requested_username !== currentUser?.username && (
             <Card.Text className={styles.DueBox2}>

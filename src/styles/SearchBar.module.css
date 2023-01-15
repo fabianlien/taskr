@@ -29,6 +29,25 @@
     font-size: larger;
 }
 
+.RequestCardBody {
+    margin-left: 10%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 80%;
+    background-color: rgb(255, 196, 0);
+    border-radius: 12px;
+}
+
+.TaskCardBody {
+    margin-left: 10%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 80%;
+    background-color: rgb(109, 106, 106);
+    color: white;
+    border-radius: 12px;
+}
+
 .RequestsBox {
     margin-top: 10px;
     margin-left: 0;
@@ -45,5 +64,6 @@
 }
 
 .TextBox {
+    font-size: 140%;
     text-align: center;
 }
