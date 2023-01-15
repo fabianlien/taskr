@@ -6,11 +6,11 @@ import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import { useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
-import UserSearchBar from "../../components/UserSearchBar";
+import UserSearchBar from "../../components/profile/UserSearchBar";
 import styles from "../../styles/Profile.module.css";
-import ProfileInfo from "../../components/ProfileInfo";
-import TaskList from "../../components/TaskList";
-import RequestList from "../../components/RequestList";
+import ProfileInfo from "../../components/profile/ProfileInfo";
+import TaskList from "../../components/tasks/TaskList";
+import RequestList from "../../components/tasks/RequestList";
 
 const Home = () => {
   const currentUser = useCurrentUser();
@@ -43,26 +43,26 @@ const Home = () => {
           <Accordion.Collapse eventKey="0">
             <Card.Body className={styles.ProfileBody}>
               <ProfileInfo />
-              <Tabs defaultActiveKey="tasks" justify className="mt-3" >
-                <Tab
-                  eventKey="tasks"
-                  title={is_owner ? "Your Tasks" : `${owner}'s Tasks`}
-                  className={styles.TasksTabBody}
-                  id={styles.TasksTab}
-                >
-                  <TaskList owner={owner} />
-                </Tab>
-                <Tab
-                  eventKey="requests"
-                  title={is_owner ? "Requested Tasks" : "Your Requests"}
-                  className={styles.RequestsTabBody}
-                  id={styles.RequestsTab}
-                >
-                  <RequestList owner={owner} />
-                </Tab>
-              </Tabs>
             </Card.Body>
           </Accordion.Collapse>
+          <Tabs defaultActiveKey="tasks" justify className="mt-3">
+            <Tab
+              eventKey="tasks"
+              title={is_owner ? "Your Tasks" : `${owner}'s Tasks`}
+              className={styles.TasksTabBody}
+              id={styles.TasksTab}
+            >
+              <TaskList owner={owner} />
+            </Tab>
+            <Tab
+              eventKey="requests"
+              title={is_owner ? "Requested Tasks" : "Your Requests"}
+              className={styles.RequestsTabBody}
+              id={styles.RequestsTab}
+            >
+              <RequestList owner={owner} />
+            </Tab>
+          </Tabs>
         </Card>
       </Accordion>
     </Container>

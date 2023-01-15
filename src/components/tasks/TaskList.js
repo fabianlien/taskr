@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import { Spinner } from "react-bootstrap";
-import { useCurrentUser } from "../context/CurrentUserContext";
+import { useCurrentUser } from "../../context/CurrentUserContext";
 import { useParams } from "react-router-dom";
-import { axiosReq } from "../api/axiosDefaults";
-import TaskSearchBar from "../components/TaskSearchBar";
+import { axiosReq } from "../../api/axiosDefaults";
+import TaskSearchBar from "./TaskSearchBar";
 import TaskPreview from "./TaskPreview";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { fetchMoreData } from "../utils/utils";
-import styles from "../styles/SearchBar.module.css";
+import { fetchMoreData } from "../../utils/utils";
+import styles from "../../styles/SearchBar.module.css";
 
 const TaskList = ({owner}) => {
   const currentUser = useCurrentUser();
@@ -48,7 +48,7 @@ const TaskList = ({owner}) => {
                 {tasksFiltered.results
                   .filter((task) => task.owner === owner && task.request_accepted !== "no")
                   .map((task, index) => {
-                    return <TaskPreview key={index} task={task} />;
+                    return <TaskPreview key={index} task={task} user_id={id}/>;
                   })}
               </>
             ) : (

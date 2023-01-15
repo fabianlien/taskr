@@ -1,8 +1,8 @@
 import styles from "./styles/App.module.css";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/profile/NavBar";
 import Container from "react-bootstrap/Container";
 import "./api/axiosDefaults";
-import Landing from "./components/Landing";
+import Landing from "./pages/auth/Landing";
 import SignInForm from "./pages/auth/SignInForm";
 import SignUpForm from "./pages/auth/SignUpForm";
 import CreateTaskForm from "./pages/tasks/CreateTaskForm";

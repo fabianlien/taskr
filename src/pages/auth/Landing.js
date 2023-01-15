@@ -3,8 +3,8 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import banner from "./assets/abstract_colorful_pattern.jpg";
-import { useCurrentUser } from "../context/CurrentUserContext";
+import banner from "../../components/assets/abstract_colorful_pattern.jpg";
+import { useCurrentUser } from "../../context/CurrentUserContext";
 import { useNavigate } from "react-router-dom";
 import { Container } from "react-bootstrap";
 

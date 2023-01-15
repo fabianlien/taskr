@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { axiosReq } from "../api/axiosDefaults";
-import styles from "../styles/SearchBar.module.css";
+import { axiosReq } from "../../api/axiosDefaults";
+import styles from "../../styles/SearchBar.module.css";
 
 const TaskSearchBar = ({
   setTasksFiltered,

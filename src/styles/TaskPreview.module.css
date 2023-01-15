@@ -1,0 +1,59 @@
+.PreviewCard {
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: #faf7f7;
+    color: black;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.CardHeader {
+    background-color: rgb(109, 106, 106);
+    color: white;
+}
+
+.CompletedCardHeader {
+    background-color: rgb(85, 117, 91);
+    color: white;
+}
+
+.OutReqCardHeader {
+    background-color: rgb(255, 196, 0);
+}
+
+.InReqCardHeader {
+    background-color: rgb(211, 94, 94);
+}
+
+.DueDate {
+    letter-spacing: 1px;
+}
+
+.OverDue {
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.RequestText {
+    text-align: right;
+    letter-spacing: 1px;
+}
+
+.TaskTitle {
+    font-size: 240%;
+}
+
+.TaskDescription {
+    font-size: large;
+    color: rgb(109, 106, 106);
+}
+
+@media only screen and (max-width: 991px) {
+    .OverDue {
+        text-align: right;
+    }
+}

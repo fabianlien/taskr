@@ -5,10 +5,10 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
-import { useCurrentUser } from "../context/CurrentUserContext";
+import { useCurrentUser } from "../../context/CurrentUserContext";
 import { Link, useParams } from "react-router-dom";
-import { axiosReq } from "../api/axiosDefaults";
-import styles from "../styles/Profile.module.css";
+import { axiosReq } from "../../api/axiosDefaults";
+import styles from "../../styles/Profile.module.css";
 
 const ProfileInfo = () => {
   const currentUser = useCurrentUser();
@@ -83,11 +83,16 @@ const ProfileInfo = () => {
                 eventKey="0"
                 className={styles.BioCollapseToggle}
               >
-                <i
-                  className={`${"fa-solid fa-square-caret-down"} ${
-                    styles.BioCaret
-                  }`}
-                ></i>
+                <Row>
+                  <Col xs={10} className={styles.NameContainer}>{name}</Col>
+                  <Col xs={2} className={styles.CaretContainer}>
+                    <i
+                      className={`${"fa-solid fa-square-caret-down"} ${
+                        styles.BioCaret
+                      }`}
+                    />
+                  </Col>
+                </Row>
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
                 <Card.Text>{bio}</Card.Text>
@@ -99,16 +104,25 @@ const ProfileInfo = () => {
       <Row>
         <Col>
           <Link to={`/task/create/${owner}`}>
-            <Button variant="warning" className={styles.TaskButton}>
-              {is_owner ? "+ Task" : "+ Task Request"}
-            </Button>
+            {is_owner ? (
+              <Button variant="secondary" className={styles.TaskButton}>
+                + Task
+              </Button>
+            ) : (
+              <Button variant="warning" className={styles.RequestButton}>
+                + Request
+              </Button>
+            )}
           </Link>
         </Col>
         <Col>
           {name ? (
             <div className={styles.ActiveTasksContainer}>
-              <Card.Text>
+              <Card.Text className="d-none d-md-block">
                 {name}'s active tasks: <strong>{filteredActiveTotal}</strong>
+              </Card.Text>
+              <Card.Text className="d-md-none">
+                Active tasks: <strong>{filteredActiveTotal}</strong>
               </Card.Text>
             </div>
           ) : (

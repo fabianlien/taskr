@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { axiosReq } from "../api/axiosDefaults";
-import ProfilePreview from "../pages/profile/ProfilePreview";
-import styles from "../styles/SearchBar.module.css";
+import { axiosReq } from "../../api/axiosDefaults";
+import ProfilePreview from "../../pages/profile/ProfilePreview";
+import styles from "../../styles/SearchBar.module.css";
 
 const UserSearchBar = () => {
   const [userSearchQuery, setUserSearchQuery] = useState("");

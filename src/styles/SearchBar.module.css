@@ -28,3 +28,22 @@
     margin-top: 20px;
     font-size: larger;
 }
+
+.RequestsBox {
+    margin-top: 10px;
+    margin-left: 0;
+    font-size: 160%;
+    letter-spacing: 1px;
+    width: 80%;
+    background-color: none;
+    text-decoration: underline;
+}
+
+.RequestCard {
+    background-color: transparent;
+    border: none;
+}
+
+.TextBox {
+    text-align: center;
+}

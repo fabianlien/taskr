@@ -2,10 +2,10 @@ import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import { useCurrentUser, useSetCurrentUser } from "../context/CurrentUserContext";
+import { useCurrentUser, useSetCurrentUser } from "../../context/CurrentUserContext";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "../styles/NavBar.module.css";
+import styles from "../../styles/NavBar.module.css";
 
 const NavBar = () => {
   const currentUser = useCurrentUser();

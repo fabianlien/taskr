@@ -14,6 +14,7 @@ const Task = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState({});
+  const [timeLeft, setTimeLeft] = useState({});
 
   useEffect(() => {
     const onMount = async () => {
@@ -32,14 +33,36 @@ const Task = () => {
     title,
     is_completed,
     due_by,
+    created_at,
     description,
     request_accepted,
     requested_username,
-    requested_ID
+    requested_ID,
   } = task;
   const stringDate = String(due_by);
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12));
-  const Overdue = new Date(due_by).getTime() < new Date().getTime();
+  const overdue = new Date(due_by).getTime() < new Date().getTime();
+
+  const countDown = setInterval(() => {
+    const reamingTime = new Date(due_by).getTime() - new Date().getTime();
+    const days = Math.floor(reamingTime / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (reamingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((reamingTime % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((reamingTime % (1000 * 60)) / 1000);
+
+    setTimeLeft({
+      days: days,
+      hours: hours,
+      minutes: minutes,
+      seconds: seconds,
+    });
+
+    if (overdue) {
+      clearInterval(countDown);
+    }
+  }, 1000);
 
   const handleComplete = async () => {
     try {
@@ -78,7 +101,6 @@ const Task = () => {
 
   return (
     <Container className={styles.Container}>
-      {console.log(requested_ID)}
       <Card style={{ width: "100%", marginBottom: "20px" }}>
         {request_accepted === "no" ? (
           <Card.Text className={styles.TaskNewRequest} />
@@ -88,7 +110,7 @@ const Task = () => {
               <Card.Text className={styles.TaskComplete}></Card.Text>
             ) : (
               <Card.Text className={styles.TaskIncomplete}>
-                {Overdue && "Overdue"}
+                {overdue && "Overdue"}
               </Card.Text>
             )}
           </>
@@ -98,7 +120,25 @@ const Task = () => {
         </Card.Title>
         <Card.Text>
           <Card.Text className={styles.DueBox2}>{`Due: ${due_by}`}</Card.Text>
-          {requested_username && <Card.Text className={styles.DueBox2}>Request from: <Link className={styles.RequestedUserLink} to={`/Profile/${requested_ID}/`}>{requested_username}</Link></Card.Text>}
+          <Card.Text
+            className={styles.CreatedAtBox}
+          >{`Created: ${created_at}`}</Card.Text>
+          {!overdue &&
+          <Card.Text
+            className={styles.TimeRemainingBox}
+          >{`Due In: ${timeLeft.days} days, ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</Card.Text>
+          }
+          {requested_username && (
+            <Card.Text className={styles.DueBox2}>
+              Request from:{" "}
+              <Link
+                className={styles.RequestedUserLink}
+                to={`/Profile/${requested_ID}/`}
+              >
+                {requested_username}
+              </Link>
+            </Card.Text>
+          )}
           <Card.Text className={styles.TextBody}>{description}</Card.Text>
           <div as={Row} className={styles.Line}></div>
           <Row>

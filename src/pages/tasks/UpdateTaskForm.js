@@ -72,6 +72,7 @@ const UpdateTaskForm = () => {
     formData.append("due_by", dateTime.toISOString());
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
+    formData.append("owner", id)
 
     try {
       console.log(formData);
