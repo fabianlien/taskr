@@ -10,6 +10,7 @@ import UpdateTaskForm from "./pages/tasks/UpdateTaskForm";
 import UpdateProfileForm from "./pages/profile/UpdateProfileForm";
 import Profile from "./pages/profile/Profile";
 import Task from "./pages/tasks/Task";
+import FourOFour from "./pages/404";
 
 function App() {
   const Route = require("react-router-dom").Route;
@@ -20,15 +21,19 @@ function App() {
       <NavBar />
       <Container className={styles.Body}>
         <Routes>
-          <Route exact path="/" element={ <Landing />} />
-          <Route exact path="/signin" element={ <SignInForm />} />
-          <Route exact path="/signup" element={ <SignUpForm />} />
-          <Route exact path="/task/create/:id" element={ <CreateTaskForm />} />
-          <Route exact path="/task/:id" element={ <Task />} />
-          <Route exact path="/task/:id/update" element={ <UpdateTaskForm />} />
-          <Route exact path="/profile/:id/edit" element={ <UpdateProfileForm />} />
-          <Route exact path="/profile/:id" element={ <Profile />} />
-          <Route element={ <>Sorry, the page could not be found!</>} />
+          <Route exact path="/" element={<Landing />} />
+          <Route exact path="/signin" element={<SignInForm />} />
+          <Route exact path="/signup" element={<SignUpForm />} />
+          <Route exact path="/task/create/:id" element={<CreateTaskForm />} />
+          <Route exact path="/task/:id" element={<Task />} />
+          <Route exact path="/task/:id/update" element={<UpdateTaskForm />} />
+          <Route
+            exact
+            path="/profile/:id/edit"
+            element={<UpdateProfileForm />}
+          />
+          <Route exact path="/profile/:id" element={<Profile />} />
+          <Route path="*" element={<FourOFour />} />
         </Routes>
       </Container>
     </Container>

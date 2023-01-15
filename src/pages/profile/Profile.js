@@ -48,7 +48,7 @@ const Home = () => {
           <Tabs defaultActiveKey="tasks" justify className="mt-3">
             <Tab
               eventKey="tasks"
-              title={is_owner ? "Your Tasks" : `${owner}'s Tasks`}
+              title={is_owner ? "My Tasks" : `${owner}'s Tasks`}
               className={styles.TasksTabBody}
               id={styles.TasksTab}
             >
@@ -56,7 +56,7 @@ const Home = () => {
             </Tab>
             <Tab
               eventKey="requests"
-              title={is_owner ? "Requested Tasks" : "Your Requests"}
+              title={is_owner ? "My Requests" : "Your Requests"}
               className={styles.RequestsTabBody}
               id={styles.RequestsTab}
             >

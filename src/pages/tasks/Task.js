@@ -14,21 +14,8 @@ const Task = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [task, setTask] = useState({});
-  const [timeLeft, setTimeLeft] = useState({});
-
-  useEffect(() => {
-    const onMount = async () => {
-      try {
-        const { data } = await axiosReq.get(`/tasks/${id}/`);
-        setTask(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    onMount();
-  }, [id, setTask]);
-
   const {
+    owner,
     is_owner,
     title,
     is_completed,
@@ -42,27 +29,46 @@ const Task = () => {
   const stringDate = String(due_by);
   const parsedDate = new Date(stringDate.slice(0, 11) + stringDate.slice(12));
   const overdue = new Date(due_by).getTime() < new Date().getTime();
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
 
-  const countDown = setInterval(() => {
-    const reamingTime = new Date(due_by).getTime() - new Date().getTime();
-    const days = Math.floor(reamingTime / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (reamingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-    const minutes = Math.floor((reamingTime % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((reamingTime % (1000 * 60)) / 1000);
+  useEffect(() => {
+    const onMount = async () => {
+      try {
+        const { data } = await axiosReq.get(`/tasks/${id}/`);
+        setTask(data);
+      } catch (error) {
+        console.log(error);
+      }
+      const countDown = setInterval(() => {
+        const reamingTime = new Date(due_by).getTime() - new Date().getTime();
+        const days = Math.floor(reamingTime / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (reamingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor(
+          (reamingTime % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((reamingTime % (1000 * 60)) / 1000);
 
-    setTimeLeft({
-      days: days,
-      hours: hours,
-      minutes: minutes,
-      seconds: seconds,
-    });
+        setTimeLeft(prevState => ({...prevState,
+          days: days,
+          hours: hours,
+          minutes: minutes,
+          seconds: seconds,
+        }));
 
-    if (overdue) {
-      clearInterval(countDown);
-    }
-  }, 1000);
+        if (overdue) {
+          clearInterval(countDown);
+        }
+      }, 1000);
+    };
+    onMount();
+  }, [id, setTask, setTimeLeft, due_by, overdue]);
 
   const handleComplete = async () => {
     try {
@@ -123,12 +129,12 @@ const Task = () => {
           <Card.Text
             className={styles.CreatedAtBox}
           >{`Created: ${created_at}`}</Card.Text>
-          {!overdue &&
-          <Card.Text
-            className={styles.TimeRemainingBox}
-          >{`Due In: ${timeLeft.days} days, ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</Card.Text>
-          }
-          {requested_username && (
+          {!overdue && (
+            <Card.Text
+              className={styles.TimeRemainingBox}
+            >{`Due In: ${timeLeft.days} days, ${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`}</Card.Text>
+          )}
+          {requested_ID > 0 && requested_username !== currentUser?.username && (
             <Card.Text className={styles.DueBox2}>
               Request from:{" "}
               <Link
@@ -136,6 +142,17 @@ const Task = () => {
                 to={`/Profile/${requested_ID}/`}
               >
                 {requested_username}
+              </Link>
+            </Card.Text>
+          )}
+          {requested_ID > 0 && requested_username === currentUser?.username && (
+            <Card.Text className={styles.DueBox2}>
+              Request to:{" "}
+              <Link
+                className={styles.RequestedUserLink}
+                to={`/Profile/${owner}/`}
+              >
+                {owner}
               </Link>
             </Card.Text>
           )}
