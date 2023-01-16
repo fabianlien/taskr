@@ -38,11 +38,10 @@ const SignUpForm = () => {
   return (
     <Row>
       <Col className="my-auto py-2 p-md-2 offset-md-3" md={6}>
-        <Container className="p-4">
+        <Container className="p-5">
           <h1>sign up</h1>
-
           <Form onSubmit={handleSubmit} name="username">
-            <Form.Group controlId="username">
+            <Form.Group className="py-2" controlId="username">
               <Form.Label className="d-none">Username</Form.Label>
               <Form.Control
                 type="text"
@@ -58,7 +57,7 @@ const SignUpForm = () => {
               </Alert>
             ))}
 
-            <Form.Group controlId="password1">
+            <Form.Group className="py-2" controlId="password1">
               <Form.Label className="d-none">Password</Form.Label>
               <Form.Control
                 type="password"
@@ -74,8 +73,8 @@ const SignUpForm = () => {
               </Alert>
             ))}
 
-            <Form.Group controlId="password2">
-              <Form.Label className="d-none">Confirm password</Form.Label>
+            <Form.Group className="py-2" controlId="password2">
+              <Form.Label className="d-none ">Confirm password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Confirm password"
