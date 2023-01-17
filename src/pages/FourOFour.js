@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import styles from "../styles/Detail.module.css";
+import styles from "../styles/FourOFour.module.css";
 
 const FourOFour = () => {
   const navigate = useNavigate();

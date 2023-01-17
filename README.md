@@ -98,7 +98,7 @@ Another small feature to include in future updates is a permanent record of all 
 **Attach files to tasks:**  
 In a smaller future update, taskr will allow users to attach files such as jpg's and pdf's as task items. This would make taskr more useful as it would eliminate the need for users to resort to other means to provide eachother with docs. This has not been included so far as it is not part of taskrs core functionality.
 
-**Follow users:**
+**Follow sers:**
 A future update would allow a user to follow other users. This will become an important feature once "clusters" are available, and will also provide relevant statistics for further future updates.
 
 <hr>
@@ -160,14 +160,6 @@ The project utilizes user stories as a method of development. The user stories a
     - (C) As a cluster owner, I can make another user "owner", so that they are also able to distribute tasks or add members.
     - (S) As a cluster member, I can click a button to leave a cluster, so that I am no longer a member of that cluster.
 
-
-
-
-
-
-
-
-
 #### **Kanban Board:**
 The Project utilizes Githubs Kanban board via the "projects" tab. The board is used to track the current progress of the projects user stories. So far 23 out of 35 user stories have been completed. See the Kanban [here](https://github.com/fabianlien/taskr/projects/1).
 
@@ -176,21 +168,99 @@ The Project utilizes Githubs Kanban board via the "projects" tab. The board is u
 ### *Frontend*
 
 #### **Wire Frames:**
-An initial wire frame mock-up was created for a desktop style app. The overall layout in the final version for this project differs quite a bit and was changed in favor of a more conventional layout. See below:  
-![Screenshot of wire frame mock-up](public/screenshots/Screenshot_wireframe.jpg)
+**Desktop screen**: An initial wire frame mock-up was created for a desktop layout. Initially I thought utilizing the extra width on the desktop screen to display profile information would make for a better user experience, but I soon changed my mind as I realised that forcing the user to keep viewing the profile data would potentially distract them from the primary function of the main page: viewing the tasks. Other changes were made in favor of a less clutered UI and a second search bar was added to make the search UX more comprehensible. The layout in the final version for this project differs quite a bit and was changed in favor of a more conventional layout and is much closer to the wireframe layout for the mobile version. See below:  
 
-#### **Developer Role**
+*Desktop wireframe:*  
+![Screenshot of the desktop wireframe mock-up](public/screenshots/Screenshot_wireframe_desktop.jpg)
 
+*Mobile wireframe:*  
+![Screenshot of the mobile wireframe mock-up](public/screenshots/Screenshot_wireframe_mobile.jpg)
 
 <br>
 
-### *Backend*
+#### **Key Front-end Technologies**
+* **React.js:**  The primary Front-End library used for this project is React. For those not familiar, React is a open-source Javascript library created by Meta (formerly Facebook) and is used to create Frontend web UI's which integrate javascript logic. It utilizes a modified version of JavaScript called JSX (which is sort of a mash-up of html and JS). React has become vastly popular over the passed few years, in large part because it lends itself to recycling code. This is primarily achieved through the use of "components".
+
+  React components are easily nested within one another and use props to pass data down the component ancestry. In this project, for example, The same "TaskPreview.js" and consequently "Task.js" components are rendered within both "RequestList.js" and "Tasklist.js" and use conditional logic to determine what data to request from the API and how to filter said data. In a future update, the same Task.js will be reused to render task data to the dom within a task "Cluster". 
+
+  Components use state to render information to the DOM, thus allowing for individual components to refresh independently (without requiring a full page refresh). This is becomes evidently useful when for instance a user is searching for a task or another user and the results are imediately filtered as fetch requests are sent continously with each cahnge to the state of the searchbar component which is then rerendered to display the most current results.
+
+  As React by default only concerns itself with managing state aditional packages/libraries are needed to provide client-side functionality.
+
+* **React Router:** The React Router package (together with React Router DOM) allows for http routing between different pages in the web app.
+
+* **Axios:** Used for HTTP requests. Intercepts requests and responses and automatically converts datapackages to/from JSON format.
+
+* **React Bootstrap 1.6:** Used for quick consistent styling and grid layout with built in class components.
+
+* **React Infinite Scroll Component:** Used to display lists of tasks or requests without requiring the user to change page using default pagination, thus making for a more "modern" UX.
+
+* **JWT Decode:** Used for decoding the encoded web tokens validated by the server.
+
+* **React Datepicker:** Reusable component that allows the user to set and change due dates for tasks/requests.
+
+
+<hr>
+<br>
+
+## Backend
+
+As a part of this project a custom API was created using Django's REST framework. The API uses custom database models in combination with views and serializers to manage requests from the front-end. A PostgreSQL database has been set up for use with the deployed API and React app. A link to the REST API Repository can be found [here](https://github.com/fabianlien/taskr-api).
 
 <hr>
 <br>
 
 ## Testing
 
+<hr>
+<br>
+
 ## Deployment
+
+### **Development Build:**
+
+1.  Clone [this repository](https://github.com/fabianlien/taskr).
+2.  Open your IDE and connect to your repo, then enter this command in the terminal:
+
+        npm install
+
+3. Make sure your package.json dependencies look like this:
+
+      "dependencies": {
+        "@testing-library/jest-dom": "^5.16.4",
+        "@testing-library/react": "^11.2.7",
+        "@testing-library/user-event": "^12.8.3",
+        "axios": "^0.21.4",
+        "bootstrap": "^5.2.3",
+        "jwt-decode": "^3.1.2",
+        "react": "^17.0.2",
+        "react-bootstrap": "^1.6.1",
+        "react-custom-checkbox": "^3.1.4",
+        "react-datepicker": "^4.8.0",
+        "react-dom": "^17.0.2",
+        "react-infinite-scroll-component": "^6.1.0",
+        "react-router-dom": "^6.6.2",
+        "react-scripts": "^4.0.3",
+        "web-vitals": "^1.1.2"
+
+4.  Add your personal url for the deployed DRF API in the axiosDefaults.js file (as baseURL).
+5.  Git add, commit and push all changes to your repo.
+6.  Create or log in to an account on Heroku.
+7.  Create a new app on Heroku.
+8.  In the Deploy section on Heroku, go to Deployment method and add your GitHub repository.
+9.  Go down to Manual deploy and select deploy branch for early deployment.
+
+<br>
+
+### **Production Build:**
+
+1.  To create a production build, enter this command in your terminal:
+
+        npm run build
+
+2.  Git add, commit and push to your repo.
+3.  In the Deploy section on Heroku, go to Manual deploy and select deploy branch.
+4.  Go to the Settings tab and scroll down to Domains where you find the URL to your deployed site.
+
 
 ## Credits

@@ -5,7 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Alert from "react-bootstrap/Alert";
 import { axiosReq } from "../../api/axiosDefaults";
-import styles from "../../styles/Detail.module.css";
+import styles from "../../styles/CreateTaskItemList.module.css";
 import TaskItem from "./TaskItem";
 
 const CreateTaskItemForm = (props) => {
@@ -69,7 +69,7 @@ const CreateTaskItemForm = (props) => {
         {is_owner && (
           <Form.Group as={Row} className="mb-4" controlId="content">
             <Form.Label className="d-none">Task item</Form.Label>
-            <Col xs={10}>
+            <Col xs={11}>
               <Form.Control
                 type="text"
                 placeholder="Task item"
@@ -78,7 +78,7 @@ const CreateTaskItemForm = (props) => {
                 onChange={handleChange}
               />
             </Col>
-            <Col xs={2}>
+            <Col xs={1}>
               <Button
                 className={styles.AddButton}
                 type="button"

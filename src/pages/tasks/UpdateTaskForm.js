@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-import styles from "../../styles/Detail.module.css";
+import styles from "../../styles/UpdateTaskForm.module.css";
 import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
@@ -187,7 +187,7 @@ const UpdateTaskForm = () => {
             variant="warning"
             className={styles.ConfirmButton}
           >
-            + Add
+            + Save
           </Button>
         </Col>
         <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">

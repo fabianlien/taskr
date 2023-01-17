@@ -1,0 +1,9 @@
+.TimeRemainingBox {
+    text-align: center;
+    margin-top: -16px;
+    margin-bottom: 32px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 120%;
+    color: rgb(211, 94, 94);
+}

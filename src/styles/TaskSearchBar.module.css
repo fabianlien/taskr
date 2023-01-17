@@ -1,0 +1,17 @@
+.MagnifyingGlass {
+    font-size: x-large;
+    margin-top: 20px;
+    margin-right: -16px;
+    float: right;
+}
+
+.SearchBar {
+    margin-top: 20px;
+    margin-bottom: 16px;
+}
+
+.Spinner {
+    width: 6vw;
+    height: 6vw;
+    margin: 20px auto;
+}

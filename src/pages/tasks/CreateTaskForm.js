@@ -10,7 +10,7 @@ import { axiosReq } from "../../api/axiosDefaults";
 import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import { useCurrentUser } from "../../context/CurrentUserContext";
-import styles from "../../styles/Detail.module.css";
+import styles from "../../styles/CreateTaskForm.module.css";
 import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
@@ -96,7 +96,7 @@ const CreateTaskForm = () => {
           <Card.Header onClick={clearForm} className={styles.Heading}>
             {is_owner ? "Create a new Task" : "Make a new Request"}
           </Card.Header>
-          <Form.Group as={Row} className={styles.ro} classcontrolId="title">
+          <Form.Group as={Row} classcontrolId="title">
             <Form.Label className="d-none">Title</Form.Label>
             <Col sm={{ span: 10, offset: 1 }} className="mt-2">
               <Form.Control

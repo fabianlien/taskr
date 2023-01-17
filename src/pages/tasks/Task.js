@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults.js";
-import styles from "../../styles/Detail.module.css";
+import styles from "../../styles/Task.module.css";
 import CreateTaskItemList from "./CreateTaskItemList.js";
 import { Col, Row } from "react-bootstrap";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";

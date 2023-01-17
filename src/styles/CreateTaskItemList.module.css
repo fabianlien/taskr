@@ -1,0 +1,22 @@
+.AddButton {
+    height: 38px;
+    width: 60px;
+    margin-left: -82px;
+    line-height: 30px;
+    padding: 0;
+    background-color: rgb(109, 106, 106);
+    border: 2px solid #ece0e0;
+    color: #ece0e0;
+    font-size: xx-large;
+}
+
+.AddButton:Hover {
+    background-color: #ece0e0;
+    color: rgb(109, 106, 106);
+    border: 2px solid #ece0e0;
+}
+
+.WarningMessage {
+    width: 90%;
+    margin-top: -16px;
+}

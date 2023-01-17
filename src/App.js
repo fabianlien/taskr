@@ -10,7 +10,7 @@ import UpdateTaskForm from "./pages/tasks/UpdateTaskForm";
 import UpdateProfileForm from "./pages/profile/UpdateProfileForm";
 import Profile from "./pages/profile/Profile";
 import Task from "./pages/tasks/Task";
-import FourOFour from "./pages/404";
+import FourOFour from "./pages/FourOFour";
 
 function App() {
   const Route = require("react-router-dom").Route;

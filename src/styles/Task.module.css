@@ -15,31 +15,9 @@
     color: rgb(211, 94, 94);
 }
 
-.TitleField {
-    font-size: larger;
-}
-
 .TextBody {
     font-size: 160%;
     text-align: center;
-}
-
-.DateTimePicker {
-    width: 100%;
-    font-size: larger;
-    letter-spacing: 1px;
-    word-spacing: 2px;
-    padding: 8px;
-    border-radius: 4px;
-}
-
-.DateTimePicker:Hover {
-    border-color: rgb(211, 94, 94);
-    color: rgb(211, 94, 94);
-}
-
-.CheckBox {
-    text-indent: 4px;
 }
 
 .DueBox2 {
@@ -55,16 +33,6 @@
     height: 30px;
     line-height: 30px;
     color: rgb(109, 106, 106);
-}
-
-.TimeRemainingBox {
-    text-align: center;
-    margin-top: -16px;
-    margin-bottom: 32px;
-    height: 30px;
-    line-height: 30px;
-    font-size: 120%;
-    color: rgb(211, 94, 94);
 }
 
 .CompletedBox {
@@ -126,24 +94,6 @@
     margin-left: -4px;
 }
 
-.AddButton {
-    height: 38px;
-    width: 38px;
-    margin-left: -60px;
-    line-height: 30px;
-    padding: 0;
-    background-color: rgb(109, 106, 106);
-    border: 2px solid #ece0e0;
-    color: #ece0e0;
-    font-size: xx-large;
-}
-
-.AddButton:Hover {
-    background-color: #ece0e0;
-    color: rgb(109, 106, 106);
-    border: 2px solid #ece0e0;
-}
-
 .TaskIncomplete {
     position: relative;
     width: 100%;
@@ -199,21 +149,6 @@
     font-size: medium;
 }
 
-.WarningMessage {
-    width: 90%;
-    margin-top: -16px;
-}
-
-.FourOFourCard {
-    text-align: center;
-    font-size: larger;
-    background-color: #ece0e0;
-}
-
-.FourOFourCard strong {
-    font-size: xx-large;
-}
-
 @media only screen and (max-width: 380px) {
     .GoBack {
         display: none;
@@ -252,26 +187,10 @@
         padding-top: 10px;
         border-radius: 10px;
     }
-
-    .AddButton {
-        margin-left: -30px;
-    }
 }
 
 @media only screen and (min-width: 768px) {
-    .DueBox {
-        text-align: center;
-        height: 50px;
-        line-height: 50px;
-        font-size: larger;
-    }
-
     .DeleteButton {
         margin-top: 4px;
     }
-
-    .AddButton {
-        width: 60px;
-    }
 }
-

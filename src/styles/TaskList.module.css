@@ -1,0 +1,31 @@
+.TaskCardBody {
+    margin-left: 10%;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    width: 80%;
+    background-color: rgb(109, 106, 106);
+    color: white;
+    border-radius: 12px;
+}
+
+.RequestsBox {
+    margin-top: 10px;
+    margin-left: 0;
+    font-size: 160%;
+    letter-spacing: 1px;
+    width: 80%;
+    background-color: none;
+    text-decoration: underline;
+}
+
+.RequestCard {
+    background-color: transparent;
+    border: none;
+}
+
+.Spinner {
+    width: 6vw;
+    height: 6vw;
+    margin: 20px auto;
+    text-align: center;
+}

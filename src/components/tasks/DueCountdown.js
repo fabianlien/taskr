@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
-import styles from "../../styles/Detail.module.css"
+import styles from "../../styles/DueCountdown.module.css"
 
 const DueCountdown = ({due_by}) => {
     const overdue = new Date(due_by).getTime() < new Date().getTime();

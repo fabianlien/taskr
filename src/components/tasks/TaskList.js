@@ -9,7 +9,7 @@ import TaskSearchBar from "./TaskSearchBar";
 import TaskPreview from "./TaskPreview";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils";
-import styles from "../../styles/SearchBar.module.css";
+import styles from "../../styles/TaskList.module.css";
 
 const TaskList = ({ owner }) => {
   const currentUser = useCurrentUser();
