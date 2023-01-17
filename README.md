@@ -199,18 +199,20 @@ The Project utilizes Githubs Kanban board via the "projects" tab. The board is u
 
 * **React Datepicker:** Reusable component that allows the user to set and change due dates for tasks/requests.
 
-
-<hr>
 <br>
 
-## Backend
+### *Backend*
 
 As a part of this project a custom API was created using Django's REST framework. The API uses custom database models in combination with views and serializers to manage requests from the front-end. A PostgreSQL database has been set up for use with the deployed API and React app. A link to the REST API Repository can be found [here](https://github.com/fabianlien/taskr-api).
 
 <hr>
 <br>
 
-## Testing
+## Manual Testing
+
+
+
+
 
 <hr>
 <br>
