@@ -7,17 +7,22 @@ import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
 import { useNavigate, useParams } from "react-router-dom";
-import { axiosReq } from "../../api/axiosDefaults";
+import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/UpdateProfileForm.module.css";
-import { Card } from "react-bootstrap";
+import { Accordion, Card } from "react-bootstrap";
 
 const UpdateProfileForm = () => {
   const currentUser = useCurrentUser();
+  const [userPassword, setUserPassword] = useState({
+    password: "",
+  });
+  const { password } = userPassword;
   const [profileData, setProfileData] = useState({
     name: "",
     bio: "",
     profile_image: "",
+    password: "",
   });
   const { name, bio, profile_image } = profileData;
   const imageInput = useRef(null);
@@ -47,6 +52,11 @@ const UpdateProfileForm = () => {
     });
   };
 
+  const handlePassword = (event) => {
+    setUserPassword({ [event.target.name]: event.target.value });
+    console.log(userPassword);
+  };
+
   const handleImage = (event) => {
     if (event.target.files.length) {
       URL.revokeObjectURL(profile_image);
@@ -54,6 +64,21 @@ const UpdateProfileForm = () => {
         ...profileData,
         profile_image: URL.createObjectURL(event.target.files[0]),
       });
+    }
+  };
+
+  const handleDelete = async () => {
+    const formData = new FormData();
+    formData.append("password", password);
+    formData.append("username", currentUser.username);
+
+    try {
+      await axiosReq.post("dj-rest-auth/login/", formData);
+      await axiosRes.delete(`/profiles/${id}`);
+      await axiosReq.post("/dj-rest-auth/logout/");
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status !== 401) setErrors(error.response?.data);
     }
   };
 
@@ -166,6 +191,52 @@ const UpdateProfileForm = () => {
                 Cancel
               </Button>
             </Col>
+            <Accordion defaultActiveKey="1">
+              <Accordion.Toggle
+                className={styles.DeleteAccordian}
+                as={Card.Header}
+                eventKey="0"
+              >
+                <strong>Delete Account</strong>
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>
+                  <strong className={styles.DeleteWarning}>
+                    Caution: Deleting your profile is permanent and cannot be
+                    undone.
+                  </strong>
+                  <Form.Group
+                    style={{ width: "50%" }}
+                    className="py-2"
+                    controlId="password"
+                  >
+                    <Form.Label>
+                      Enter your account password to delete your profile:
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Password"
+                      default=""
+                      name="password"
+                      value={password}
+                      onChange={handlePassword}
+                    />
+                  </Form.Group>
+                  {errors.non_field_errors?.map((index) => (
+                    <Alert variant="warning" key={index}>
+                      {`The provided password did not match ${currentUser.username}'s password`}
+                    </Alert>
+                  ))}
+                  <Button
+                    className={styles.DeleteAccountButton}
+                    onClick={handleDelete}
+                    variant="danger"
+                  >
+                    Delete Profile
+                  </Button>
+                </Card.Body>
+              </Accordion.Collapse>
+            </Accordion>
           </Form.Group>
         </Form>
       </Card>

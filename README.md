@@ -210,6 +210,8 @@ _Mobile wireframe:_
 
 - **React Datepicker:** Reusable component that allows the user to set and change due dates for tasks/requests.
 
+- **React Custom Checkbox:** A customizable checkbox component that looks much better than the default browser checkbox or the Bootstrap checkbox.
+
 <br>
 
 ### _Backend_
