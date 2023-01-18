@@ -34,6 +34,7 @@ function App() {
           />
           <Route exact path="/profile/:id" element={<Profile />} />
           <Route path="*" element={<FourOFour />} />
+          <Route path="/not_found" element={<FourOFour />} />
         </Routes>
       </Container>
     </Container>

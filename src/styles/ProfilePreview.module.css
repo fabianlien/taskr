@@ -32,9 +32,10 @@
 }
 
 .Owner {
-    text-align: center;
+    text-align: right;
     color: rgb(43, 49, 43);
     margin-top: 20px;
+    padding-right: 10%;
 }
 
 .Name {

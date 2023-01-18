@@ -15,6 +15,7 @@ import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
 const CreateTaskForm = () => {
+  
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -40,11 +41,13 @@ const CreateTaskForm = () => {
           setTaskRequestProfileData(data);
         } catch (error) {
           console.log(error);
+          navigate(-1);
         }
       }
     };
     onMount();
   }, [is_owner, id]);
+
 
   const handleChange = (event) => {
     setTaskTextData({

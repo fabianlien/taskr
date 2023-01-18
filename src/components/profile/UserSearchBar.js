@@ -34,7 +34,7 @@ const UserSearchBar = () => {
   }, [userSearchQuery, setProfilesPreview, setHasLoaded]);
 
   return (
-    <Container>
+    <Container className={styles.Container}>
       <Row>
         <Col xs={1}>
           <div className={styles.MagnifyingGlass}>

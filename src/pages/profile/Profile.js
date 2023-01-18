@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import { Tab, Tabs } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 import UserSearchBar from "../../components/profile/UserSearchBar";
 import styles from "../../styles/Profile.module.css";
@@ -13,6 +13,7 @@ import TaskList from "../../components/tasks/TaskList";
 import RequestList from "../../components/tasks/RequestList";
 
 const Home = () => {
+  const navigate = useNavigate();
   const currentUser = useCurrentUser();
   const { id } = useParams();
 
@@ -27,6 +28,7 @@ const Home = () => {
         setProfileData(data);
       } catch (error) {
         console.log(error);
+        navigate("/not_found");
       }
     };
     onMount();

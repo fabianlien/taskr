@@ -30,6 +30,10 @@ const UpdateProfileForm = () => {
   const { id } = useParams();
   const [errors, setErrors] = useState({});
 
+  if (currentUser?.pk !== parseInt(id)) {
+    navigate(-1)
+  }
+
   useEffect(() => {
     const onMount = async () => {
       if (currentUser?.pk === parseInt(id)) {

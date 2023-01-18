@@ -13,14 +13,14 @@ const ProfilePreview = ({ profile, setUserSearchQuery }) => {
       <Card.Body onClick={() => setUserSearchQuery("")} className={styles.ProfilePreviewCard}>
         <Link to={`/profile/${id}/`}>
             <Row>
-              <Col xs={2} className={styles.ImageContainer}>
+              <Col xs={1} md={2} className={styles.ImageContainer}>
                 <Card.Img
                   className={styles.ProfilePreviewImage}
                   src={profile_image}
                   alt="profile image"
                 />
               </Col>
-              <Col xs={10} className={styles.NameContainer}>
+              <Col xs={11} md={10} className={styles.NameContainer}>
                 {name.length ? (
                   <>
                     <Card.Title className={styles.Owner}>{owner}</Card.Title>

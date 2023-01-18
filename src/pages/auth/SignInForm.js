@@ -8,9 +8,12 @@ import Container from "react-bootstrap/Container";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSetCurrentUser } from "../../context/CurrentUserContext";
+import { setTokenTimestamp } from "../../utils/utils";
+import { useRedirect } from "../../hooks/useRedirect";
 
 const SignInForm = () => {
   const setCurrentUser = useSetCurrentUser();
+  useRedirect("loggedIn")
   const [signInData, setSignInData] = useState({
     username: "",
     password: "",
@@ -30,8 +33,9 @@ const SignInForm = () => {
     event.preventDefault();
     try {
       const {data} = await axios.post("dj-rest-auth/login/", signInData);
-      setCurrentUser(data.user)
-      navigate("/");
+      setCurrentUser(data.user);
+      setTokenTimestamp(data);
+      navigate(-1);
     } catch (error) {
       setErrors(error.response?.data);
     }
