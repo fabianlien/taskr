@@ -8,6 +8,7 @@ const TaskSearchBar = ({
   setTasksFiltered,
   taskSearchQuery,
   setTaskSearchQuery,
+  
 }) => {
   useEffect(() => {
     const fetchQuery = async () => {
@@ -34,7 +35,7 @@ const TaskSearchBar = ({
     <Form onSubmit={(event) => event.preventDefault()}>
       <Row>
         <Col xs={1}>
-          <div className={styles.MagnifyingGlass}><i className="fa-solid fa-magnifying-glass"></i></div>
+          <div className={styles.MagnifyingGlass}><i className="fa-solid fa-magnifying-glass"/></div>
         </Col>
         <Col xs={10}>
           <Form.Control

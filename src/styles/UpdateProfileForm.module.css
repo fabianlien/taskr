@@ -13,10 +13,13 @@
     }
 
 .UploadButton {
-    width: 100%;
     font-size: larger;
     margin-bottom: 20px;
     color: rgb(109, 106, 106);
+}
+
+.UploadButton * {
+    width: 100%;
 }
 
 .Bio {

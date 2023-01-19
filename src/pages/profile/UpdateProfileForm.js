@@ -10,10 +10,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { axiosReq, axiosRes } from "../../api/axiosDefaults";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/UpdateProfileForm.module.css";
-import { Accordion, Card } from "react-bootstrap";
+import { Accordion, Card, Spinner } from "react-bootstrap";
 
 const UpdateProfileForm = () => {
   const currentUser = useCurrentUser();
+  const [pageLoading, setPageLoading] = useState(true);
   const [userPassword, setUserPassword] = useState({
     password: "",
   });
@@ -31,7 +32,7 @@ const UpdateProfileForm = () => {
   const [errors, setErrors] = useState({});
 
   if (currentUser?.pk !== parseInt(id)) {
-    navigate(-1)
+    navigate(-1);
   }
 
   useEffect(() => {
@@ -41,13 +42,16 @@ const UpdateProfileForm = () => {
           const { data } = await axiosReq.get(`/profiles/${id}`);
           const { bio, name, profile_image } = data;
           setProfileData({ bio, name, profile_image });
+          setPageLoading(false);
         } catch (error) {
           console.log(error);
         }
       }
     };
-    onMount();
-  }, [id, navigate, currentUser, setProfileData]);
+    if (pageLoading) {
+      onMount();
+    }
+  }, [id, navigate, currentUser, setProfileData, pageLoading]);
 
   const handleChange = (event) => {
     setProfileData({
@@ -107,143 +111,155 @@ const UpdateProfileForm = () => {
 
   return (
     <Container fluid className={styles.Container}>
-      <Card className={styles.EditProfileCard}>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className={styles.ProfileTextBox}>
-            {profile_image ? (
-              <figure>
-                <Image src={profile_image} rounded="true" fluid="true" />
-              </figure>
-            ) : (
-              <Form.Label
-                className="d-flex justify-content-center"
-                htmlFor="image-upload"
-              >
-                <span>Click or tap to upload an image</span>
+      {pageLoading ? (
+        <Spinner animation="border" />
+      ) : (
+        <Card className={styles.EditProfileCard}>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className={styles.ProfileTextBox}>
+              {profile_image ? (
+                <figure>
+                  <Image src={profile_image} rounded="true" fluid="true" />
+                </figure>
+              ) : (
+                <Form.Label
+                  className="d-flex justify-content-center"
+                  htmlFor="image-upload"
+                >
+                  <span>Click or tap to upload an image</span>
+                </Form.Label>
+              )}
+              <Row>
+                <Col xs={{ offset: 1 }} md={{ span: 4, offset: 2 }}>
+                  <Form.File
+                    className={styles.UploadButton}
+                    id="image-upload"
+                    accept="image/*"
+                    onChange={handleImage}
+                    ref={imageInput}
+                  />
+                </Col>
+              </Row>
+            </Form.Group>
+            {errors.profile_image?.map((message, index) => (
+              <Alert variant="warning" key={index}>
+                {message}
+              </Alert>
+            ))}
+            <Form.Group as={Row} controlId="name">
+              <Form.Label className="d-none mg-b-20" column sm={2}>
+                Name
               </Form.Label>
-            )}
-            <Row>
-              <Col sm={{ span: 6, offset: 3 }} md={{ span: 6, offset: 4 }}>
-                <Form.File
-                  className={styles.UploadButton}
-                  id="image-upload"
-                  accept="image/*"
-                  onChange={handleImage}
-                  ref={imageInput}
+              <Col xs={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
+                <Form.Control
+                  className={styles.Text}
+                  type="text"
+                  size="lg"
+                  placeholder="Name"
+                  name="name"
+                  value={name}
+                  onChange={handleChange}
                 />
               </Col>
-            </Row>
-          </Form.Group>
-          <Form.Group as={Row} controlId="name">
-            <Form.Label className="d-none mg-b-20" column sm={2}>
-              Name
-            </Form.Label>
-            <Col xs={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
-              <Form.Control
-                className={styles.Text}
-                type="text"
-                size="lg"
-                placeholder="Name"
-                name="name"
-                value={name}
-                onChange={handleChange}
-              />
-            </Col>
-          </Form.Group>
-          {errors.name?.map((message, index) => (
-            <Alert variant="warning" key={index}>
-              {message}
-            </Alert>
-          ))}
-          <Form.Group as={Row} controlId="bio">
-            <Form.Label className="d-none mg-b-20" column sm={2}>
-              Biography
-            </Form.Label>
-            <Col xs={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
-              <Form.Control
-                className={styles.Bio}
-                as="textarea"
-                size="lg"
-                placeholder="Write something about yourself..."
-                name="bio"
-                value={bio}
-                onChange={handleChange}
-              />
-            </Col>
-          </Form.Group>
-          {errors.bio?.map((message, index) => (
-            <Alert variant="warning" key={index}>
-              {message}
-            </Alert>
-          ))}
-          <Form.Group as={Row}>
-            <Col sm={{ span: 6, offset: 1 }} md={{ span: 3, offset: 2 }}>
-              <Button
-                className={styles.ConfirmButton}
-                type="submit"
-                variant="warning"
-              >
-                Save
-              </Button>
-            </Col>
-            <Col sm={{ span: 4 }} md={{ span: 3, offset: 2 }}>
-              <Button
-                className={styles.CancelButton}
-                variant="secondary"
-                onClick={() => navigate(-1)}
-              >
-                Cancel
-              </Button>
-            </Col>
-            <Accordion defaultActiveKey="1">
-              <Accordion.Toggle
-                className={styles.DeleteAccordian}
-                as={Card.Header}
-                eventKey="0"
-              >
-                <strong>Delete Account</strong>
-              </Accordion.Toggle>
-              <Accordion.Collapse eventKey="0">
-                <Card.Body>
-                  <strong className={styles.DeleteWarning}>
-                    Caution: Deleting your profile is permanent and cannot be
-                    undone.
-                  </strong>
-                  <Form.Group
-                    style={{ width: "50%" }}
-                    className="py-2"
-                    controlId="password"
-                  >
-                    <Form.Label>
-                      Enter your account password to delete your profile:
-                    </Form.Label>
-                    <Form.Control
-                      type="password"
-                      placeholder="Password"
-                      default=""
-                      name="password"
-                      value={password}
-                      onChange={handlePassword}
-                    />
-                  </Form.Group>
-                  {errors.non_field_errors?.map((index) => (
-                    <Alert variant="warning" key={index}>
-                      {`The provided password did not match ${currentUser.username}'s password`}
-                    </Alert>
-                  ))}
-                  <Button
-                    className={styles.DeleteAccountButton}
-                    onClick={handleDelete}
-                    variant="danger"
-                  >
-                    Delete Profile
-                  </Button>
-                </Card.Body>
-              </Accordion.Collapse>
-            </Accordion>
-          </Form.Group>
-        </Form>
-      </Card>
+            </Form.Group>
+            {errors.name?.map((message, index) => (
+              <Alert variant="warning" key={index}>
+                {message}
+              </Alert>
+            ))}
+            <Form.Group as={Row} controlId="bio">
+              <Form.Label className="d-none mg-b-20" column sm={2}>
+                Biography
+              </Form.Label>
+              <Col xs={{ span: 10, offset: 1 }} md={{ span: 8, offset: 2 }}>
+                <Form.Control
+                  className={styles.Bio}
+                  as="textarea"
+                  size="lg"
+                  placeholder="Write something about yourself..."
+                  name="bio"
+                  value={bio}
+                  onChange={handleChange}
+                />
+              </Col>
+            </Form.Group>
+            {errors.bio?.map((message, index) => (
+              <Alert variant="warning" key={index}>
+                {message}
+              </Alert>
+            ))}
+            <Form.Group as={Row}>
+              <Col sm={{ span: 6, offset: 1 }} md={{ span: 3, offset: 2 }}>
+                <Button
+                  className={styles.ConfirmButton}
+                  type="submit"
+                  variant="warning"
+                >
+                  Save
+                </Button>
+              </Col>
+              <Col sm={{ span: 4 }} md={{ span: 3, offset: 2 }}>
+                <Button
+                  className={styles.CancelButton}
+                  variant="secondary"
+                  onClick={() => navigate(-1)}
+                >
+                  Cancel
+                </Button>
+              </Col>
+              <Accordion defaultActiveKey="1">
+                <Accordion.Toggle
+                  className={styles.DeleteAccordian}
+                  as={Card.Header}
+                  eventKey="0"
+                >
+                  <strong>Delete Profile</strong>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey="0">
+                  <Card.Body>
+                    <strong className={styles.DeleteWarning}>
+                      Caution: Deleting your profile is permanent and cannot be
+                      undone.
+                      <br />
+                      If you wish to delete your account please contact an
+                      administrator.
+                    </strong>
+                    <Form.Group
+                      style={{ width: "50%" }}
+                      className="py-2"
+                      controlId="password"
+                    >
+                      <Form.Label>
+                        Enter your account password to delete your profile:
+                      </Form.Label>
+                      <Form.Control
+                        type="password"
+                        placeholder="Password"
+                        default=""
+                        name="password"
+                        value={password}
+                        onChange={handlePassword}
+                      />
+                    </Form.Group>
+                    {errors.non_field_errors?.map((index) => (
+                      <Alert variant="warning" key={index}>
+                        {`The provided password did not match ${currentUser.username}'s password`}
+                      </Alert>
+                    ))}
+                    <Button
+                      className={styles.DeleteAccountButton}
+                      onClick={handleDelete}
+                      variant="danger"
+                    >
+                      Delete Profile
+                    </Button>
+                  </Card.Body>
+                </Accordion.Collapse>
+              </Accordion>
+            </Form.Group>
+          </Form>
+        </Card>
+      )}
     </Container>
   );
 };

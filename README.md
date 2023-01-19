@@ -212,6 +212,8 @@ _Mobile wireframe:_
 
 - **React Custom Checkbox:** A customizable checkbox component that looks much better than the default browser checkbox or the Bootstrap checkbox.
 
+- **React Toastify:** A plug-and-play notification package which lets me communicate relevant changes in the db to the end user in a fluid way.
+
 <br>
 
 ### _Backend_
@@ -260,6 +262,7 @@ As a part of this project a custom API was created using Django's REST framework
 | Accept request            | Click the "Accept" button in a request| Change state and color of the request with updated "active tasks" number on user profile and request moved to "My tasks" tabs                              | ✓    |
 | Reject request            | Click the "Reject" button in a request| Reroute to authenticated user profile with updated "incoming requests" preview list                                                                        | ✓    |
 | Edit profile page         | Submit a valid edit profile form      | Profile picture and bio should change according to new input data                                                                                          | ✓    |
+| Toastify notifications    | Post or Put formdata to the backend   | A notification with a relevant message to the request should appear at the top of the screen for 5 seconds                                                 | ✓    |
 
 ### Validation:
 
@@ -301,22 +304,24 @@ As a part of this project a custom API was created using Django's REST framework
 
 3.  Make sure your package.json dependencies look like this:
 
-    "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.21.4",
-    "bootstrap": "^5.2.3",
-    "jwt-decode": "^3.1.2",
-    "react": "^17.0.2",
-    "react-bootstrap": "^1.6.1",
-    "react-custom-checkbox": "^3.1.4",
-    "react-datepicker": "^4.8.0",
-    "react-dom": "^17.0.2",
-    "react-infinite-scroll-component": "^6.1.0",
-    "react-router-dom": "^6.6.2",
-    "react-scripts": "^4.0.3",
-    "web-vitals": "^1.1.2"
+        "dependencies": {
+          "@testing-library/jest-dom": "^5.16.4",
+          "@testing-library/react": "^11.2.7",
+          "@testing-library/user-event": "^12.8.3",
+          "axios": "^0.21.4",
+          "bootstrap": "^5.2.3",
+          "jwt-decode": "^3.1.2",
+          "react": "^17.0.2",
+          "react-bootstrap": "^1.6.1",
+          "react-custom-checkbox": "^3.1.4",
+          "react-datepicker": "^4.8.0",
+          "react-dom": "^17.0.2",
+          "react-infinite-scroll-component": "^6.1.0",
+          "react-router-dom": "^6.6.2",
+          "react-scripts": "^4.0.3",
+          "react-toastify": "^9.0.3",
+          "web-vitals": "^1.1.2"
+          },
 
 4.  Add your personal url for the deployed DRF API in the axiosDefaults.js file (as baseURL).
 5.  Git add, commit and push all changes to your repo.
@@ -337,4 +342,22 @@ As a part of this project a custom API was created using Django's REST framework
 3.  In the Deploy section on Heroku, go to Manual deploy and select deploy branch.
 4.  Go to the Settings tab and scroll down to Domains where you find the URL to your deployed site.
 
+<hr>
+<br>
+
 ## Credits
+
+### **Code:**
+Some of the components are either imported third party components (npm packages are mentioned in "**Key frontend technologies**) or components that are copied from the Code Institute "Moments" code-along project. Instances of the latter are:
+  * axiosDefaults.js
+  * CurrentUserContext.js
+  * useRedirect.js
+  * utils.js
+ 
+  ### **Media:**
+  The landing page banner image (seen below) is licensed as free to use with atribution on [Freepik](https://www.freepik.com)  
+  ![banner image](src/components/assets/abstract_colorful_pattern.jpg)
+  [Image by exnico](https://www.freepik.com/free-vector/abstract-seamless-pattern_28698758.htm#query=exnico&position=19&from_view=search&track=sph)
+
+  ### **Acknowledgements**
+  Another huge "thank you!" to my mentor, Antonio Rodriguez, for your always valueble input and help, and whom without this project would not be the same.

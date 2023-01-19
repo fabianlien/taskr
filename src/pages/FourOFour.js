@@ -20,7 +20,7 @@ const FourOFour = () => {
         </strong>
         !
         <Row>
-          <Card.Text className={styles.Heading} onClick={() => navigate(-1)}>
+          <Card.Text className={styles.Heading} onClick={() => navigate("/")}>
             <i className="fa-solid fa-rotate-left" />
           </Card.Text>
         </Row>

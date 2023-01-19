@@ -10,12 +10,13 @@ import { axiosReq } from "../../api/axiosDefaults";
 import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 import styles from "../../styles/UpdateTaskForm.module.css";
-import { Card } from "react-bootstrap";
+import { Card, Spinner } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
-const UpdateTaskForm = ({toast}) => {
+const UpdateTaskForm = ({ toast }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
     const onMount = async () => {
@@ -34,6 +35,7 @@ const UpdateTaskForm = ({toast}) => {
           setDateTime(new Date(due_by));
           setCheckedPriority(is_important);
           setCheckedPublic(is_public);
+          setPageLoading(false);
         } else {
           navigate(-1);
         }
@@ -41,8 +43,10 @@ const UpdateTaskForm = ({toast}) => {
         console.log(error);
       }
     };
-    onMount();
-  }, [id, navigate]);
+    if (pageLoading) {
+      onMount();
+    }
+  }, [id, navigate, pageLoading]);
 
   const [taskTextData, setTaskTextData] = useState({
     title: "",
@@ -72,13 +76,13 @@ const UpdateTaskForm = ({toast}) => {
     formData.append("due_by", dateTime.toISOString());
     formData.append("is_important", checkedPriority);
     formData.append("is_public", checkedPublic);
-    formData.append("owner", id)
+    formData.append("owner", id);
 
     try {
       console.log(formData);
       await axiosReq.put(`/tasks/${id}/`, formData);
       navigate(-1);
-      toast(`"${title}" has been updated.`)
+      toast(`"${title}" has been updated.`);
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -87,122 +91,128 @@ const UpdateTaskForm = ({toast}) => {
 
   return (
     <Container className={styles.Container}>
-    <Form onSubmit={handleSubmit}>
-      <Card className="p-2">
-        <Card.Header>
-          <div className={styles.Heading}>{title}</div>
-        </Card.Header>
-        <Form.Group as={Row} controlId="title">
-          <Form.Label className="d-none mg-b-20" column sm={2}>
-            Title
-          </Form.Label>
-          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
-            <Form.Control
-              type="text"
-              placeholder="Title"
-              name="title"
-              value={title}
-              onChange={handleChange}
-              className={styles.TitleField}
-            />
-          </Col>
-        </Form.Group>
-        {errors.title?.map((message, index) => (
-          <Alert variant="warning" key={index}>
-            {message}
-          </Alert>
-        ))}
-
-        <Form.Group as={Row} controlId="dateTime">
-          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
-            <Row>
-              <Col md={2} className={styles.DueBox}>Due By</Col>
-              <Col md={10}>
-                <DatePicker
-                  className={styles.DateTimePicker}
-                  selected={dateTime}
-                  onChange={(date) => setDateTime(date)}
-                  showTimeSelect
-                  dateFormat="Pp"
+      {pageLoading ? (
+        <Spinner animation="border" />
+      ) : (
+        <Form onSubmit={handleSubmit}>
+          <Card className="p-2">
+            <Card.Header>
+              <div className={styles.Heading}>{title}</div>
+            </Card.Header>
+            <Form.Group as={Row} controlId="title">
+              <Form.Label className="d-none mg-b-20" column sm={2}>
+                Title
+              </Form.Label>
+              <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                <Form.Control
+                  type="text"
+                  placeholder="Title"
+                  name="title"
+                  value={title}
+                  onChange={handleChange}
+                  className={styles.TitleField}
                 />
               </Col>
-            </Row>
-          </Col>
-        </Form.Group>
+            </Form.Group>
+            {errors.title?.map((message, index) => (
+              <Alert variant="warning" key={index}>
+                {message}
+              </Alert>
+            ))}
 
-        <Form.Group as={Row} controlId="description">
-          <Form.Label className="d-none mg-b-20" column sm={2}>
-            Description
-          </Form.Label>
-          <Col sm={{ span: 10, offset: 1 }} className="mt-2">
-            <Form.Control
-              as="textarea"
-              placeholder="Description"
-              name="description"
-              value={description}
-              onChange={handleChange}
-              className="mb-3"
-            />
-          </Col>
-        </Form.Group>
-        {errors.description?.map((message, index) => (
-          <Alert variant="warning" key={index}>
-            {message}
-          </Alert>
-        ))}
+            <Form.Group as={Row} controlId="dateTime">
+              <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                <Row>
+                  <Col md={2} className={styles.DueBox}>
+                    Due By
+                  </Col>
+                  <Col md={10}>
+                    <DatePicker
+                      className={styles.DateTimePicker}
+                      selected={dateTime}
+                      onChange={(date) => setDateTime(date)}
+                      showTimeSelect
+                      dateFormat="Pp"
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Form.Group>
 
-        <fieldset>
+            <Form.Group as={Row} controlId="description">
+              <Form.Label className="d-none mg-b-20" column sm={2}>
+                Description
+              </Form.Label>
+              <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                <Form.Control
+                  as="textarea"
+                  placeholder="Description"
+                  name="description"
+                  value={description}
+                  onChange={handleChange}
+                  className="mb-3"
+                />
+              </Col>
+            </Form.Group>
+            {errors.description?.map((message, index) => (
+              <Alert variant="warning" key={index}>
+                {message}
+              </Alert>
+            ))}
+
+            <fieldset>
+              <Form.Group as={Row}>
+                <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                  <Switch
+                    label="High Priority"
+                    name="priority"
+                    checked={checkedPriority}
+                    onChange={() => setCheckedPriority(toggleBool)}
+                    className={styles.CheckBox}
+                  />
+                </Col>
+              </Form.Group>
+            </fieldset>
+
+            <fieldset>
+              <Form.Group as={Row}>
+                <Col sm={{ span: 10, offset: 1 }} className="mt-2">
+                  <Switch
+                    type="switch"
+                    label="Visible to public"
+                    name="public"
+                    checked={checkedPublic}
+                    onChange={() => setCheckedPublic(toggleBool)}
+                    className={styles.CheckBox}
+                  />
+                </Col>
+              </Form.Group>
+            </fieldset>
+          </Card>
+
           <Form.Group as={Row}>
-            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
-              <Switch
-                label="High Priority"
-                name="priority"
-                checked={checkedPriority}
-                onChange={() => setCheckedPriority(toggleBool)}    
-                className={styles.CheckBox}
-              />
+            <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+              <Button
+                type="submit"
+                variant="warning"
+                className={styles.ConfirmButton}
+              >
+                + Save
+              </Button>
+            </Col>
+            <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
+              <Button
+                className={styles.CancelButton}
+                variant="secondary"
+                onClick={() => navigate(-1)}
+              >
+                Cancel
+              </Button>
             </Col>
           </Form.Group>
-        </fieldset>
-
-        <fieldset>
-          <Form.Group as={Row}>
-            <Col sm={{ span: 10, offset: 1 }} className="mt-2">
-              <Switch
-                type="switch"
-                label="Visible to public"
-                name="public"
-                checked={checkedPublic}
-                onChange={() => setCheckedPublic(toggleBool)}
-                className={styles.CheckBox}
-              />
-            </Col>
-          </Form.Group>
-        </fieldset>
-      </Card>
-
-      <Form.Group as={Row}>
-        <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
-          <Button
-            type="submit"
-            variant="warning"
-            className={styles.ConfirmButton}
-          >
-            + Save
-          </Button>
-        </Col>
-        <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">
-          <Button
-            className={styles.CancelButton}
-            variant="secondary"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </Button>
-        </Col>
-      </Form.Group>
-    </Form>
-  </Container>
+        </Form>
+      )}
+    </Container>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
-import { Tab, Tabs } from "react-bootstrap";
+import { Spinner, Tab, Tabs } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,8 +16,8 @@ const Home = () => {
   const navigate = useNavigate();
   const currentUser = useCurrentUser();
   const { id } = useParams();
-
   const [profileData, setProfileData] = useState({});
+  const [pageLoading, setPageLoading] = useState(true);
   const { owner } = profileData;
   const is_owner = currentUser?.username === owner;
 
@@ -26,47 +26,54 @@ const Home = () => {
       try {
         const { data } = await axiosReq.get(`/profiles/${id}`);
         setProfileData(data);
+        setPageLoading(false);
       } catch (error) {
         console.log(error);
         navigate("/not_found");
       }
     };
-    onMount();
-  }, [is_owner, id, currentUser, navigate]);
+    if (pageLoading) {
+      onMount();
+    }
+  }, [is_owner, id, currentUser, navigate, pageLoading]);
 
   return (
     <Container id={styles.ProfileContainer}>
       <UserSearchBar />
-      <Accordion defaultActiveKey="0">
-        <Card className={styles.ProfileCard}>
-          <Accordion.Toggle as={Card.Header} eventKey="0">
-            <strong className={styles.ProfileCardTitle}>{owner}</strong>
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body className={styles.ProfileBody}>
-              <ProfileInfo />
-            </Card.Body>
-          </Accordion.Collapse>
-          <Tabs defaultActiveKey="tasks" justify className="mt-3">
-            <Tab
-              eventKey="tasks"
-              title={is_owner ? "My Tasks" : `${owner}'s Tasks`}
-              className={styles.TasksTabBody}
-              id={styles.TasksTab}
-            >
-              <TaskList owner={owner} />
-            </Tab>
-            <Tab
-              eventKey="requests"
-              title={is_owner ? "My Requests" : "Your Requests"}
-              className={styles.RequestsTabBody}
-              id={styles.RequestsTab}
-            >
-              <RequestList owner={owner} />
-            </Tab>
-          </Tabs>
-        </Card>
-      </Accordion>
+      {pageLoading ? (
+        <Spinner animation="border" />
+      ) : (
+        <Accordion defaultActiveKey="0">
+          <Card className={styles.ProfileCard}>
+            <Accordion.Toggle as={Card.Header} eventKey="0">
+              <strong className={styles.ProfileCardTitle}>{owner}</strong>
+            </Accordion.Toggle>
+            <Accordion.Collapse eventKey="0">
+              <Card.Body className={styles.ProfileBody}>
+                <ProfileInfo />
+              </Card.Body>
+            </Accordion.Collapse>
+            <Tabs defaultActiveKey="tasks" justify className="mt-3">
+              <Tab
+                eventKey="tasks"
+                title={is_owner ? "My Tasks" : `${owner}'s Tasks`}
+                className={styles.TasksTabBody}
+                id={styles.TasksTab}
+              >
+                <TaskList owner={owner} />
+              </Tab>
+              <Tab
+                eventKey="requests"
+                title={is_owner ? "My Requests" : "Your Requests"}
+                className={styles.RequestsTabBody}
+                id={styles.RequestsTab}
+              >
+                <RequestList owner={owner} />
+              </Tab>
+            </Tabs>
+          </Card>
+        </Accordion>
+      )}
     </Container>
   );
 };
