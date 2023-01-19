@@ -11,6 +11,8 @@ import UpdateProfileForm from "./pages/profile/UpdateProfileForm";
 import Profile from "./pages/profile/Profile";
 import Task from "./pages/tasks/Task";
 import FourOFour from "./pages/FourOFour";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const Route = require("react-router-dom").Route;
@@ -18,15 +20,15 @@ function App() {
 
   return (
     <Container className={styles.App}>
-      <NavBar />
+      <NavBar toast={toast}/>
       <Container className={styles.Body}>
         <Routes>
           <Route exact path="/" element={<Landing />} />
-          <Route exact path="/signin" element={<SignInForm />} />
-          <Route exact path="/signup" element={<SignUpForm />} />
-          <Route exact path="/task/create/:id" element={<CreateTaskForm />} />
-          <Route exact path="/task/:id" element={<Task />} />
-          <Route exact path="/task/:id/update" element={<UpdateTaskForm />} />
+          <Route exact path="/signin" element={<SignInForm toast={toast}/>} />
+          <Route exact path="/signup" element={<SignUpForm toast={toast}/>} />
+          <Route exact path="/task/create/:id" element={<CreateTaskForm toast={toast}/>} />
+          <Route exact path="/task/:id" element={<Task toast={toast}/>} />
+          <Route exact path="/task/:id/update" element={<UpdateTaskForm toast={toast}/>} />
           <Route
             exact
             path="/profile/:id/edit"
@@ -37,6 +39,12 @@ function App() {
           <Route path="/not_found" element={<FourOFour />} />
         </Routes>
       </Container>
+      <ToastContainer
+        className={styles.Toaster}
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+      />
     </Container>
   );
 }

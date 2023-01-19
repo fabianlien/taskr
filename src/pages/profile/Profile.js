@@ -32,7 +32,7 @@ const Home = () => {
       }
     };
     onMount();
-  }, [is_owner, id, currentUser]);
+  }, [is_owner, id, currentUser, navigate]);
 
   return (
     <Container id={styles.ProfileContainer}>

@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSetCurrentUser } from "../../context/CurrentUserContext";
 import { setTokenTimestamp } from "../../utils/utils";
 import { useRedirect } from "../../hooks/useRedirect";
+import { toast } from "react-toastify";
 
 const SignInForm = () => {
   const setCurrentUser = useSetCurrentUser();
@@ -36,6 +37,7 @@ const SignInForm = () => {
       setCurrentUser(data.user);
       setTokenTimestamp(data);
       navigate(-1);
+      toast(`Hello ${username}, welcome back!`)
     } catch (error) {
       setErrors(error.response?.data);
     }

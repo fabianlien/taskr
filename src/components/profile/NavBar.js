@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/NavBar.module.css";
 import { removeTokenTimestamp } from "../../utils/utils";
 
-const NavBar = () => {
+const NavBar = ( {toast} ) => {
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ const NavBar = () => {
       await axios.post("/dj-rest-auth/logout/");
       setCurrentUser(null);
       removeTokenTimestamp();
+      toast(`${currentUser?.username} has signed out.`);
     } catch (error) {
       console.log(error);
     }

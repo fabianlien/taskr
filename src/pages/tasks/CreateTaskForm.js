@@ -9,12 +9,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { axiosReq } from "../../api/axiosDefaults";
 import { useNavigate, useParams } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
-import { useCurrentUser } from "../../context/CurrentUserContext";
+import { CurrentUserContext, useCurrentUser } from "../../context/CurrentUserContext";
 import styles from "../../styles/CreateTaskForm.module.css";
 import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
-const CreateTaskForm = () => {
+const CreateTaskForm = ({toast}) => {
   
   const currentUser = useCurrentUser();
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const CreateTaskForm = () => {
       if (is_owner === false) {
         setRequestAccepted("no");
         try {
-          const { data } = await axiosReq.get(`/profiles/?search=${id}`);
+          const { data } = await axiosReq.get(`/profiles/?owner__username=${id}`);
           setTaskRequestProfileData(data);
         } catch (error) {
           console.log(error);
@@ -46,7 +46,7 @@ const CreateTaskForm = () => {
       }
     };
     onMount();
-  }, [is_owner, id]);
+  }, [is_owner, id, navigate]);
 
 
   const handleChange = (event) => {
@@ -79,6 +79,7 @@ const CreateTaskForm = () => {
       formData.append("owner", taskRequestProfileData.results?.[0].owner);
       formData.append("requested_ID", currentUser.pk);
       formData.append("requested_username", currentUser.username);
+      console.log(taskRequestProfileData)
     } else {
       formData.append("owner", currentUser.username);
     }
@@ -86,6 +87,11 @@ const CreateTaskForm = () => {
     try {
       await axiosReq.post("/tasks/", formData);
       navigate(-1);
+      if (requestAccepted === "no") {
+        toast(`"${title}" request has been sent to ${taskRequestProfileData.results?.[0].owner}`)
+      } else {  
+        toast(`"${title}" was added to your active tasks.`)
+      }
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);
@@ -195,7 +201,7 @@ const CreateTaskForm = () => {
               variant="warning"
               className={styles.ConfirmButton}
             >
-              + Add
+              {requestAccepted !== "no" ? "+ Add" : "+ Send"} 
             </Button>
           </Col>
           <Col sm={{ span: 6 }} lg={{ span: 3 }} className="mt-3">

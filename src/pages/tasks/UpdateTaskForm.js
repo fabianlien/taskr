@@ -13,7 +13,7 @@ import styles from "../../styles/UpdateTaskForm.module.css";
 import { Card } from "react-bootstrap";
 import Switch from "react-custom-checkbox/switch";
 
-const UpdateTaskForm = () => {
+const UpdateTaskForm = ({toast}) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -77,7 +77,8 @@ const UpdateTaskForm = () => {
     try {
       console.log(formData);
       await axiosReq.put(`/tasks/${id}/`, formData);
-      navigate("/");
+      navigate(-1);
+      toast(`"${title}" has been updated.`)
     } catch (error) {
       console.log(error);
       if (error.response?.status !== 401) setErrors(error.response?.data);

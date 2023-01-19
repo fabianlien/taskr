@@ -14,3 +14,10 @@ a {
     color: rebeccapurple;
     font-size: small;
 }
+
+.Toaster > div {
+    border: solid rgb(211, 94, 94) 2px;
+    color: rgb(109, 106, 106);
+    text-align: center;
+    font-size: large;
+}

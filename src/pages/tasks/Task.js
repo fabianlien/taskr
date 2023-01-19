@@ -11,7 +11,7 @@ import { useCurrentUser } from "../../context/CurrentUserContext.js";
 import ImportantBadge from "../../components/tasks/ImportantBadge.js";
 import DueCountdown from "../../components/tasks/DueCountdown.js";
 
-const Task = () => {
+const Task = ({toast}) => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -53,6 +53,7 @@ const Task = () => {
         is_completed: true,
       });
       setTask(data);
+      toast(`"${title}" completed. Well done!`, {id: `${styles.Toaster}`})
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +79,7 @@ const Task = () => {
       console.log(error);
     }
     navigate(-1);
-  };
+    toast(`"${title}" has been deleted.`) };
 
   return (
     <Container className={styles.Container}>
@@ -105,9 +106,7 @@ const Task = () => {
           <Card.Text
             className={styles.CreatedAtBox}
           >{`Created: ${created_at}`}</Card.Text>
-          {!overdue && !is_completed && (
-            <DueCountdown due_by={due_by} />
-          )}
+          {!overdue && !is_completed && <DueCountdown due_by={due_by} />}
           {is_completed && (
             <Card.Text className={styles.CompletedBox}>
               Task Completed!
@@ -126,13 +125,7 @@ const Task = () => {
           )}
           {requested_ID > 0 && requested_username === currentUser?.username && (
             <Card.Text className={styles.DueBox2}>
-              Request to:{" "}
-              <Link
-                className={styles.RequestedUserLink}
-                to={`/Profile/${owner}/`}
-              >
-                {owner}
-              </Link>
+              Request to: {owner}
             </Card.Text>
           )}
           <Card.Text className={styles.TextBody}>{description}</Card.Text>

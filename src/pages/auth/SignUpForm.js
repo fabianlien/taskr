@@ -9,7 +9,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useRedirect } from "../../hooks/useRedirect";
 
-const SignUpForm = () => {
+const SignUpForm = ({toast}) => {
   useRedirect("loggedIn")
   const [signUpData, setSignUpData] = useState({
     username: "",
@@ -32,6 +32,7 @@ const SignUpForm = () => {
     try {
       await axios.post("dj-rest-auth/registration/", signUpData);
       navigate("/signin");
+      toast(`Welcome ${username}! Sign in to start using taskr.`)
     } catch (error) {
       setErrors(error.response?.data);
     }
