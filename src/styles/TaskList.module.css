@@ -26,6 +26,8 @@
 .Spinner {
     width: 6vw;
     height: 6vw;
-    margin: 20px auto;
-    text-align: center;
+    max-width: 100px;
+    max-height: 100px;
+    margin-top: 20px;
+    margin-left: 5%;
 }

@@ -14,6 +14,7 @@ import styles from "../../styles/RequestList.module.css";
 const RequestList = ({ owner }) => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
+  const [hasLoaded, setHasLoaded] = useState(true);
   const [requestedTasks, setRequestedTasks] = useState({ results: [] });
   const [userRequests, setUserRequests] = useState({ results: [] });
   const [taskSearchQuery, setTaskSearchQuery] = useState("");
@@ -42,7 +43,28 @@ const RequestList = ({ owner }) => {
       }
     };
     onMount();
-  }, [is_owner, id, currentUser]);
+
+    const fetchQuery = async () => {
+      try {
+        const { data } = await axiosReq.get(
+          `/tasks/?search=${taskSearchQuery}`
+        );
+        if (taskSearchQuery.length) {
+          setTasksFiltered(data);
+          setHasLoaded(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    setHasLoaded(false);
+    const searchTimer = setTimeout(() => {
+      fetchQuery();
+    }, 800);
+    return () => {
+      clearTimeout(searchTimer);
+    };
+  }, [is_owner, id, currentUser, taskSearchQuery]);
 
   const requests = requestedTasks.results?.filter(
     (task) => task.request_accepted === "no"
@@ -57,26 +79,36 @@ const RequestList = ({ owner }) => {
       />
       {taskSearchQuery.length ? (
         <>
-          {tasksFiltered.results.length ? (
+          {hasLoaded ? (
             <>
-              {tasksFiltered.results
-                .filter(
-                  (task) =>
-                    task.requested_username === owner ||
-                    task.request_accepted === "no"
-                )
-                .map((task, index) => {
-                  return <TaskPreview key={index} task={task} />;
-                })}
+              {tasksFiltered.results.length ? (
+                <>
+                  {tasksFiltered.results
+                    .filter(
+                      (task) =>
+                        task.requested_username === owner ||
+                        task.request_accepted === "no"
+                    )
+                    .map((task, index) => {
+                      return <TaskPreview key={index} task={task} />;
+                    })}
+                </>
+              ) : (
+                <Card className={styles.RequestCard}>
+                  <Card.Body className={styles.RequestCardBody}>
+                    <Card.Title className={styles.TextBox}>
+                      No tasks to display.
+                    </Card.Title>
+                  </Card.Body>
+                </Card>
+              )}
             </>
           ) : (
-            <Card className={styles.RequestCard}>
-              <Card.Body className={styles.RequestCardBody}>
-                <Card.Title className={styles.TextBox}>
-                  No tasks to display.
-                </Card.Title>
-              </Card.Body>
-            </Card>
+              <Row className={styles.NoTasksBox}>
+                <Col xs={{range: 2, offset: 5}}>
+                  <Spinner animation="border" className={styles.Spinner} />
+                </Col>
+              </Row>
           )}
         </>
       ) : (

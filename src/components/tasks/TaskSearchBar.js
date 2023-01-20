@@ -1,41 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { axiosReq } from "../../api/axiosDefaults";
 import styles from "../../styles/TaskSearchBar.module.css";
 
-const TaskSearchBar = ({
-  setTasksFiltered,
-  taskSearchQuery,
-  setTaskSearchQuery,
-  
-}) => {
-  useEffect(() => {
-    const fetchQuery = async () => {
-      try {
-        const { data } = await axiosReq.get(
-          `/tasks/?search=${taskSearchQuery}`
-        );
-        if (taskSearchQuery.length) {
-          setTasksFiltered(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const searchTimer = setTimeout(() => {
-      fetchQuery();
-    }, 800);
-    return () => {
-      clearTimeout(searchTimer);
-    };
-  }, [taskSearchQuery, setTasksFiltered]);
-
+const TaskSearchBar = ({ taskSearchQuery, setTaskSearchQuery }) => {
   return (
     <Form onSubmit={(event) => event.preventDefault()}>
       <Row>
         <Col xs={1}>
-          <div className={styles.MagnifyingGlass}><i className="fa-solid fa-magnifying-glass"/></div>
+          <div className={styles.MagnifyingGlass}>
+            <i className="fa-solid fa-magnifying-glass" />
+          </div>
         </Col>
         <Col xs={10}>
           <Form.Control
