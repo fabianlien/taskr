@@ -287,11 +287,20 @@ As a part of this project a custom API was created using Django's REST framework
 | 404  | Non-existent profile ID in URL   | Reroute to homepage.                                                                     | ✓    |
 | 404  | Non-existent task ID in URL      | Reroute to homepage.                                                                     | ✓    |
 
+<br>
 
 ### Unresolved Issues/Bugs:
 
+####  **"countDown" function dependency:**
+eslint throws a warning saying that the 'countDown' function makes the dependencies of useEffect Hook change on every render. The suggested fix is to move the entire function inside the useEffect callback. Doing this, however, will cause unwanted refreshes on the rendered component causing bad UX. The warning has been disabled using the "// eslint-disable-next-line" command.
+
+
+#### **-1 hour bug:**
+When a task is created the due_by date is set to 1 hour prior to the time selected in the DateTimePicker widget. I am unsure if this is an issue with my local time zone or with the date parsing. It will likely be fixed shortly in a future update, but for now it remains unresolved.
+
 <hr>
 <br>
+
 
 ## Deployment
 
