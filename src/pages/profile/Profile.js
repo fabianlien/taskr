@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
-import { Spinner, Tab, Tabs } from "react-bootstrap";
+import { Tab, Tabs } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 import { useCurrentUser } from "../../context/CurrentUserContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,7 +17,6 @@ const Home = () => {
   const currentUser = useCurrentUser();
   const { id } = useParams();
   const [profileData, setProfileData] = useState({});
-  const [pageLoading, setPageLoading] = useState(true);
   const { owner } = profileData;
   const is_owner = currentUser?.username === owner;
 
@@ -26,23 +25,17 @@ const Home = () => {
       try {
         const { data } = await axiosReq.get(`/profiles/${id}`);
         setProfileData(data);
-        setPageLoading(false);
       } catch (error) {
         console.log(error);
         navigate("/not_found");
       }
     };
-    if (pageLoading) {
       onMount();
-    }
-  }, [is_owner, id, currentUser, navigate, pageLoading]);
+  }, [is_owner, id, currentUser, navigate]);
 
   return (
     <Container id={styles.ProfileContainer}>
       <UserSearchBar />
-      {pageLoading ? (
-        <Spinner animation="border" />
-      ) : (
         <Accordion defaultActiveKey="0">
           <Card className={styles.ProfileCard}>
             <Accordion.Toggle as={Card.Header} eventKey="0">
@@ -73,7 +66,6 @@ const Home = () => {
             </Tabs>
           </Card>
         </Accordion>
-      )}
     </Container>
   );
 };

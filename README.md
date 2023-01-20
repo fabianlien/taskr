@@ -298,6 +298,9 @@ eslint throws a warning saying that the 'countDown' function makes the dependenc
 #### **-1 hour bug:**
 When a task is created the due_by date is set to 1 hour prior to the time selected in the DateTimePicker widget. I am unsure if this is an issue with my local time zone or with the date parsing. It will likely be fixed shortly in a future update, but for now it remains unresolved.
 
+#### **Profile request loading bug**
+The state based loader rendered on the profile page while axios is awaiting the profile data, has been removed. Whilst implemenet it caused the wrong data to be rendered to the DOM.This might be fairly quick to fix, but due to a lack of available time (and the fact that it has very little impact on both functionality and appearance of the app) it has simply been resolved by removing the loader.
+
 <hr>
 <br>
 
